@@ -5,6 +5,7 @@ function errorMessage(mensagem) {
     title: mensagem,
     showConfirmButton: false,
     timer: 2300,
+    backdrop: false,
   });
 }
 
@@ -15,31 +16,38 @@ function responseMessage(mensagem) {
     title: mensagem,
     showConfirmButton: false,
     timer: 2300,
+    backdrop: false,
   });
 }
 
 function autenticateUser(email, password) {
   if (email === "" || password === "") {
-    mensagem = `Você não pode ter campos vazios!`;
-    errorMessage(mensagem);
-    return;
-  } else if (email.indexOf("@") == -1 || !email.endsWith(".com")) {
-    mensagem = `Email precisa ter @ e terminar com .com`;
-    errorMessage(mensagem);
-    return;
-  } else if (password.length <= 8 && password.indexOf("@", "#")) {
-    mensagem = `A senha tem que ter ao menos 8 caracteres e 1 caracter especial`;
-    errorMessage(mensagem);
-    return;
+    errorMessage(`Você não pode ter campos vazios!`);
+    return false;
   }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errorMessage(`Email inválido!`);
+    return false;
+  }
+
+  if (password.length < 8 || !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    errorMessage(
+      `A senha precisa ter ao menos 8 caracteres e 1 caractere especial`
+    );
+    return false;
+  }
+
+  return true;
 }
 
-function login() {
+function login(event) {
+  event.preventDefault();
+
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  let mensagem = "";
 
-  autenticateUser(email, password);
+  if (!autenticateUser(email, password)) return;
 
   fetch("http://localhost:3000/users")
     .then((response) => response.json())
@@ -49,12 +57,17 @@ function login() {
       );
 
       if (user) {
-        mensagem = `Bem vindo ao AgendFy`;
-        responseMessage(mensagem);
+        responseMessage(`Bem vindo ao AgendFy`);
+        setTimeout(() => {
+          window.location.href = "teste.html";
+        }, 2300);
       } else {
-        mensagem = `Usuário ou senha inválidos`;
-        errorMessage(mensagem);
+        errorMessage(`Usuário ou senha inválidos`);
       }
     })
     .catch((error) => console.error("Erro ao buscar usuários:", error));
 }
+
+document.getElementById("loginForm").addEventListener("submit", (event) => {
+  login(event);
+});
