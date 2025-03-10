@@ -62,6 +62,13 @@
   scroll-behavior: smooth;
 }
 
+.App{
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+}
+
 .app-header {
   display: flex;
   flex-direction: row;
@@ -80,6 +87,7 @@
 
   a{
     text-decoration: none;
+    font-size: small;
     color: var(--BlackFy);
   }
   a:hover{
@@ -88,22 +96,20 @@
   }
 
   #agendfy_logo {
-    width: 10em;
+    width: 5em;
   }
 
   div {
     display: flex;
     gap: 1em;
   }
-
-
 }
 
 button {
   border: none;
   padding: 1em 2em;
   font-weight: 500;
-  font-size: medium;
+  font-size: small;
 }
 
 #btn_secundario {
@@ -136,12 +142,16 @@ button {
   justify-content: space-between;
   align-items: center;
   padding: 3em 10em;
-
   background: linear-gradient(60deg, var(--WhiteFy) 60%, var(--DarkBlueFy) 60%);
+  
+  .div-buttons{
+    display: flex;
+    gap: 1em;
+  }
 }
 
 .card-img {
-  width: 40em;
+  width: 32em;
   border-radius: 1em;
   border: var(--WhiteFy) 2px solid;
 }
@@ -161,38 +171,47 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center; 
+  width: 100%;
   background-color: var(--WhiteFy);
   h1{
     color: var(--DarkBlueFy);
-    font-size: xx-large;
+    font-size: x-large;
+    margin: 0;
+  }
+  h3{
+    font-size: medium;
   }
 }
 
 .content-solucao {
   display: flex;
   justify-content: space-between;
-  background: linear-gradient(120deg, var(--WhiteFy) 40%, var(--DarkBlueFy) 40%);
   padding: 3em 10em;
+  background: linear-gradient(120deg, var(--WhiteFy) 40%, var(--DarkBlueFy) 40%);
+  .card-img{
+    width: 24em;
+  }
 }
 
 
 .cards-solucao {
   display: flex;
   flex-wrap: wrap;
+  flex: 2;
   justify-content: center;
   align-items: center;
   gap: 3em;
+  font-size: small;
 
   div {
-    width: 20em;
-    height: 10em;
+    width: 16em;
+    height: 8em;
     background: linear-gradient(11deg, var(--WhiteFy) 80%, var(--LightBlueFy) 80%);
     padding: 1em;
     border-radius: 1em;
   }
+}
 
-  img{
-    width: 3em;
-  }
-
+.card-icon{
+  width: 2em;
 }
