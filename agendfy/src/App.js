@@ -5,13 +5,19 @@ import CardIcon1 from './images/icons/Vector.svg'
 import CardIcon2 from './images/icons/Vector-1.svg'
 import CardIcon3 from './images/icons/Vector-2.svg'
 import CardIcon4 from './images/icons/Vector-3.svg'
+import MissaoImg from './images/essencia/missao_img.svg'
+import ValoresImg from './images/essencia/valores_img.svg'
+import VisaoImg from './images/essencia/visao_img.svg'
+import LogoBranca from './images/LogoTipo Branco 1.svg'
+
+
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="app-header">
-        
+
         <img src={logo} id="agendfy_logo" alt="" />
         <ul>
           <li><a href="#home">Home</a></li>
@@ -78,7 +84,28 @@ function App() {
       </div>
 
       <section className="section-nossa-essencia" id="essencia">
+        <h1>NOSSA ESSÊNCIA</h1>
+        <h3>MISSÃO, VISÃO E VALORES</h3>
+        <div className="boxes">
+          <div className="box-content">
+            <img src={MissaoImg} alt="" />
+            <h3>Missão</h3>
+            <p>Facilitar e otimizar o gerenciamento de agendamentos por meio de tecnologia inovadora, proporcionando eficiência e organização.</p>
+          </div>
 
+          <div className="box-content">
+            <img src={VisaoImg} alt="" />
+            <h3>Visão</h3>
+            <p>Ser a principal referência em soluções tecnológicas para agendamentos, revolucionando a experiência entre empresas e clientes.</p>
+          </div>
+
+          <div className="box-content">
+            <img src={ValoresImg} alt="" />
+            <h3>Valores</h3>
+            <p>Prezamos pela segurança, protegendo os dados, garantindo processos simples e ágeis. e oferecendo um serviço confiável.</p>
+          </div>
+        </div>
+        <button id="btn_primario">Entre em contato</button>
       </section>
 
       <div className="divisao">
@@ -101,6 +128,18 @@ function App() {
       <section className="section-contate" id="contate">
 
       </section>
+
+      <footer>
+        <img src={LogoBranca} alt=""/>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#solucao">Solução</a></li>
+          <li><a href="#essencia">Nossa Essência</a></li>
+          <li><a href="#recursos">Recursos AgendFy</a></li>
+          <li><a href="#contate">Contate-nos</a></li>
+        </ul>
+        <p>AgendFy @ 2025. Todos os direitos reservados.</p>
+      </footer>
     </div>
   );
 }

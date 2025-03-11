@@ -215,3 +215,69 @@ button {
 .card-icon{
   width: 2em;
 }
+
+.section-nossa-essencia{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3em 10em;
+  .boxes{
+    display: flex;
+    gap: 2em;
+  }
+
+  h1{
+    margin: 0;
+    color: var(--LightBlueFy);
+  }
+  
+  button{
+    margin: 2em;
+  }
+    
+
+
+  .box-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: var(--GrayFy) 1px solid;
+    text-align: center;
+    align-items: center;
+    font-size: small;
+    padding: 1em;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+
+    img{
+      width: 6em;
+    }
+  }
+}
+
+footer{
+  background-color: var(--DarkestBlueFy);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2em 4em;
+
+  ul{
+    display: flex;
+    gap: 1em;
+    li{
+      list-style-type: none;
+
+      a{
+        color: var(--WhiteFy);
+        text-decoration: none;
+        font-size: smaller;
+      }
+    }
+  }
+
+  p{
+    color: var(--WhiteFy);
+  }
+}
