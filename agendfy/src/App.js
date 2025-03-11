@@ -1,6 +1,5 @@
 import logo from './images/logoBlue.svg';
 import ImgHome from './images/img_home.png'
-import Rectangle from './images/Rectangle 11.svg'
 import CardIcon1 from './images/icons/Vector.svg'
 import CardIcon2 from './images/icons/Vector-1.svg'
 import CardIcon3 from './images/icons/Vector-2.svg'
@@ -9,6 +8,7 @@ import MissaoImg from './images/essencia/missao_img.svg'
 import ValoresImg from './images/essencia/valores_img.svg'
 import VisaoImg from './images/essencia/visao_img.svg'
 import LogoBranca from './images/LogoTipo Branco 1.svg'
+import DivisaoComponent from './components/divisao/divisao'
 
 
 import './App.css';
@@ -44,11 +44,7 @@ function App() {
         <img src={ImgHome} className="card-img" alt="" />
       </section>
 
-      <div className="divisao">
-        <img src={Rectangle} alt="" />
-        V
-        <img src={Rectangle} alt="" />
-      </div>
+      <DivisaoComponent></DivisaoComponent>
 
       <section className="section-solucao" id="solucao">
         <h1>SOLUÇÃO</h1>
@@ -77,11 +73,7 @@ function App() {
 
       </section>
 
-      <div className="divisao">
-        <img src={Rectangle} alt="" />
-        V
-        <img src={Rectangle} alt="" />
-      </div>
+      <DivisaoComponent></DivisaoComponent>
 
       <section className="section-nossa-essencia" id="essencia">
         <h1>NOSSA ESSÊNCIA</h1>
@@ -108,21 +100,15 @@ function App() {
         <button id="btn_primario">Entre em contato</button>
       </section>
 
-      <div className="divisao">
-        <img src={Rectangle} alt="" />
-        V
-        <img src={Rectangle} alt="" />
-      </div>
+     
+      <DivisaoComponent></DivisaoComponent>
+      
 
       <section className="section-recursos" id="recursos">
 
       </section>
 
-      <div className="divisao">
-        <img src={Rectangle} alt="" />
-        V
-        <img src={Rectangle} alt="" />
-      </div>
+      <DivisaoComponent></DivisaoComponent>
 
 
       <section className="section-contate" id="contate">

@@ -281,3 +281,10 @@ footer{
     color: var(--WhiteFy);
   }
 }
+
+@media (max-width: 1000px){
+  .content-solucao{
+    flex-direction: column;
+    align-items: center;
+  }
+}
