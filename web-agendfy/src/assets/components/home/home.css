@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+
+
+.section-home {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3em 10em;
+    padding-top: 4em;
+    background: linear-gradient(60deg, var(--WhiteFy) 60%, var(--DarkBlueFy) 60%);
+    
+    .div-buttons{
+      display: flex;
+      gap: 1em;
+    }
+    .card-img{
+      width: 20em;
+    }
+  }
+  
+  

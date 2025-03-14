@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+.app-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 10em;
+    background-color: var(--WhiteFy);
+    border-bottom: var(--GrayFy) 1px solid;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+
+    ul {
+        display: flex;
+        flex-direction: row;
+        list-style-type: none;
+        gap: 2em;
+    }
+
+
+
+    #agendfy_logo {
+        width: 5em;
+    }
+
+    div {
+        display: flex;
+        gap: 1em;
+    }
+}
+
+a {
+    text-decoration: none;
+    color: var(--BlackFy);
+}
+
+a:hover {
+    color: var(--LightBlueFy);
+    font-weight: bold;
+}
+
