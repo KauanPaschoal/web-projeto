@@ -76,6 +76,18 @@ button {
   gap: 3em;
 }
 
+.titulo-section{
+  color: var(--LightBlueFy);
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.subtitulo-section{
+  color: var(--BlackFy);
+  font-size: medium;
+  font-weight: 500;
+}
+
 
 
 

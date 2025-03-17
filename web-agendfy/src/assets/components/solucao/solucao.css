@@ -10,17 +10,6 @@
     padding-top: 4em;
     width: 100%;
     background-color: var(--WhiteFy);
-
-    h1 {
-        color: var(--DarkBlueFy);
-        font-size: x-large;
-        font-weight: 600;
-        margin: 0;
-    }
-
-    h3 {
-        font-size: medium;
-    }
 }
 
 .content-solucao {
