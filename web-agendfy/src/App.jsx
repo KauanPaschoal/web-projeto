@@ -16,6 +16,7 @@ import DivisaoComponent from './assets/components/divisao/divisao'
 import HomeComponent from './assets/components/home/HomeComponent'
 import NossaEssenciaComponent from './assets/components/nossa-essencia/NossaEssenciaComponent'
 import SolucaoComponent from './assets/components/solucao/SolucaoComponent';
+import RecursosComponent from './assets/components/recursos/RecursosComponent';
 
 
 
@@ -30,6 +31,7 @@ function App() {
         <HeaderComponent></HeaderComponent>
         {/* Seção Home */}
         <HomeComponent></HomeComponent>
+        
         <DivisaoComponent></DivisaoComponent>
 
         <SolucaoComponent></SolucaoComponent>
@@ -40,10 +42,7 @@ function App() {
 
         <DivisaoComponent></DivisaoComponent>
 
-
-        <section className="section-recursos" id="recursos">
-
-        </section>
+        <RecursosComponent></RecursosComponent>
 
         <DivisaoComponent></DivisaoComponent>
 

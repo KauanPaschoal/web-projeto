@@ -4,11 +4,12 @@ import ValoresImg from '../../images/essencia/valores_img.svg'
 import VisaoImg from '../../images/essencia/visao_img.svg'
 import './styles.css'
 
+
 const NossaEssenciaComponent = () => {
     return (
         <section className="section-nossa-essencia flex flex-col justify-between items-center p-12 md:p-40" id="essencia">
-            <h1 className="text-lightBlueFy text-2xl font-bold">NOSSA ESSÊNCIA</h1>
-            <h3 className="text-lg mt-4">MISSÃO, VISÃO E VALORES</h3>
+            <h1 className="titulo-section">NOSSA ESSÊNCIA</h1>
+            <h3 className="subtitulo-section">MISSÃO, VISÃO E VALORES</h3>
             <div className="boxes flex flex-col md:flex-row gap-8 mt-8">
                 <div className="box-content flex flex-col justify-center items-center text-center border border-gray-300 p-4 rounded-lg shadow-md">
                     <img src={MissaoImg} className="w-24" alt="" />
