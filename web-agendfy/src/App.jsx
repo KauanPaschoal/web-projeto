@@ -1,14 +1,4 @@
-import { useState } from 'react'
 import './App.css'
-import logo from './assets/images/logoBlue.svg';
-import ImgHome from './assets/images/img_home.png'
-import CardIcon1 from './assets/images/icons/Vector.svg'
-import CardIcon2 from './assets/images/icons/Vector-1.svg'
-import CardIcon3 from './assets/images/icons/Vector-2.svg'
-import CardIcon4 from './assets/images/icons/Vector-3.svg'
-import MissaoImg from './assets/images/essencia/missao_img.svg'
-import ValoresImg from './assets/images/essencia/valores_img.svg'
-import VisaoImg from './assets/images/essencia/visao_img.svg'
 import LogoBranca from './assets/images/LogoTipo Branco 1.svg'
 
 
@@ -22,7 +12,6 @@ import SolucaoComponent from './assets/components/solucao/SolucaoComponent';
 import HeaderComponent from './assets/components/header/HeaderComponent';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
