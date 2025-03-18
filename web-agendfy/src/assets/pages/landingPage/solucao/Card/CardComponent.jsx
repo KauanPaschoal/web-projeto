@@ -1,5 +1,5 @@
 import React from 'react'
-import CardIcon1 from '../../../images/icons/Vector.svg'
+import CardIcon1 from '../../../../images/icons/Vector.svg'
 import './card.css'
 
 const CardComponent = () => {

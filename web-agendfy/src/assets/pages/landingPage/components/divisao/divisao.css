@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+.divisao {
+    background-color: var(--WhiteFy);
+    color: var(--BlackFy);
+    font-size: xx-large;
+    display: flex;
+    justify-content: center;
+    padding: 1em;
+    gap: 3em;
+    transition: ease-in-out 0.3s;
+
+    &.divisao:hover{
+        cursor: pointer;
+        svg{
+            transition: ease-in-out 0.3s;
+            transform: scale(1.7);
+        }
+    }
+}

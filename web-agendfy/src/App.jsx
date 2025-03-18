@@ -2,15 +2,14 @@ import './App.css'
 import LogoBranca from './assets/images/LogoTipo Branco 1.svg'
 
 
-import DivisaoComponent from './assets/components/divisao/divisao'
-import HomeComponent from './assets/components/home/HomeComponent'
-import NossaEssenciaComponent from './assets/components/nossa-essencia/NossaEssenciaComponent'
-import SolucaoComponent from './assets/components/solucao/SolucaoComponent';
-import RecursosComponent from './assets/components/recursos/RecursosComponent';
+import DivisaoComponent from './assets/pages/landingPage/components/divisao/divisao'
+import HomeComponent from './assets/pages/landingPage/home/HomeComponent'
+import NossaEssenciaComponent from './assets/pages/landingPage/nossa-essencia/NossaEssenciaComponent'
+import SolucaoComponent from './assets/pages/landingPage/solucao/SolucaoComponent';
+import RecursosComponent from './assets/pages/landingPage/recursos/RecursosComponent';
+import HeaderComponent from './assets/pages/landingPage/header/HeaderComponent';
 
 
-
-import HeaderComponent from './assets/components/header/HeaderComponent';
 
 function App() {
 

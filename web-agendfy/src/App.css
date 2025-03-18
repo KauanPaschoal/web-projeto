@@ -66,15 +66,7 @@ button {
 
 
 
-.divisao {
-  background-color: var(--WhiteFy);
-  color: var(--BlackFy);
-  font-size: xx-large;
-  display: flex;
-  justify-content: center;
-  padding: 1em 10em;
-  gap: 3em;
-}
+
 
 .titulo-section{
   color: var(--LightBlueFy);

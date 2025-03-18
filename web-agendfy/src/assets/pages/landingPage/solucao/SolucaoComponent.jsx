@@ -1,5 +1,5 @@
 import React from 'react'
-import ImgHome from '../../images/img_home.png'
+import ImgHome from '../../../images/img_home.png'
 import CardComponent from './Card/CardComponent'
 import './solucao.css'
 

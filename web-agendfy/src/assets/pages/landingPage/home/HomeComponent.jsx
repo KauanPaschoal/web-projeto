@@ -1,8 +1,10 @@
 import React from 'react'
-import ImgHome from '../../images/img_home.png'
+import ImgHome from '../../../images/img_home.png'
 import './home.css'
 
 const HomeComponent = () => {
+
+    
     return (
         <section className="section-home flex flex-col md:flex-row justify-between items-center p-12 md:p-40 bg-gradient-to-r from-white to-darkBlueFy mt-16" id='home'>
             <div>
