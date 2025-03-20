@@ -49,11 +49,16 @@ const RecursosComponent = () => {
                 }}
                 navigation={true}
                 className=''  
+                
             >
-                {dadosRecursos.map(() => {
-                    <SwiperSlide>
-                        
+                {dadosRecursos.map((recurso) => {
+                    return(
+                    <SwiperSlide key={recurso.id}>
+                        <img src={recurso.img} alt='Imagem de exemplo'/>
+                        <h1>{recurso.titulo}</h1>
+                        <p>{recurso.descricao}</p>
                     </SwiperSlide>
+                     )
                 })}
 
             </Swiper>
