@@ -2,7 +2,7 @@ import React from 'react'
 import MissaoImg from '../../../images/essencia/missao_img.svg'
 import ValoresImg from '../../../images/essencia/valores_img.svg'
 import VisaoImg from '../../../images/essencia/visao_img.svg'
-import './styles.css'
+import './nossaEssencia.css'
 
 
 const NossaEssenciaComponent = () => {
@@ -11,17 +11,17 @@ const NossaEssenciaComponent = () => {
             <h1 className="titulo-section">NOSSA ESSÊNCIA</h1>
             <h3 className="subtitulo-section">MISSÃO, VISÃO E VALORES</h3>
             <div className="boxes flex flex-col md:flex-row gap-8 mt-8">
-                <div className="box-content flex flex-col justify-center items-center text-center border border-gray-300 p-4 rounded-lg shadow-md">
+                <div className="box-content ">
                     <img src={MissaoImg} className="w-24" alt="" />
                     <h3 className="mt-4 text-lg font-bold">Missão</h3>
                     <p className="mt-2 text-sm">Facilitar e otimizar o gerenciamento de agendamentos por meio de tecnologia inovadora, proporcionando eficiência e organização.</p>
                 </div>
-                <div className="box-content flex flex-col justify-center items-center text-center border border-gray-300 p-4 rounded-lg shadow-md">
+                <div className="box-content">
                     <img src={VisaoImg} className="w-24" alt="" />
                     <h3 className="mt-4 text-lg font-bold">Visão</h3>
                     <p className="mt-2 text-sm">Ser a principal referência em soluções tecnológicas para agendamentos, revolucionando a experiência entre empresas e clientes.</p>
                 </div>
-                <div className="box-content flex flex-col justify-center items-center text-center border border-gray-300 p-4 rounded-lg shadow-md">
+                <div className="box-content">
                     <img src={ValoresImg} className="w-24" alt="" />
                     <h3 className="mt-4 text-lg font-bold">Valores</h3>
                     <p className="mt-2 text-sm">Prezamos pela segurança, protegendo os dados, garantindo processos simples e ágeis. e oferecendo um serviço confiável.</p>

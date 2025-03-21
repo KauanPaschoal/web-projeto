@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import ImgHome from '../../../images/img_home.png'
 import './recursos.css'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 const RecursosComponent = () => {
-    const [slidesPerView, setSlidesPerView] = useState(1)
+    
 
     const dadosRecursos = [
         {
@@ -44,7 +44,7 @@ const RecursosComponent = () => {
 
             </section>
             <Swiper
-                slidesPerView={slidesPerView}
+                slidesPerView={1}
                 pagination={{ clickable: true }}
                 navigation
                 className='swiper-recursos'

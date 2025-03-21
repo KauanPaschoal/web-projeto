@@ -14,8 +14,8 @@ const HeaderComponent = () => {
             <li><a href="#contate" className="navbar-item text-sm md:text-base lg:text-md">Contate-nos</a></li>
           </ul>
           <div className="flex gap-4">
-            <button id="btn_secundario">Cadastrar</button>
-            <button id="btn_primario">Entrar</button>
+            <button className="btn_secundario">Cadastrar</button>
+            <button className="btn_primario">Entrar</button>
           </div>
         </header>
     )

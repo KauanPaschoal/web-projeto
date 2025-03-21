@@ -38,28 +38,28 @@ button {
   font-size: small;
 }
 
-#btn_secundario {
+.btn_secundario {
   background-color: var(--WhiteFy);
   border: var(--LightBlueFy) 2px solid;
   color: var(--LightBlueFy);
   transition: ease-in-out 0.3s;
 }
 
-#btn_secundario:hover {
+.btn_secundario:hover {
   cursor: pointer;
   background-color: var(--LightBlueFy);
   border: var(--LightBlueFy) 2px solid;
   color: var(--WhiteFy);
 }
 
-#btn_primario {
+.btn_primario {
   background-color: var(--LightBlueFy);
   border: var(--LightBlueFy) 2px solid;
   color: var(--WhiteFy);
   transition: ease-in-out 0.3s;
 }
 
-#btn_primario:hover {
+.btn_primario:hover {
   cursor: pointer;
   background-color: var(--DarkestBlueFy);
 }
@@ -85,45 +85,7 @@ button {
 
 
 
-.section-nossa-essencia{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0em 10em;
-  padding-top: 4em;
-  .boxes{
-    display: flex;
-    gap: 2em;
-  }
 
-  h1{
-    margin: 0;
-    color: var(--LightBlueFy);
-  }
-  
-  button{
-    margin: 2em;
-  }
-    
-
-
-  .box-content{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border: var(--GrayFy) 1px solid;
-    text-align: center;
-    align-items: center;
-    font-size: small;
-    padding: 1em;
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-
-    img{
-      width: 6em;
-    }
-  }
-}
 
 footer{
   background-color: var(--DarkestBlueFy);
