@@ -3,11 +3,13 @@ import React from 'react'
 import LogoBranca from '../../images/LogoTipo Branco 1.svg'
 
 import DivisaoComponent from './components/divisao/divisao'
+import HeaderComponent from './header/HeaderComponent';
 import HomeComponent from './home/HomeComponent'
 import NossaEssenciaComponent from './nossa-essencia/NossaEssenciaComponent'
 import SolucaoComponent from './solucao/SolucaoComponent';
 import RecursosComponent from './recursos/RecursosComponent';
-import HeaderComponent from './header/HeaderComponent';
+import ContatoComponent from './contato/ContatoComponent';
+
 
 const LandingPage = () => {
     return (
