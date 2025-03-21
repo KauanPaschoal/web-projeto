@@ -3,24 +3,40 @@
 .div-recursos{
     width: 100%;
 
-
-    .cards{
-        width: 50%;
-        height: auto;
-
-        .card-content-solucao{
-            display: flex;
-            flex-direction: row;
-            gap: 1em;
-            padding: 1em;
-            margin-bottom: 1em;
-            box-shadow: 0px 0px 10px 0px var(--GrayFy);
-            transition: 0.3s;
-
-            &:hover{
-                transform: scale(1.05);
-            }
-        }
-    }
-
 }
+
+.swiper-recursos{
+    width: 80%;
+}
+
+.card-content-solucao{
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    padding: 1em;
+    margin: 3em;
+    box-shadow: 0px 0px 10px 0px var(--GrayFy);
+    transition: 0.3s;
+
+    &:hover{
+        transform: scale(1.05);
+    }
+}
+
+.card-solucao{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    
+
+    h1{
+
+    }
+}
+
+.slide-img{
+    width: 20em;
+    padding: 3em;
+}	

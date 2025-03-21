@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ImgHome from '../../../images/img_home.png'
 import './recursos.css'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 const RecursosComponent = () => {
+    const [slidesPerView, setSlidesPerView] = useState(1)
 
     const dadosRecursos = [
         {
@@ -34,6 +35,7 @@ const RecursosComponent = () => {
     ]
 
 
+
     return (
         <div className='div-recursos flex flex-col justify-center items-center p-12 md:p-40' id='recursos'>
             <h1 className='titulo-section'>RECURSOS AGENDFY</h1>
@@ -41,28 +43,29 @@ const RecursosComponent = () => {
             <section className='cards flex flex-col md:flex-row gap-8 mt-8'>
 
             </section>
-
-            <Swiper 
-                slidesPerView={1}
-                pagination={{
-                    clickable: true
-                }}
-                navigation={true}
-                className=''  
-                
+            <Swiper
+                slidesPerView={slidesPerView}
+                pagination={{ clickable: true }}
+                navigation
+                className='swiper-recursos'
             >
-                {dadosRecursos.map((recurso) => {
-                    return(
-                    <SwiperSlide key={recurso.id}>
-                        <img src={recurso.img} alt='Imagem de exemplo'/>
-                        <h1>{recurso.titulo}</h1>
-                        <p>{recurso.descricao}</p>
-                    </SwiperSlide>
-                     )
-                })}
+                {dadosRecursos.map((recurso) => (
+                    <SwiperSlide key={recurso.id} className='card-content-solucao'>
+                        <div className='card-solucao'>
+                            <img src={recurso.img} alt="" className='slide-img' />
+                            <div>
+                                <h1>{recurso.titulo}</h1>
+                                <p>{recurso.descricao}</p>
+                            </div>
 
+                        </div>
+
+                    </SwiperSlide>
+                ))}
             </Swiper>
+
         </div>
+
     )
 }
 
