@@ -32,9 +32,7 @@ const LandingPage = () => {
 
             <DivisaoComponent></DivisaoComponent>
 
-            <section className="section-contate" id="contate">
-
-            </section>
+            <ContatoComponent></ContatoComponent>
 
             <footer>
                 <img src={LogoBranca} alt="" />

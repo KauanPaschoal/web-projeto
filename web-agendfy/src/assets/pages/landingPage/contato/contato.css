@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+
+.contato-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    padding: 3em;
+    background-color: var(--WhiteFy);
+    color: var(--BlackFy);
+    padding-top: 4em;
+}
+
+.contato-form{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 50%;
+    font-size: small;
+
+    input, textarea{
+        padding: 1em;
+        border-bottom: 1px solid var(--GrayFy);
+        background-color: var(--LightGrayFy);
+    }
+}

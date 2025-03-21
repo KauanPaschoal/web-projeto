@@ -11,8 +11,8 @@ const HomeComponent = () => {
                 <h1 className="text-4xl font-bold">Gerencie a agenda de sua empresa conosco!</h1>
                 <p className="mt-4 text-lg">Aumente a eficiência de seu negócio com a nossa tecnologia em gerenciamento de agendamentos.</p>
                 <div className="div-buttons flex gap-4 mt-4">
-                    <button className="btn_primario bg-lightBlueFy border-2 border-lightBlueFy text-white p-4 font-medium text-sm transition duration-300 ease-in-out hover:bg-darkestBlueFy">Saiba Mais</button>
-                    <button className="btn_secundario border-2 border-lightBlueFy text-lightBlueFy p-4 font-medium text-sm transition duration-300 ease-in-out hover:bg-lightBlueFy hover:text-white">Criar Conta</button>
+                    <button className="btn_primario bg-lightBlueFy border-2 border-lightBlueFy text-white p-4 font-medium text-sm transition duration-300 ease-in-out hover:bg-darkestBlueFy">Entrar</button>
+                    <button className="btn_secundario border-2 border-lightBlueFy text-lightBlueFy p-4 font-medium text-sm transition duration-300 ease-in-out hover:bg-lightBlueFy hover:text-white">Saiba Mais</button>
                 </div>
             </div>
             <img src={ImgHome} className="w-128 rounded-lg border-2 border-white mt-8 md:mt-0" alt="" />

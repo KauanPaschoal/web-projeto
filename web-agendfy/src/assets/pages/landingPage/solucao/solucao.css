@@ -19,7 +19,7 @@
     width: 100%;
     padding: 5em 10em;
     background: linear-gradient(120deg, var(--WhiteFy) 40%, var(--DarkestBlueFy) 40%);
-    gap: 3rem;
+    gap: 3rem;  
 }
 
 
@@ -30,4 +30,14 @@
     justify-content: space-between;
     align-items: space-between;
     font-size: small;
+}
+
+.cards-solucao-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 1em;
+    transition: 0.3s;
 }
