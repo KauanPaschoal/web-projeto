@@ -9,31 +9,6 @@
       "id": 2,
       "email": "gavassa",
       "password": "user123@"
-    },
-    {
-      "id": 3,
-      "email": "lucas",
-      "password": "User123@"
-    },
-    {
-      "id": 4,
-      "email": "joao",
-      "password": "user123"
-    },
-    {
-      "id": 5,
-      "email": "rizerio",
-      "password": "user@"
-    },
-    {
-      "id": 6,
-      "email": "kaue",
-      "password": "user"
-    },
-    {
-      "id": 7,
-      "email": "kauan",
-      "password": "User123@"
     }
   ]
 }
