@@ -1,8 +1,12 @@
 import React from 'react'
+import MenuLateralComponent from './components/MenuLateral/MenuLateralComponent'
+import './dashboard.css'
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <div className='dashboard'>
+      <MenuLateralComponent></MenuLateralComponent>
+    </div>
   )
 }
 
