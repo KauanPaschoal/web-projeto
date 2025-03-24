@@ -1,13 +1,15 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
 
-const Login = () => {
-    return (
-        <div>
-            Login
-            
-        </div>
-    )
-}
+import LoginComponent from "./loginpage/loginComponent";
+import LogoBranca from "../../images/LogoTipo Branco 1.svg";
+import { Link } from "react-router-dom";
 
-export default Login
+const loginpage = () => {
+  return (
+    <div>
+      <LoginComponent></LoginComponent>
+    </div>
+  );
+};
+
+export default loginpage;
