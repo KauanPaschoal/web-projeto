@@ -9,11 +9,13 @@ import NossaEssenciaComponent from './nossa-essencia/NossaEssenciaComponent'
 import SolucaoComponent from './solucao/SolucaoComponent';
 import RecursosComponent from './recursos/RecursosComponent';
 import ContatoComponent from './contato/ContatoComponent';
+import { Link } from 'react-router-dom';	
 
 
 const LandingPage = () => {
     return (
         <div>
+            
             <HeaderComponent></HeaderComponent>
             {/* Seção Home */}
             <HomeComponent></HomeComponent>

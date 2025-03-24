@@ -1,8 +1,14 @@
 import React from 'react'
+import './Pacientes.css'
+import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent'
+import MainComponent from '../components/MainComponent/MainComponent'
 
 const Pacientes = () => {
   return (
-    <div>Pacientes</div>
+    <div className='div-pacientes flex'>
+      <MenuLateralComponent></MenuLateralComponent>
+      <MainComponent title="Meus Pacientes"></MainComponent>
+    </div>
   )
 }
 
