@@ -1,5 +1,5 @@
 import React from 'react'
-import ImgHome from '../../../images/img_home.png'
+import ImgHome from '../../../assets/images/img_home.png'
 import CardComponent from './Card/CardComponent'
 import CardIcon1 from './Card/icons/Vector.svg'
 import CardIcon2 from './Card/icons/Vector-1.svg'

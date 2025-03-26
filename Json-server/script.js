@@ -1,5 +1,5 @@
-import { errorMessage, responseMessage } from './utils/alert.js';
-import { autenticateUser } from './utils/auth.js';
+import { errorMessage, responseMessage } from '../web-agendfy/src/utils/alert.js';
+import { autenticateUser } from '../web-agendfy/src/utils/auth.js';
 
 
 document.getElementById("loginForm").addEventListener("submit", (event) => {

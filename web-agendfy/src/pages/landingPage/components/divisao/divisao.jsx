@@ -1,5 +1,5 @@
 import React from 'react'
-import Rectangle from '../../../../images/Rectangle 11.svg'
+import Rectangle from '../../../../assets/images/Rectangle 11.svg'
 import './divisao.css'
 
 const Divisao = () => {
