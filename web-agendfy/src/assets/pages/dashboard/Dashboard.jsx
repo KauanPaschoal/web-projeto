@@ -21,7 +21,7 @@ const Dashboard = () => {
   return (
     <div className='dashboard flex'>
       <MenuLateralComponent></MenuLateralComponent>
-      <MainComponent title="Luquinhas">
+      <MainComponent title="Dashboard">
         <div className='flex w-full justify-evenly'>
           <div className='flex w-full justify-evenly'>
             {valores.map((valor, index) => {
