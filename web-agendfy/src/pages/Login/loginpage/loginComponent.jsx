@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-// import { autenticateUser } from "./auth.js"; // Importa a função de autenticação
-// import { responseMessage } from "./alert.js"; // Importa a função de sucesso
+import { autenticateUser } from "../../../utils/auth.js"; // Importa a função de autenticação
+import { responseMessage } from "../../../utils/alert.js"; // Importa a função de sucesso
 import Swal from "sweetalert2";
 
 import "./login.css";

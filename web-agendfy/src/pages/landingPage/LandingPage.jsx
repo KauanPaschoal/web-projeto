@@ -1,6 +1,6 @@
 import React from 'react'
 
-import LogoBranca from '../../images/LogoTipo Branco 1.svg'
+import LogoBranca from '../../assets/images/LogoTipo Branco 1.svg'
 
 import DivisaoComponent from './components/divisao/divisao'
 import HeaderComponent from './header/HeaderComponent';

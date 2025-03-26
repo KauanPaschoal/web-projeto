@@ -1,7 +1,7 @@
 import React from 'react'
-import MissaoImg from '../../../images/essencia/missao_img.svg'
-import ValoresImg from '../../../images/essencia/valores_img.svg'
-import VisaoImg from '../../../images/essencia/visao_img.svg'
+import MissaoImg from '../../../assets/images/essencia/missao_img.svg'
+import ValoresImg from '../../../assets/images/essencia/valores_img.svg'
+import VisaoImg from '../../../assets/images/essencia/visao_img.svg'
 import './nossaEssencia.css'
 
 
