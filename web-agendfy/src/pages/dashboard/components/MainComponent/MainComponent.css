@@ -57,6 +57,5 @@
     align-items: start;
     padding: 0.5em;
     width: 100%;
-    min-height: 100%;
-    height: fit-content;
+    height: 76vh;
 }

@@ -1,1 +1,23 @@
-@import 'tailwindcss'
+@import 'tailwindcss';
+
+.agendas-diario{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: 44vh;
+    overflow-y: scroll;
+    width: 100%;
+    border-radius: 1em;
+}
+
+.agendas-section{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 40%;
+    height: 70%;
+    padding: 1em;
+    border-radius: 1em;
+    background-color: var(--TrueWhiteFy);
+    border: var(--LightGrayFy) 1px solid;
+}
