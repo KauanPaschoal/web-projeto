@@ -14,15 +14,9 @@ const Agendamentos = () => {
       <MenuLateralComponent></MenuLateralComponent>
       <MainComponent
         title="Agendamentos"
-        headerContent={
-          <button
-            className="btn_secundario"
-            onClick={handleFilterClick}
-          >
+        headerContent={<button className="btn_secundario" onClick={handleFilterClick}>
             + Agendar
-          </button>
-        }
-      ></MainComponent>
+          </button>}></MainComponent>
 
     </div>
   )
