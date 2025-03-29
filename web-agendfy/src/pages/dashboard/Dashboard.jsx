@@ -32,14 +32,22 @@ const Dashboard = () => {
     }
   ]
 
-
-
+  const ultimaAtualizacao = new Date().toLocaleDateString('pt-BR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
 
 
   return (
     <div className='dashboard flex'>
       <MenuLateralComponent></MenuLateralComponent>
-      <MainComponent title="Dashboard">
+      <MainComponent title="Dashboard"
+      headerContent={ultimaAtualizacao}>
         <div className='flex flex-col gap-2'>
           <div className='flex w-full justify-between gap-2'>
             {valores.map((valor, index) => {
