@@ -1,7 +1,7 @@
 import React from 'react'
 import './Administracao.css'
-import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent'
-import MainComponent from '../components/MainComponent/MainComponent'
+import MenuLateralComponent from '../components/menuLateral/MenuLateralComponent'
+import MainComponent from '../components/mainComponent/MainComponent'
 
 const Administracao = () => {
     return (

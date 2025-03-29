@@ -1,7 +1,7 @@
 import React from 'react'
 import MenuLateralComponent from './components/MenuLateral/MenuLateralComponent'
-import MainComponent from './components/MainComponent/MainComponent'
-import KPIsComponent from './components/KPIsComponent/KPIsComponent'
+import MainComponent from './components/mainComponent/MainComponent'
+import KPIsComponent from './components/kpisComponent/KPIsComponent'
 import AgendaDiaComponent from './components/AgendaDiaComponent/AgendaDiaComponent'
 import './dashboard.css'
 
