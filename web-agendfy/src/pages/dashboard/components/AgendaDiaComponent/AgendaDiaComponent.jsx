@@ -1,19 +1,34 @@
 import React from 'react'
 import './AgendaDiaComponent.css'
 
-const AgendaDiaComponent = (paciente) => {
+const AgendaDiaComponent = ({ nome, horario, status }) => {
+
+      const getStatusClass = () => {
+        switch (status) {
+          case 'Confirmado':
+            return 'status-confirmado';
+          case 'Pendente':
+            return 'status-pendente';
+          case 'Cancelado':
+            return 'status-cancelado';
+          default:
+            return 'status-default';
+        }
+      };
+
     return (
-        <div className='agendaDiaComponent bg-gray-300'>
+        <div className='agendaDiaComponent bg-gray-200'>
+            <span className={`status ${getStatusClass()}`}>{status}</span>
             <div className='info-card flex'>
                 <div className='flex gap-1'>
-                    <span className='font-bold'>Nome:</span><p>{paciente.nome}</p>
+                    <span className='font-bold'>Nome:</span><p>{nome}</p>
                 </div>
             </div>
             <div className='info-card flex'>
                 <div className='flex gap-1'>
-                    <span className='font-bold'>Horário:</span><p>{paciente.horario}</p>
+                    <span className='font-bold'>Horário:</span><p>{horario}</p>
                 </div>
-                <span className='status'>{paciente.status}</span>
+                
             </div>
             <button className='btn_primario rounded-full'>Ver Detalhes</button>
         </div>
