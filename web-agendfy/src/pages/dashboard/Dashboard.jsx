@@ -16,7 +16,7 @@ const Dashboard = () => {
       id: 2, valor: 10, texto: 'Desistências e/ou Reagendamentos na Semana'
     },
     {
-      id: 3, valor: 10, texto: 'Pacientes com mais de duas semanas sem agendamento'
+      id: 3, valor: 10, texto: 'Pacientes sem agendamento por mais de duas semanas'
     }
   ]
 
