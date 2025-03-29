@@ -1,7 +1,7 @@
 import React from 'react'
 import './Agendamentos.css'
 import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent'
-import MainComponent from '../components/MainComponent/MainComponent'
+import MainComponent from '../components/mainComponent/MainComponent'
 
 const Agendamentos = () => {
 
@@ -15,8 +15,9 @@ const Agendamentos = () => {
       <MainComponent
         title="Agendamentos"
         headerContent={<button className="btn_secundario" onClick={handleFilterClick}>
-            + Agendar
-          </button>}></MainComponent>
+          + Agendar
+        </button>}>
+      </MainComponent>
 
     </div>
   )

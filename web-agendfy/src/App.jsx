@@ -6,7 +6,7 @@ import Login from "./pages/Login/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Agendamentos from "./pages/dashboard/agendamentos/Agendamentos";
 import Pacientes from "./pages/dashboard/pacientes/Pacientes";
-import Administracao from "./pages/dashboard/administração/Administracao";
+import Administracao from "./pages/dashboard/administracao/Administracao";
 
 function App() {
   return (

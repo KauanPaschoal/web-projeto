@@ -1,5 +1,5 @@
 import React from 'react'
-import './menulateral.css'
+import './MenuLateral.css'
 import Logo from '../../../../assets/images/icons/Logo.svg'
 import { Link, useLocation } from 'react-router-dom'
 
