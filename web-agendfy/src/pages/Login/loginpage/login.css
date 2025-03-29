@@ -11,16 +11,15 @@
 }
 
 
-* {
+/* * {
     font-family: Montserrat, sans-serif;
     padding: 0;
     margin: 0;
-}
+} */
 
 .background {
     display: flex;
     justify-content: center;
-    align-items: center;
     width: 100vw;
     height: 100vh;
     background-color: var(--whiteFy);
@@ -35,16 +34,16 @@
     border-radius: 3em;
     justify-content: space-between;
     overflow: hidden;
+    margin: 1.5em;
 }
 
 .login-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2em;
     align-items: center;
     width: 50%;
-    padding: 3em;
+    gap: 0.3em;
 
     a {
         color: var(--lightBlueFy);
@@ -61,11 +60,11 @@
         display: flex;
         flex-direction: column;
         width: 80%;
-        gap: 2em;
 
         p {
             font-size: small;
             color: var(--grayFy);
+            margin: 0;
         }
 
         a {
@@ -73,6 +72,7 @@
             font-weight: 600;
             text-align: end;
             text-decoration: none;
+            margin: 0.8em;
         }
 
         button {
@@ -147,5 +147,10 @@
         cursor: pointer;
         background-color: var(--whiteFy);
         color: var(--darkBlueFy);
+    }
+
+    img {
+        height: 50%;
+        width: 80%;
     }
 }
