@@ -10,6 +10,7 @@
     width: 94vw;
     min-height: 100vh;
     background-color: var(--WhiteFy);
+    overflow: hidden;
 }
 
 .titulo{

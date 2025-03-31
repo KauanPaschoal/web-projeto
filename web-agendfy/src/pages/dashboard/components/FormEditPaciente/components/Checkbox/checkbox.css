@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+
+.container {
+    background-color: peru;
+    height: 80%;
+}
