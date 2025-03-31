@@ -1,5 +1,5 @@
 import React from 'react'
-import './Pacientes.css'
+import './pacientes.css'
 import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent'
 import MainComponent from '../components/MainComponent/MainComponent'
 
