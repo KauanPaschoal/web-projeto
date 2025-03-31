@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-.div-main{
+.div-main {
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -13,18 +13,18 @@
     overflow: hidden;
 }
 
-.titulo{
+.titulo {
     color: var(--BlackFy);
     font-size: x-large;
     font-weight: bold;
 }
 
-.main-section{
+.main-section {
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    gap: 1em;
+    /* gap: 1em; */
     width: 100%;
     min-height: 80vh;
     height: fit-content;
@@ -34,7 +34,7 @@
     background-color: var(--WhiteFy);
 }
 
-.cabecalho{
+.cabecalho {
     display: flex;
     flex-direction: row;
     justify-content: end;
@@ -45,13 +45,13 @@
     border-radius: 12px 12px 0 0;
     color: white;
 
-    h2{
+    h2 {
         font-size: large;
         font-weight: normal;
     }
 }
 
-.conteudo{
+.conteudo {
     display: flex;
     flex-direction: column;
     justify-content: start;
