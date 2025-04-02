@@ -1,29 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 
-:root {
-    --darkestBlueFy: #133857;
-    --darkBlueFy: #144B78;
-    --lightBlueFy: #1B66A4;
-    --whiteFy: #F5f5f5;
-    --lightGrayFy: #DDE1E6;
-    --grayFy: #A5A5A5;
-}
 
-
-* {
+/* * {
     font-family: Montserrat, sans-serif;
     padding: 0;
     margin: 0;
-}
+} */
 
 .background {
     display: flex;
     justify-content: center;
-    align-items: center;
     width: 100vw;
     height: 100vh;
-    background-color: var(--whiteFy);
+    background-color: var(--WhiteFy);
 }
 
 .card {
@@ -35,19 +25,19 @@
     border-radius: 3em;
     justify-content: space-between;
     overflow: hidden;
+    margin: 1.5em;
 }
 
 .login-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2em;
     align-items: center;
     width: 50%;
-    padding: 3em;
+    gap: 0.3em;
 
     a {
-        color: var(--lightBlueFy);
+        color: var(--LightBlueFy);
         text-decoration: none;
         text-align: start;
         font-weight: 600
@@ -61,59 +51,60 @@
         display: flex;
         flex-direction: column;
         width: 80%;
-        gap: 2em;
 
         p {
             font-size: small;
-            color: var(--grayFy);
+            color: var(--GrayFy);
+            margin: 0;
         }
 
         a {
-            color: var(--darkBlueFy);
+            color: var(--DarkBlueFy);
             font-weight: 600;
             text-align: end;
             text-decoration: none;
+            margin: 0.8em;
         }
 
         button {
-            background-color: var(--lightBlueFy);
-            color: var(--whiteFy);
+            background-color: var(--LightBlueFy);
+            color: var(--WhiteFy);
             font-size: larger;
             font-weight: 600;
-            border: var(--darkestBlueFy) 2px solid;
+            border: var(--DarkestBlueFy) 2px solid;
             padding: 0.5em 2em;
             transition: ease-in-out 0.2s;
         }
 
         button:hover {
             cursor: pointer;
-            background-color: var(--darkBlueFy);
+            background-color: var(--DarkBlueFy);
         }
 
     }
 
     input {
         border: none;
-        border-bottom: var(--lightGrayFy) 2px solid;
+        border-bottom: var(--LightGrayFy) 2px solid;
         padding: 1em;
         width: 100%;
     }
 
     .btn_google {
         background-color: transparent;
-        color: var(--darkestBlueFy);
+        color: var(--DarkestBlueFy);
         border-radius: 2em;
         font-size: larger;
         font-weight: 600;
-        border: var(--darkestBlueFy) 2px solid;
+        border: var(--DarkestBlueFy) 2px solid;
         padding: 0.5em 2em;
         transition: ease-in-out 0.2s;
     }
 
     button:hover {
         cursor: pointer;
-        background-color: var(--darkBlueFy);
-        color: var(--whiteFy);
+        background-color: var(--DarkBlueFy);
+        color: var(--WhiteFy);
     }
 
 
@@ -127,16 +118,16 @@
     align-items: center;
     width: 50%;
     padding: 3em;
-    background-color: var(--darkestBlueFy);
-    color: var(--whiteFy);
+    background-color: var(--DarkestBlueFy);
+    color: var(--WhiteFy);
     gap: 1em;
 
     a {
         background-color: transparent;
-        color: var(--whiteFy);
+        color: var(--WhiteFy);
         font-size: larger;
         font-weight: 600;
-        border: var(--whiteFy) 2px solid;
+        border: var(--WhiteFy) 2px solid;
         padding: 0.5em 2em;
         transition: ease-in-out 0.2s;
         width: 50%;
@@ -145,7 +136,12 @@
 
     a:hover {
         cursor: pointer;
-        background-color: var(--whiteFy);
-        color: var(--darkBlueFy);
+        background-color: var(--WhiteFy);
+        color: var(--DarkBlueFy);
+    }
+
+    img {
+        height: 50%;
+        width: 65%;
     }
 }
