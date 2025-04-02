@@ -6,6 +6,7 @@ import Login from "./pages/Login/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Agendamentos from "./pages/dashboard/agendamentos/Agendamentos";
 import Pacientes from "./pages/dashboard/pacientes/Pacientes";
+
 import EditarPaciente from "./pages/dashboard/pacientes/EditarPaciente/EditarPaciente";
 import AdicionarPaciente from "./pages/dashboard/pacientes/AdicionarPaciente/AdicionarPaciente";
 import Administracao from "./pages/dashboard/administração/Administracao";

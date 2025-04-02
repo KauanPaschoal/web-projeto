@@ -6,6 +6,7 @@
   --DarkBlueFy: #144B78;
   --LightBlueFy: #1B66A4;
   --WhiteFy: #F5F5F5;
+  --TrueWhiteFy: #FFFFFF;
   --RedFy: #AD1C03;
   --DarkRedFy: #7a1300;
   --RedFyTransparente: #ad1c0378;
@@ -66,9 +67,8 @@ button {
 .btn_primario:hover {
   cursor: pointer;
   background-color: var(--DarkestBlueFy);
+  border: var(--DarkestBlueFy) 2px solid;
 }
-
-
 
 
 
