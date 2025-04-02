@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+
+button {
+    display: block;
+    margin: auto;
+    position: relative;
+    margin-top: 16px;
+
+    color: #F5F5F5;
+    background-color: #1B66A4;
+
+    border-radius: 20px;
+
+    cursor: pointer;
+}

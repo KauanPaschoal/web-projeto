@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+
+:root {
+    --light-blue: #1B66A4;
+}
+
+/* Esconde o checkbox padrão */
+input[type="checkbox"] {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    margin-right: 8px;
+    border: 2px solid var(--light-blue); /* Borda azul */
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  /* Quando o checkbox está marcado */
+  input[type="checkbox"]:checked {
+    background-color: var(--light-blue); /* Fundo azul */
+    border-color: var(--light-blue);
+  }
+  
+  /* Criando o símbolo de check */
+  input[type="checkbox"]:checked::before {
+    content: "✔";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-size: 12px;
+  }
+
+  .checkboxLabel {
+    font-weight: bold;
+  }
