@@ -5,7 +5,7 @@ import './saveButton.css'
 const InputField = ({type, textContent}) => {
 
     return (
-        <button type={type ? type : 'submit'}>🖫 {textContent ? textContent : 'Salvar Alterações'}</button>
+        <button type={type ? type : 'submit'} className='save-btn'>🖫 {textContent ? textContent : 'Salvar Alterações'}</button>
         
     )
 }

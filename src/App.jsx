@@ -9,7 +9,7 @@ import Pacientes from "./pages/dashboard/pacientes/Pacientes";
 
 import EditarPaciente from "./pages/dashboard/pacientes/EditarPaciente/EditarPaciente";
 import AdicionarPaciente from "./pages/dashboard/pacientes/AdicionarPaciente/AdicionarPaciente";
-import Administracao from "./pages/dashboard/administração/Administracao";
+import Administracao from "./pages/dashboard/administracao/Administracao";
 
 function App() {
   return (

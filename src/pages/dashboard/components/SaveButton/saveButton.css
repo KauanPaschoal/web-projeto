@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-button {
+.save-btn {
     display: block;
     margin: auto;
     position: relative;

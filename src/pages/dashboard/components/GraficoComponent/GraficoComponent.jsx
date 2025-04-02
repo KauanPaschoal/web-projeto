@@ -1,5 +1,6 @@
 import React from 'react'
 import { Chart } from "react-google-charts";
+import "./GraficoComponent.css"
 
 const GraficoComponent = () => {
     const data = [
@@ -26,6 +27,8 @@ const GraficoComponent = () => {
             chartType="Bar"
             data={data}
             options={options}
+            height={"150px"}
+            className='grafico-component'
         />
     );
 }
