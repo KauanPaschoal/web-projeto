@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+
+.agendas-diario{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: 44vh;
+    overflow-y: scroll;
+    width: 100%;
+    border-radius: 1em;
+}
+
+.second-section{
+    width: 100%;
+    height: 60%;
+    justify-content: space-between;
+}
+
+.agendas-section{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 40%;
+    height: 100%;
+    padding: 1em;
+    border-radius: 1em;
+    background-color: var(--TrueWhiteFy);
+    border: var(--LightGrayFy) 1px solid;
+}
+
+.grafico-section{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    height: 100%;
+    padding: 1em;
+    border-radius: 1em;
+    background-color: var(--TrueWhiteFy);
+    border: var(--LightGrayFy) 1px solid;
+}
