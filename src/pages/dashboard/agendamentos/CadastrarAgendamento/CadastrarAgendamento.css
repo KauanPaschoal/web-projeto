@@ -39,6 +39,17 @@
     border-radius: 1em;
 }
 
+.paciente-info{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1em;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
 .styled-datalist{
     width: 100%;
     height: 100%;
@@ -46,4 +57,26 @@
     border-radius: 1em;
     background-color: var(--WhiteFy);
     border: var(--LightGrayFy) 1px solid;
+}
+
+.suggestions-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #fff;
+    position: absolute;
+    z-index: 1000;
+    width: 20%;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
 }
