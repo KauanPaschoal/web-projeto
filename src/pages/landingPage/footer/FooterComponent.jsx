@@ -1,6 +1,6 @@
 import React from 'react'
 import './FooterComponent.css'
-import LogoBranca from '../../assets/images/LogoTipo Branco 1.svg'
+import LogoBranca from '../../../assets/images/LogoTipo Branco 1.svg'
 
 const FooterComponent = () => {
     return (
