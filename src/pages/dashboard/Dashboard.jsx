@@ -8,6 +8,29 @@ import GraficoComponent from './components/GraficoComponent/GraficoComponent'
 
 const Dashboard = () => {
 
+  // const [planos, setPlanos] = React.useState([]);
+
+  // fetch('/planos', {
+  //   method: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': 'Bearer ' + localStorage.getItem('token')
+  //   }
+  // }).then((response) => {
+  //   if (response.ok) {
+  //     return response.json();
+  //   } else {
+  //     throw new Error('Erro ao buscar dados');
+  //   }
+  // }).then((data) => {
+  //   setPlanos(data);
+  // }).catch((error) => {
+  //   console.error(error);
+  // });
+
+
+
+
   const valores = [
     {
       id: 1, valor: 10, texto: 'Pacientes Agendados na Semana'
@@ -47,7 +70,7 @@ const Dashboard = () => {
     <div className='dashboard flex'>
       <MenuLateralComponent></MenuLateralComponent>
       <MainComponent title="Dashboard"
-      headerContent={ultimaAtualizacao}>
+        headerContent={"Última atualização: " + ultimaAtualizacao}>
         <div className='flex flex-col gap-2'>
           <div className='flex w-full justify-between gap-2'>
             {valores.map((valor, index) => {
@@ -67,7 +90,14 @@ const Dashboard = () => {
               <h1 className='font-bold text-xl'>Gráfico de Agendamentos</h1>
               <GraficoComponent></GraficoComponent>
             </div>
+
           </div>
+          {/* {planos.map((plano, index) => {
+            return <div key={index} className='bg-slate-300 rounded-lg p-4'>
+              <p>{plano.categoria}</p>
+              <p>Valor: {plano.preco}</p>
+            </div>
+          })} */}
         </div>
 
 

@@ -5,20 +5,24 @@ import MainComponent from '../components/mainComponent/MainComponent'
 
 const Agendamentos = () => {
 
-  const handleFilterClick = () => {
-    alert('Filtro clicado!');
-  };
+  const redirectToCadastrarAgendamento = () => {
+    window.location.href = './agendamentos/cadastrar'
+  }
 
   return (
     <div className='div-agendamentos flex'>
-      <MenuLateralComponent></MenuLateralComponent>
+      <MenuLateralComponent/>
       <MainComponent
         title="Agendamentos"
-        headerContent={<button className="btn_secundario" onClick={handleFilterClick}>
-          + Agendar
-        </button>}>
+        headerContent={
+          <button
+            className="btn_agendamento"
+            onClick={redirectToCadastrarAgendamento}
+          >
+            + Agendar
+          </button>
+        }>
       </MainComponent>
-
     </div>
   )
 }

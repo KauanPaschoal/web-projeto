@@ -1,1 +1,16 @@
 @import 'tailwindcss';
+
+.btn_agendamento{
+    background-color: var(--BlueFy);
+    color: var(--WhiteFy);
+    padding: 0em 1em;
+    font-size: small;
+    cursor: pointer;
+    border-radius: 12em;
+}
+
+.btn_agendamento:hover{
+    background-color: var(--WhiteFy);
+    color: var(--DarkBlueFy);
+    transition: 0.3s;
+}
