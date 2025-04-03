@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+.div-cadastrar-agendamento{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 1em 2em;
+    width: 94vw;
+    min-height: 100vh;
+    background-color: var(--WhiteFy);
+    overflow: hidden;
+}
+
+.form-cadastrar-agendamento{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+    min-height: 80vh;
+    height: fit-content;
+    padding: 1em;
+    gap: 1em;
+    border: var(--BlackFy) 2px solid;
+    border-radius: 12px;
+    background-color: var(--LightGrayFy);
+}
+
+.div-escolher-paciente{
+    width: 80%;
+    height: 10vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--WhiteFy);
+    padding: 1em;
+    border-radius: 1em;
+}
+
+.paciente-info{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1em;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.styled-datalist{
+    width: 100%;
+    height: 100%;
+    padding: 0.5em;
+    border-radius: 1em;
+    background-color: var(--WhiteFy);
+    border: var(--LightGrayFy) 1px solid;
+}
+
+.suggestions-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #fff;
+    position: absolute;
+    z-index: 1000;
+    width: 20%;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
