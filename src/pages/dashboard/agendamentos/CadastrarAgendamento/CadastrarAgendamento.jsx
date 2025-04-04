@@ -3,7 +3,7 @@ import './CadastrarAgendamento.css'
 import MainComponent from '../../components/mainComponent/MainComponent'
 import MenuLateralComponent from '../../components/MenuLateral/MenuLateralComponent'
 import InputField from '../../components/InputField/InputField'
-import { FaSearch } from 'react-icons/fa'
+import { FaSearch, FaUser } from 'react-icons/fa'
 
 const CadastrarAgendamento = () => {
     const [pacientes, setPacientes] = React.useState([]);
@@ -14,9 +14,9 @@ const CadastrarAgendamento = () => {
         setQuery(query); // Atualiza o estado com o texto digitado
         const allPacientes = [
             { nome: "Paciente 1", diaSemana: 1, horario: "10:00" }, // Segunda-feira
-            { nome: "Paciente 2", diaSemana: 3, horario: "14:00" }, // Quarta-feira
-            { nome: "Paciente 3", diaSemana: 5, horario: "09:00" }, // Sexta-feira
-            { nome: "Paciente 4", diaSemana: 0, horario: "11:00" }, // Domingo
+            { nome: "Pecia 2", diaSemana: 3, horario: "14:00" }, // Quarta-feira
+            { nome: "Peaciente 3", diaSemana: 5, horario: "09:00" }, // Sexta-feira
+            { nome: "Peagte 4", diaSemana: 0, horario: "11:00" }, // Domingo
         ];
 
         const getDiaDoMes = (diaSemana) => {
@@ -42,7 +42,7 @@ const CadastrarAgendamento = () => {
         const filteredPacientes = allPacientesComDiaMes.filter(paciente =>
             paciente.nome.toLowerCase().includes(query.toLowerCase())
         );
-        
+
         setPacientes(filteredPacientes);
         setShowSuggestions(true); // Exibe as sugestões
     };
@@ -81,7 +81,7 @@ const CadastrarAgendamento = () => {
                             onBlur={handleBlur}
                             required
                             className="styled-input"
-                            icon={<FaSearch />}
+                            icon={<FaUser />}
                         />
                         {showSuggestions && pacientes.length > 0 && (
                             <ul className="suggestions-list">
@@ -112,30 +112,41 @@ const CadastrarAgendamento = () => {
                         )}
                     </div>
 
-                    <div className='flex'>
-                        <InputField
-                            type="text"
-                            id="data"
-                            name="data"
-                            labelTitle="Data"
-                            placeholder="Data"
-                            required
-                            value={query !== '' && pacientes.length === 1 && pacientes[0].nome === query ? pacientes[0].diaMes : ''}
-                            readOnly
-                        />
-                        <InputField
-                            type="text"
-                            id="hora"
-                            name="hora"
-                            labelTitle="Hora"
-                            placeholder="Hora"
-                            required
-                            value={query !== '' && pacientes.length === 1 && pacientes[0].nome === query ? pacientes[0].horario : ''}
-                            readOnly
-                        />
+                    <div className='container-sessao'>
+                        <div className='flex gap-2 justify-center'>
+                            <InputField
+                                type="text"
+                                id="data"
+                                name="data"
+                                labelTitle="Data"
+                                placeholder="Data"
+                                required
+                                value={query !== '' && pacientes.length === 1 && pacientes[0].nome === query ? pacientes[0].diaMes : ''}
+                                readOnly
+                            />
+                            <InputField
+                                type="text"
+                                id="hora"
+                                name="hora"
+                                labelTitle="Hora"
+                                placeholder="Hora"
+                                required
+                                value={query !== '' && pacientes.length === 1 && pacientes[0].nome === query ? pacientes[0].horario : ''}
+                                readOnly
+                            />
+                        </div>
+
+                        <div>
+                            <h3>Últimos Agendamentos</h3>
+                        </div>
                     </div>
 
-                    <button type="submit" className='btn_secundario'>Cadastrar</button>
+
+                    <div className='flex gap-2'>
+                        <button type="submit" className='btn_primario'>Salvar Alterações</button>
+                        <button className='btn_secundario'>Cancelar</button>
+                    </div>
+
                 </form>
             </MainComponent>
         </>
