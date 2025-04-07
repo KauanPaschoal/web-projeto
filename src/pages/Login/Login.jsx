@@ -108,10 +108,6 @@ const LoginPage = () => {
               Entrar
             </button>
           </form>
-          <span className="text-lg text-gray-600">Ou entre com:</span>
-          <button className="bg-transparent text-darkestBlueFy text-lg font-semibold py-2 px-8 border-2 border-darkestBlueFy hover:bg-darkBlueFy hover:text-white transition ease-in-out duration-200">
-            Google
-          </button>
         </div>
         <div className="cadastro-container bg-darkestBlueFy">
           <img src={logo} alt="Logo" className="logo-class" />
