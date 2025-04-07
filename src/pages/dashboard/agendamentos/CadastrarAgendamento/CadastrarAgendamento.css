@@ -128,3 +128,48 @@
     background-color: #FFF;
 }
 
+
+.status-ok{
+    background-color: var(--GreenAlertFy);
+    color: var(--BlackFy);
+    padding: 0.5em 1em;
+    border-radius: 1em;
+    font-size: small;
+    font-weight: bold;
+}
+
+.container-inputs{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: end;
+    gap: 1em;
+}
+
+.select-container {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
+
+.select-container label {
+    width: fit-content;
+    font-size: 14px;
+    font-weight: bold;
+    color: #21272A;
+}
+
+.select-container .select-field {
+    width: 300px;
+    border-bottom: 1px solid #C1C7CD;
+    font-size: 14px;
+    padding: 10px 0 2px 16px;
+
+    caret-color: var(--blue-detail);
+
+    outline: none;
+}
+
+.select-container .select-field:focus {
+    border-bottom-color: var(--blue-detail);
+}
