@@ -174,7 +174,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                 placeholder="Data"
                                 required
                                 value={query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query ?
-                                    pacienteSelecionado.diaMes.find(dia => new Date(dia.split('/').reverse().join('-')) > new Date()) || ''
+                                    pacienteSelecionado.diaMes.find(dia => new Date(dia.split('/').reverse().join('/')) > new Date()) || ''
                                     : ''} 
                                 readOnly
                                 className={"w-full"}
@@ -193,7 +193,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                             />
                         </div>
 
-                        {pacienteSelecionado && (
+                        {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
                             <div className='agendamentos-container'>
                                 <h3>Últimos Agendamentos</h3>
                                 <div className='agendamentos-list'>

@@ -18,8 +18,7 @@
     justify-content: space-evenly;
     align-items: center;
     width: 100%;
-    min-height: 80vh;
-    height: fit-content;
+    height: 100%;
     padding: 1em;
     gap: 0.2em;
     border: var(--BlackFy) 2px solid;
@@ -114,6 +113,7 @@
     height: 100%;
     gap: 1em;
     overflow-y: auto;
+    padding-right: 1em;
 }
 
 .agendamento-item{
