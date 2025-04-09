@@ -4,6 +4,7 @@ import MainComponent from '../../components/mainComponent/MainComponent'
 import MenuLateralComponent from '../../components/MenuLateral/MenuLateralComponent'
 import InputField from '../../components/InputField/InputField'
 import { FaSearch, FaUser } from 'react-icons/fa'
+import { errorMessage, responseMessage } from '../../../../utils/alert.js'
 
 const CadastrarAgendamento = ({ paciente }) => {
     const [pacientes, setPacientes] = React.useState([]);
@@ -22,69 +23,61 @@ const CadastrarAgendamento = ({ paciente }) => {
     const handlePacienteSearch = (query) => {
         setQuery(query);
         const allPacientes = [
-            { nome: "Paciente 1", diaSemana: 1, horario: "10:00" },
-            { nome: "Pecia 2", diaSemana: 3, horario: "14:00" },
-            { nome: "Peaciente 3", diaSemana: 5, horario: "09:00" },
-            { nome: "Peagte 4", diaSemana: 0, horario: "11:00" },
+            { id: 1, nome: "Paciente 1", diaSemana: 1, horario: "10:00" },
+            { id: 2, nome: "paeciente 2", diaSemana: 3, horario: "14:00" },
+            { id: 3, nome: "paegiente 3", diaSemana: 5, horario: "09:00" },
+            { id: 4, nome: "paegente 4", diaSemana: 0, horario: "11:00" },
         ];
 
+
         const agendamentos = [
-            { data: "2023-10-01", horario: "10:00", paciente: "Paciente 1" },
-            { data: "2023-10-02", horario: "14:00", paciente: "Pecia 2" },
-            { data: "2023-10-03", horario: "09:00", paciente: "Peaciente 3" },
-            { data: "2023-10-04", horario: "11:00", paciente: "Peagte 4" },
-            { data: "2023-10-05", horario: "10:00", paciente: "Paciente 1" },
-            { data: "2023-10-06", horario: "14:00", paciente: "Pecia 2" },
-            { data: "2023-10-07", horario: "09:00", paciente: "Peaciente 3" },
-            { data: "2023-10-08", horario: "11:00", paciente: "Peagte 4" },
-        ]
+            { data: "2023-10-01", horario: "10:00", idPaciente: 1, status: "Compareceu" },
+            { data: "2023-10-02", horario: "14:00", idPaciente: 2, status: "Cancelou" },
+            { data: "2023-10-03", horario: "09:00", idPaciente: 3, status: "Reagendou" },
+            { data: "2023-10-04", horario: "11:00", idPaciente: 4, status: "Pendente" },
+            { data: "2023-10-05", horario: "10:30", idPaciente: 1, status: "Compareceu" },
+            { data: "2023-10-06", horario: "15:00", idPaciente: 2, status: "Cancelou" },
+            { data: "2023-10-07", horario: "08:30", idPaciente: 3, status: "Reagendou" },
+            { data: "2023-10-08", horario: "12:00", idPaciente: 4, status: "Pendente" },
+            { data: "2023-10-09", horario: "09:00", idPaciente: 1, status: "Compareceu" },
+            { data: "2023-10-10", horario: "13:00", idPaciente: 2, status: "Cancelou" },
+            { data: "2023-10-11", horario: "10:00", idPaciente: 3, status: "Reagendou" },
+            { data: "2023-10-12", horario: "11:30", idPaciente: 4, status: "Pendente" },
+            { data: "2023-10-13", horario: "14:00", idPaciente: 1, status: "Compareceu" },
+            { data: "2023-10-14", horario: "16:00", idPaciente: 2, status: "Cancelou" },
+            { data: "2023-10-15", horario: "07:30", idPaciente: 3, status: "Reagendou" },
+            { data: "2023-10-16", horario: "10:00", idPaciente: 4, status: "Pendente" },
+            { data: "2023-10-17", horario: "09:30", idPaciente: 1, status: "Compareceu" },
+            { data: "2023-10-18", horario: "14:30", idPaciente: 2, status: "Cancelou" },
+            { data: "2023-10-19", horario: "08:00", idPaciente: 3, status: "Reagendou" },
+            { data: "2023-10-20", horario: "12:30", idPaciente: 4, status: "Pendente" },
+        ];
 
-        const filteredAgendamentos = agendamentos.filter(agendamento => {
-            const agendamentoData = new Date(agendamento.data);
-            const agendamentoDia = agendamentoData.getDate();
-            const agendamentoMes = agendamentoData.getMonth() + 1; // Meses começam do 0
-            const agendamentoAno = agendamentoData.getFullYear();
-            const agendamentoDiaFormatado = `${agendamentoDia < 10 ? '0' : ''}${agendamentoDia}/${agendamentoMes < 10 ? '0' : ''}${agendamentoMes}/${agendamentoAno}`;
-            return agendamento.paciente.toLowerCase().includes(query.toLowerCase()) || agendamentoDiaFormatado.includes(query);
-        });
-        setAgendamentos(filteredAgendamentos);
-
-
-        const getDiasDoMes = (diaSemana) => {
-            const hoje = new Date();
-            const mesAtual = hoje.getMonth();
-            const anoAtual = hoje.getFullYear();
-            const diasDoMes = [];
-            const ultimoDiaDoMes = new Date(anoAtual, mesAtual + 1, 0).getDate();
-
-            for (let dia = 1; dia <= ultimoDiaDoMes; dia++) {
-                const data = new Date(anoAtual, mesAtual, dia);
-                if (data.getDay() === diaSemana) {
-                    const diaFormatado = data.toLocaleDateString('pt-BR', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                    });
-                    diasDoMes.push(diaFormatado);
-                }
-            }
-
-            return diasDoMes;
-        };
-
-        const allPacientesComDiaMes = allPacientes.map(paciente => ({
-            ...paciente,
-            diaMes: getDiasDoMes(paciente.diaSemana),
-        }));
-
-        const filteredPacientes = allPacientesComDiaMes.filter(paciente =>
+        const filteredPacientes = allPacientes.filter(paciente =>
             paciente.nome.toLowerCase().includes(query.toLowerCase())
         );
 
-        setPacientes(filteredPacientes);
         if (filteredPacientes.length === 1) {
-            setPacienteSelecionado(filteredPacientes[0]);
+            const selectedPaciente = filteredPacientes[0];
+            setPacienteSelecionado({
+                ...selectedPaciente,
+                diaMes: Array.from({ length: 4 }, (_, i) => {
+                    const data = new Date();
+                    data.setDate(data.getDate() + i * 7 + (selectedPaciente.diaSemana - data.getDay() + 7) % 7);
+                    return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                }),
+            });
+
+            const filteredAgendamentos = agendamentos.filter(
+                agendamento => agendamento.idPaciente === selectedPaciente.id
+            );
+            setAgendamentos(filteredAgendamentos);
+        } else {
+            setPacienteSelecionado(null);
+            setAgendamentos([]);
         }
+
+        setPacientes(filteredPacientes);
         setShowSuggestions(true);
     };
 
@@ -111,6 +104,68 @@ const CadastrarAgendamento = ({ paciente }) => {
         setTimeout(() => setShowSuggestions(false), 200);
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        let novoAgendamento = {}
+        if (!pacienteSelecionado) {
+            errorMessage("Por favor, escolha um paciente para continuar.", "small")
+        } else if (!pacienteSelecionado.selectedDate) {
+            errorMessage("Por favor, escolha uma data para continuar.", "small")
+        } else if (!pacienteSelecionado.horario) {
+            errorMessage("Por favor, escolha um horário para continuar.", "small")
+        } else {
+            novoAgendamento = {
+                idPaciente: pacienteSelecionado.id,
+                data: pacienteSelecionado.selectedDate,
+                horario: pacienteSelecionado.horario,
+            };
+            responseMessage("Agendamento cadastrado com sucesso!", "small")
+        }
+
+
+
+
+        console.log(novoAgendamento);
+    }
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+
+    //     if (!pacienteSelecionado || !pacienteSelecionado.selectedDate || !pacienteSelecionado.horario) {
+    //         alert("Por favor, preencha todos os campos antes de salvar.");
+    //         return;
+    //     }
+
+    //     const novoAgendamento = {
+    //         idPaciente: pacienteSelecionado.id,
+    //         data: pacienteSelecionado.selectedDate,
+    //         horario: pacienteSelecionado.horario,
+    //     };
+
+    //     try {
+    //         const response = await fetch('/api/agendamentos', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(novoAgendamento),
+    //         });
+
+    //         if (response.ok) {
+    //             alert("Agendamento cadastrado com sucesso!");
+    //             setAgendamentos([...agendamentos, novoAgendamento]);
+    //         } else {
+    //             alert("Erro ao cadastrar o agendamento. Tente novamente.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Erro ao cadastrar o agendamento:", error);
+    //         alert("Erro ao cadastrar o agendamento. Tente novamente.");
+    //     }
+    // };
+
+   
+
     return (
         <>
             <MenuLateralComponent />
@@ -121,7 +176,10 @@ const CadastrarAgendamento = ({ paciente }) => {
                         {"< Voltar"}
                     </button>
                 }>
-                <form className='form-cadastrar-agendamento'>
+                <form className='form-cadastrar-agendamento'
+                    onSubmit={handleSubmit}
+                    noValidate
+                >
                     <div className='w-[80%]'>
                         <InputField
                             type="text"
@@ -201,7 +259,6 @@ const CadastrarAgendamento = ({ paciente }) => {
                                 className={"w-full"}
                             />
                         </div>
-
                         {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
                             <div className='agendamentos-container'>
                                 <h3>Últimos Agendamentos</h3>
@@ -210,7 +267,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                         <div key={index} className="agendamento-item">
                                             <p><strong>Data:</strong> {agendamento.data}</p>
                                             <p><strong>Horário:</strong> {agendamento.horario}</p>
-                                            <p><span className='status-ok'>Compareceu</span></p>
+                                            <p><span className="status">{agendamento.status}</span></p>
                                         </div>
                                     ))}
                                 </div>
@@ -218,7 +275,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                         )}
                     </div>
                     <div className='flex gap-2'>
-                        <button type="submit" className='btn_primario rounded-full'>Salvar Alterações</button>
+                        <button type="submit" className='btn_primario rounded-full' >Salvar Alterações</button>
                         <button className='btn_secundario rounded-full'>Cancelar</button>
                     </div>
                 </form>

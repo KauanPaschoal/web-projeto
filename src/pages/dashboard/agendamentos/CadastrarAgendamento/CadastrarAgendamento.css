@@ -29,7 +29,7 @@
 .container-sessao{
     height: 50%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: start;
     justify-content: start;
     background-color: var(--WhiteFy);
@@ -129,8 +129,8 @@
 }
 
 
-.status-ok{
-    background-color: var(--GreenAlertFy);
+.status{
+    background-color: var(--LightGrayFy);
     color: var(--BlackFy);
     padding: 0.5em 1em;
     border-radius: 1em;
@@ -138,9 +138,29 @@
     font-weight: bold;
 }
 
+.status-ok{
+    background-color: var(--GreenFy);
+    color: var(--WhiteFy);
+}
+
+.status-cancelado{
+    background-color: var(--RedFy);
+    color: var(--WhiteFy);
+}
+
+.status-reagendado{
+    background-color: var(--YellowFy);
+    color: var(--WhiteFy);
+}
+
+.status-pendente{
+    background-color: var(--BlueFy);
+    color: var(--WhiteFy);
+}
+
 .container-inputs{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: start;
     align-items: end;
     gap: 1em;
