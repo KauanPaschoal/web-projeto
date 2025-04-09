@@ -277,13 +277,30 @@ const CadastrarAgendamento = ({ paciente }) => {
                             <div className='agendamentos-container'>
                                 <h3>Últimos Agendamentos</h3>
                                 <div className='agendamentos-list'>
-                                    {agendamentos.map((agendamento, index) => (
-                                        <div key={index} className="agendamento-item">
-                                            <p><strong>Data:</strong> {agendamento.data}</p>
-                                            <p><strong>Horário:</strong> {agendamento.horario}</p>
-                                            <p><span className="status">{agendamento.status}</span></p>
-                                        </div>
-                                    ))}
+                                    {agendamentos.map((agendamento, index) => {
+                                        const getStatusSessaoClass = () => {
+                                            switch (agendamento.status) {
+                                                case 'Compareceu':
+                                                    return 'status-sessao-ok';
+                                                case 'Pendente':
+                                                    return 'status-sessao-pendente';
+                                                case 'Cancelou':
+                                                    return 'status-sessao-cancelado';
+                                                case 'Reagendou':
+                                                    return 'status-sessao-reagendado';
+                                                default:
+                                                    return 'status-sessao-default';
+                                            }
+                                        };
+                                        return (
+                                            <div key={index} className="agendamento-item">
+                                                <p><strong>Data:</strong> {agendamento.data}</p>
+                                                <p><strong>Horário:</strong> {agendamento.horario}</p>
+                                                <p><span className={`status ${getStatusSessaoClass()}`}>{agendamento.status}</span></p>
+                                            </div>
+                                        )
+                                    }
+                                    )}
                                 </div>
                             </div>
                         )}
