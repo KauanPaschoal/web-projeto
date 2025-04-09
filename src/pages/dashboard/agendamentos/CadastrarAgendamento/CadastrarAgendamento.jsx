@@ -5,6 +5,7 @@ import MenuLateralComponent from '../../components/MenuLateral/MenuLateralCompon
 import InputField from '../../components/InputField/InputField'
 import { FaSearch, FaUser } from 'react-icons/fa'
 import { errorMessage, responseMessage } from '../../../../utils/alert.js'
+import axios from 'axios';
 
 const CadastrarAgendamento = ({ paciente }) => {
     const [pacientes, setPacientes] = React.useState([]);
@@ -13,12 +14,21 @@ const CadastrarAgendamento = ({ paciente }) => {
     const [query, setQuery] = React.useState(paciente ? paciente.nome : '');
     const [showSuggestions, setShowSuggestions] = React.useState(false);
 
-    React.useEffect(() => {
-        if (paciente) {
-            setPacienteSelecionado(paciente);
-            setQuery(paciente.nome);
-        }
-    }, [paciente]);
+
+
+    const getNomeDiaSemana = (diaSemana) => {
+        const dias = [
+            "Domingo",
+            "Segunda-feira",
+            "Terça-feira",
+            "Quarta-feira",
+            "Quinta-feira",
+            "Sexta-feira",
+            "Sábado",
+        ];
+        return dias[diaSemana] || "Desconhecido";
+    };
+
 
     const handlePacienteSearch = (query) => {
         setQuery(query);
@@ -81,19 +91,6 @@ const CadastrarAgendamento = ({ paciente }) => {
         setShowSuggestions(true);
     };
 
-    const getNomeDiaSemana = (diaSemana) => {
-        const dias = [
-            "Domingo",
-            "Segunda-feira",
-            "Terça-feira",
-            "Quarta-feira",
-            "Quinta-feira",
-            "Sexta-feira",
-            "Sábado",
-        ];
-        return dias[diaSemana] || "Desconhecido";
-    };
-
     const handleSelectPaciente = (paciente) => {
         setQuery(paciente);
         handlePacienteSearch(paciente);
@@ -122,12 +119,29 @@ const CadastrarAgendamento = ({ paciente }) => {
             };
             responseMessage("Agendamento cadastrado com sucesso!", "small")
         }
-
-
-
-
         console.log(novoAgendamento);
     }
+
+    React.useEffect(() => {
+        if (paciente) {
+            setPacienteSelecionado(paciente);
+            setQuery(paciente.nome);
+        }
+    }, [paciente]);
+
+    React.useEffect(() => {
+        const fetchPacientes = async () => {
+            try {
+                const response = await axios.get('/api/pacientes');
+                setPacientes(response.data);
+            } catch (error) {
+                console.error("Erro ao buscar pacientes:", error);
+                errorMessage("Erro ao carregar a lista de pacientes.", "small");
+            }
+        };
+
+        fetchPacientes();
+    }, []);
 
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
@@ -164,7 +178,7 @@ const CadastrarAgendamento = ({ paciente }) => {
     //     }
     // };
 
-   
+
 
     return (
         <>
