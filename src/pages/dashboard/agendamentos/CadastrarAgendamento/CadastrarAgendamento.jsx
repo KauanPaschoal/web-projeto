@@ -237,42 +237,45 @@ const CadastrarAgendamento = ({ paciente }) => {
                     </div>
 
                     <div className='container-sessao'>
-                        <div className='container-inputs flex gap-2'>
-                            <div className="select-container w-full">
-                                <label htmlFor="data" className="input-label">Data</label>
-                                <select
-                                    id="data"
-                                    name="data"
+                        {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
+                            <div className='container-inputs flex gap-2'>
+                                <div className="select-container w-full">
+                                    <label htmlFor="data" className="input-label">Data:</label>
+                                    <select
+                                        id="data"
+                                        name="data"
+                                        required
+                                        className="select-field w-full"
+                                        value={pacienteSelecionado?.selectedDate || ''}
+                                        onChange={(e) => setPacienteSelecionado({
+                                            ...pacienteSelecionado,
+                                            selectedDate: e.target.value
+                                        })}
+                                    >
+                                        <option value="" disabled>Selecione uma data</option>
+                                        {pacienteSelecionado && pacienteSelecionado.diaMes
+                                            .filter(dia => new Date(dia.split('/').reverse().join('/')) > new Date())
+                                            .map((dia, index) => (
+                                                <option key={index} value={dia}>
+                                                    {dia}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </div>
+                                <InputField
+                                    type="text"
+                                    id="horario"
+                                    name="horario"
+                                    labelTitle="Horário"
+                                    placeholder="Horário"
                                     required
-                                    className="select-field w-full"
-                                    value={pacienteSelecionado?.selectedDate || ''}
-                                    onChange={(e) => setPacienteSelecionado({
-                                        ...pacienteSelecionado,
-                                        selectedDate: e.target.value
-                                    })}
-                                >
-                                    <option value="" disabled>Selecione uma data</option>
-                                    {pacienteSelecionado && pacienteSelecionado.diaMes
-                                        .filter(dia => new Date(dia.split('/').reverse().join('/')) > new Date())
-                                        .map((dia, index) => (
-                                            <option key={index} value={dia}>
-                                                {dia}
-                                            </option>
-                                        ))}
-                                </select>
+                                    value={query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query ? pacienteSelecionado.horario : ''}
+                                    readOnly={pacienteSelecionado && pacienteSelecionado.nome === query ? false : true}
+                                    className={"w-full"}
+                                />
                             </div>
-                            <InputField
-                                type="text"
-                                id="horario"
-                                name="horario"
-                                labelTitle="Horário"
-                                placeholder="Horário"
-                                required
-                                value={query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query ? pacienteSelecionado.horario : ''}
-                                readOnly={pacienteSelecionado && pacienteSelecionado.nome === query ? false : true}
-                                className={"w-full"}
-                            />
-                        </div>
+                        )}
+
                         {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
                             <div className='agendamentos-container'>
                                 <h3>Últimos Agendamentos</h3>
@@ -307,7 +310,10 @@ const CadastrarAgendamento = ({ paciente }) => {
                     </div>
                     <div className='flex gap-2'>
                         <button type="submit" className='btn_primario rounded-full' >Salvar Alterações</button>
-                        <button className='btn_secundario rounded-full'>Cancelar</button>
+                        <button className='btn_secundario rounded-full'
+                            onClick={() => window.location.href = '/dashboard/agendamentos'}
+                            type="button"
+                        >Cancelar</button>
                     </div>
                 </form>
             </MainComponent >

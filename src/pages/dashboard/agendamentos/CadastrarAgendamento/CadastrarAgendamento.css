@@ -30,7 +30,7 @@
     height: 50%;
     display: flex;
     flex-direction: row;
-    align-items: start;
+    align-items: center;
     justify-content: space-evenly;
     background-color: var(--WhiteFy);
     border-radius: 2em;
@@ -41,7 +41,7 @@
 
 .div-escolher-paciente{
     width: 80%;
-    height: 10vh;
+    min-height: 10vh;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -130,7 +130,6 @@
 
 
 .status{
-    background-color: var(--LightGrayFy);
     color: var(--BlackFy);
     padding: 0.5em 1em;
     border-radius: 1em;
@@ -140,22 +139,22 @@
 
 .status-sessao-ok{
     background-color: var(--GreenAlertFy);
-    color: var(--WhiteFy);
+    color: var(--BlackFy);
 }
 
 .status-sessao-cancelado{
     background-color: var(--RedAlertFy);
-    color: var(--WhiteFy);
+    color: var(--BlackFy);
 }
 
 .status-sessao-reagendado{
     background-color: var(--YellowAlertFy);
-    color: var(--WhiteFy);
+    color: var(--BlackFy);
 }
 
 .status-sessao-pendente{
     background-color: var(--YellowAlertFy);
-    color: var(--WhiteFy);
+    color: var(--BlackFy);
 }
 
 .status-sessao-default {
