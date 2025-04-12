@@ -3,10 +3,11 @@ import React from 'react'
 import './adicionarPaciente.css'
 
 import MenuLateralComponent from '../../components/MenuLateral/MenuLateralComponent'
-import MainComponent from '../../components/MainComponent/MainComponent'
+
 import CheckBox from '../../components/Checkbox/Checkbox'
 import InputField from '../../components/InputField/InputField'
 import SaveButton from '../../components/SaveButton/SaveButton'
+import MainComponent from '../../components/mainComponent/MainComponent'
 
 const EditarPaciente = () => {
     return (
