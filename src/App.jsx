@@ -29,7 +29,7 @@ function App() {
             <Route path="/dashboard/agendamentos/editar" element={<EditarAgendamento />} />
             <Route path="/dashboard/pacientes" element={<Pacientes />} />
             <Route path="/dashboard/administracao" element={<Administracao />} />
-            <Route path="/dashboard/pacientes/editar" element={<EditarPaciente />} />
+            <Route path="/dashboard/pacientes/editar/:id" element={<EditarPaciente />} />
             <Route path="/dashboard/pacientes/adicionar" element={<AdicionarPaciente />} />
             <Route path="*" element={<h1>Página não encontrada.</h1>} />
           </Routes>
