@@ -1,20 +1,38 @@
 import React from 'react'
 import './CadastrarAgendamento.css'
-import MainComponent from '../../components/mainComponent/MainComponent'
+import { useParams } from 'react-router-dom'
 import MenuLateralComponent from '../../components/MenuLateral/MenuLateralComponent'
 import InputField from '../../components/InputField/InputField'
 import { FaSearch, FaUser } from 'react-icons/fa'
 import { errorMessage, responseMessage } from '../../../../utils/alert.js'
 import axios from 'axios';
+import MainComponent from '../../components/MainComponent/MainComponent.jsx'
 
 const CadastrarAgendamento = ({ paciente }) => {
+    const { id } = useParams();
     const [pacientes, setPacientes] = React.useState([]);
     const [agendamentos, setAgendamentos] = React.useState([]);
     const [pacienteSelecionado, setPacienteSelecionado] = React.useState(paciente || null);
     const [query, setQuery] = React.useState(paciente ? paciente.nome : '');
     const [showSuggestions, setShowSuggestions] = React.useState(false);
 
-
+    React.useEffect(() => {
+        fetch(`/usuarios/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Erro ao encontrar paciente");
+                }
+                response.json().then((pacienteResponse) => {
+                    setPaciente(pacienteResponse)
+                });
+            })
+            .catch((error) => console.error("Erro ao encontrar paciente:", error));
+    }, []);
 
     const getNomeDiaSemana = (diaSemana) => {
         const dias = [
@@ -142,41 +160,6 @@ const CadastrarAgendamento = ({ paciente }) => {
 
         fetchPacientes();
     }, []);
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     if (!pacienteSelecionado || !pacienteSelecionado.selectedDate || !pacienteSelecionado.horario) {
-    //         alert("Por favor, preencha todos os campos antes de salvar.");
-    //         return;
-    //     }
-
-    //     const novoAgendamento = {
-    //         idPaciente: pacienteSelecionado.id,
-    //         data: pacienteSelecionado.selectedDate,
-    //         horario: pacienteSelecionado.horario,
-    //     };
-
-    //     try {
-    //         const response = await fetch('/api/agendamentos', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify(novoAgendamento),
-    //         });
-
-    //         if (response.ok) {
-    //             alert("Agendamento cadastrado com sucesso!");
-    //             setAgendamentos([...agendamentos, novoAgendamento]);
-    //         } else {
-    //             alert("Erro ao cadastrar o agendamento. Tente novamente.");
-    //         }
-    //     } catch (error) {
-    //         console.error("Erro ao cadastrar o agendamento:", error);
-    //         alert("Erro ao cadastrar o agendamento. Tente novamente.");
-    //     }
-    // };
 
 
 
