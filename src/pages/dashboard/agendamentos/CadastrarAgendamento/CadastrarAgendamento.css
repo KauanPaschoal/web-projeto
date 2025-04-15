@@ -48,18 +48,30 @@
     align-items: center;
     background-color: var(--WhiteFy);
     padding: 1em;
-    border-radius: 1em;
+    border-radius: 1.5em;
 }
 
 .paciente-info{
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 1em;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     height: 100%;
+    p{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    strong{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
 }
 
 .styled-datalist{
@@ -165,7 +177,7 @@
     display: flex;
     flex-direction: column;
     justify-content: start;
-    align-items: end;
+    align-items: center;
     gap: 1em;
 }
 

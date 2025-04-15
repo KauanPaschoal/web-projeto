@@ -7,6 +7,7 @@ import { FaSearch, FaUser } from 'react-icons/fa'
 import { errorMessage, responseMessage } from '../../../../utils/alert.js'
 import axios from 'axios';
 import MainComponent from '../../components/MainComponent/MainComponent.jsx'
+import Checkbox from '../../components/Checkbox/Checkbox.jsx'
 
 const CadastrarAgendamento = ({ paciente }) => {
     const { id } = useParams();
@@ -15,6 +16,7 @@ const CadastrarAgendamento = ({ paciente }) => {
     const [pacienteSelecionado, setPacienteSelecionado] = React.useState(paciente || null);
     const [query, setQuery] = React.useState(paciente ? paciente.nome : '');
     const [showSuggestions, setShowSuggestions] = React.useState(false);
+    const [statusPlanoMensal, setStatusPlanoMensal] = React.useState(false);
 
     React.useEffect(() => {
         fetch(`/usuarios/${id}`, {
@@ -28,7 +30,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                     throw new Error("Erro ao encontrar paciente");
                 }
                 response.json().then((pacienteResponse) => {
-                    setPaciente(pacienteResponse)
+                    setPacienteSelecionado(pacienteResponse)
                 });
             })
             .catch((error) => console.error("Erro ao encontrar paciente:", error));
@@ -119,26 +121,48 @@ const CadastrarAgendamento = ({ paciente }) => {
         setTimeout(() => setShowSuggestions(false), 200);
     };
 
+    const handlePlanoMensal = (e) => {
+        const isChecked = e.target.checked; // Captura o valor do checkbox
+        setStatusPlanoMensal(isChecked); // Atualiza o estado statusPlanoMensal
+        setPacienteSelecionado((prevPaciente) => ({
+            ...prevPaciente,
+            planoMensal: isChecked, // Atualiza o paciente selecionado com o valor do checkbox
+        }));
+        console.log("Plano mensal ativo:", isChecked); // Exibe o valor do checkbox no console
+    };
+
+    React.useEffect(() => {
+        setPacienteSelecionado((prevPaciente) => ({
+            ...prevPaciente,
+            planoMensal: statusPlanoMensal,
+        }));
+    }, [statusPlanoMensal]);
+
+    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        let novoAgendamento = {}
+        let novoAgendamento = {};
         if (!pacienteSelecionado) {
-            errorMessage("Por favor, escolha um paciente para continuar.", "small")
+            errorMessage("Por favor, escolha um paciente para continuar.", "small");
         } else if (!pacienteSelecionado.selectedDate) {
-            errorMessage("Por favor, escolha uma data para continuar.", "small")
+            errorMessage("Por favor, escolha uma data para continuar.", "small");
         } else if (!pacienteSelecionado.horario) {
-            errorMessage("Por favor, escolha um horário para continuar.", "small")
+            errorMessage("Por favor, escolha um horário para continuar.", "small");
         } else {
             novoAgendamento = {
                 idPaciente: pacienteSelecionado.id,
                 data: pacienteSelecionado.selectedDate,
                 horario: pacienteSelecionado.horario,
+                statusPlanoMensal: pacienteSelecionado.planoMensal, // Use o valor atualizado
+                statusAgendamento: "Pendente",
             };
-            responseMessage("Agendamento cadastrado com sucesso!", "small")
+            responseMessage("Agendamento cadastrado com sucesso!", "small");
         }
         console.log(novoAgendamento);
-    }
+        console.log(pacienteSelecionado);
+    };
 
     React.useEffect(() => {
         if (paciente) {
@@ -189,6 +213,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                             onBlur={handleBlur}
                             required
                             className="styled-input"
+                            width={"w-[30%]"}
                             icon={<FaUser />}
                         />
                         {showSuggestions && pacientes.length > 0 && (
@@ -212,7 +237,8 @@ const CadastrarAgendamento = ({ paciente }) => {
                         ) : null}
                         {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
                             <div className="paciente-info">
-                                <p><strong>Paciente Selecionado:</strong> {pacienteSelecionado.nome}</p>
+                                <p><strong>Paciente:</strong> {pacienteSelecionado.nome}</p>
+                                <p><strong>Consultas Restantes: </strong>{pacienteSelecionado.qtdConsultas || 0}</p>
                                 <p><strong>Horário para Consultas:</strong> {pacienteSelecionado.horario}</p>
                                 <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(pacienteSelecionado.diaSemana)}</p>
                             </div>
@@ -255,7 +281,14 @@ const CadastrarAgendamento = ({ paciente }) => {
                                     value={query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query ? pacienteSelecionado.horario : ''}
                                     readOnly={pacienteSelecionado && pacienteSelecionado.nome === query ? false : true}
                                     className={"w-full"}
+                                    width={"w-full"}
                                 />
+                                <Checkbox
+                                    labelTitle="Plano mensal ativo?"
+                                    onChange={handlePlanoMensal}
+                                    checked={statusPlanoMensal}
+                                />
+
                             </div>
                         )}
 

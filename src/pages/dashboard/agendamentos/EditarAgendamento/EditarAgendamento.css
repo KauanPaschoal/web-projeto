@@ -13,3 +13,19 @@
     border-radius: 12px;
     background-color: var(--LightGrayFy);
 }
+
+.pendente-container{
+    display: flex;
+    
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .checkbox-container{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+    }
+}

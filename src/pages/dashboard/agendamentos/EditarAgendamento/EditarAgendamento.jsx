@@ -1,5 +1,5 @@
 import React from 'react'
-import MainComponent from '../../components/mainComponent/MainComponent'
+import MainComponent from '../../components/MainComponent/MainComponent'
 import MenuLateralComponent from '../../components/MenuLateral/MenuLateralComponent'
 import './EditarAgendamento.css'
 import InputField from '../../components/InputField/InputField'
@@ -110,7 +110,7 @@ const EditarAgendamento = () => {
                 <p><strong>Horário para Consultas:</strong> {paciente.horario}</p>
                 <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(paciente.diaSemana)}</p>
                 <p><strong>Data Marcada:</strong> {paciente.data}</p>
-                <p><strong></strong>
+                <div className="pendente-container">
                   <span className={`status ${paciente.status === 'Pendente' ? 'status-sessao-pendente' :
                     paciente.status === 'Confirmado' ? 'status-sessao-ok' :
                       paciente.status === 'Cancelado' ? 'status-cancelado' :
@@ -118,21 +118,22 @@ const EditarAgendamento = () => {
                     }`}>
                     {paciente.status}
                   </span>
-                </p>
-                <div className="checkbox-container">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={paciente.confirmado || false}
-                      onChange={(e) => setPaciente({
-                        ...paciente,
-                        confirmado: e.target.checked,
-                        status: e.target.checked ? 'Confirmado' : 'Pendente'
-                      })}
-                    />
-                    Confirmar Agendamento
-                  </label>
+                  <div className="checkbox-container">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={paciente.confirmado || false}
+                        onChange={(e) => setPaciente({
+                          ...paciente,
+                          confirmado: e.target.checked,
+                          status: e.target.checked ? 'Confirmado' : 'Pendente'
+                        })}
+                      />
+                      Confirmar Agendamento
+                    </label>
+                  </div>
                 </div>
+                
               </div>
             )}
           </div>
@@ -170,6 +171,7 @@ const EditarAgendamento = () => {
                 value={paciente ? paciente.horario : ''}
                 readOnly={paciente ? false : true}
                 className={"w-full"}
+                width={"w-full"}
               />
             </div>
             {paciente && (
