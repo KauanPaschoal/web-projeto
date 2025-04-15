@@ -2,10 +2,10 @@ import React from 'react'
 import './inputField.css'
 
 
-const InputField = ({labelTitle, type = 'text', placeholder, id, name, onChange, onBlur, list, required, className, value, icon}) => {
+const InputField = ({labelTitle, type = 'text', placeholder, id, name, onChange, onBlur, list, required, className, value, icon, width}) => {
 
     return (
-        <div className='inputContainer'>
+        <div className= {`inputContainer ${width}`} >
             <label>{labelTitle}:</label>
             <div className="input-with-icon">
                 {icon && <span className="input-icon">{icon}</span>}
@@ -18,8 +18,9 @@ const InputField = ({labelTitle, type = 'text', placeholder, id, name, onChange,
                     onBlur={onBlur}
                     list={list}
                     required={required}
-                    className={`inputField ${className}`}
+                    className={`inputField ${className}` }
                     value={value}
+
                 />
             </div>
         </div>
