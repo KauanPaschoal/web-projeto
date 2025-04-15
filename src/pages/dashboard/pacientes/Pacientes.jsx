@@ -1,9 +1,10 @@
 import React from 'react';
 import './pacientes.css';
 import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent';
-import MainComponent from '../components/MainComponent/MainComponent';
 import { FaPen, FaPlus, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import MainComponent from '../components/MainComponent/MainComponent';
+
 
 
 const Pacientes = () => {
