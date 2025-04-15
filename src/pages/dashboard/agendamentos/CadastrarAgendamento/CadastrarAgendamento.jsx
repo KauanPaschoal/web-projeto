@@ -155,7 +155,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                 idPaciente: pacienteSelecionado.id,
                 data: pacienteSelecionado.selectedDate,
                 horario: pacienteSelecionado.horario,
-                statusPlanoMensal: pacienteSelecionado.planoMensal, // Use o valor atualizado
+                statusPlanoMensal: pacienteSelecionado.planoMensal || false, // Use o valor atualizado
                 statusAgendamento: "Pendente",
             };
             responseMessage("Agendamento cadastrado com sucesso!", "small");
