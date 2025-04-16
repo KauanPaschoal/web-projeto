@@ -7,7 +7,8 @@ import MenuLateralComponent from '../../components/MenuLateral/MenuLateralCompon
 import CheckBox from '../../components/Checkbox/Checkbox'
 import InputField from '../../components/InputField/InputField'
 import SaveButton from '../../components/SaveButton/SaveButton'
-import MainComponent from '../../components/mainComponent/MainComponent'
+import MainComponent from '../../components/MainComponent/MainComponent';
+
 
 const EditarPaciente = () => {
 

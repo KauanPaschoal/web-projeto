@@ -75,7 +75,10 @@ const Pacientes = () => {
 
               <button
                 className='btn_agendamento flex rounded-full'
-                onClick={redirectToCadastrarAgendamento}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(`/dashboard/agendamentos/cadastrar`);
+                }}
               >
                 <FaPlus className='icon' />
                 Agendar

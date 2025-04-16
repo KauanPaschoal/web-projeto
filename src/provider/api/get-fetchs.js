@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const getPacientes = async () => {
+export const getPacientes = async () => {
     try {
         const response = await axios.get('/usuarios', {
             headers: {
