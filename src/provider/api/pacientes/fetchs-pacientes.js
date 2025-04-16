@@ -1,7 +1,4 @@
 import axios from 'axios';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export const getPacientes = async () => {
     try {
@@ -31,35 +28,6 @@ export const getPacientesPorId = async (id) => {
     }
 }
 
-
-const getAgendamentosPorId = async (id) => {
-    try {
-        const response = await axios.get(`/agendamentos/${id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao encontrar agendamento:', error);
-        throw error;
-    }
-}
-
-const getAgendamentos = async () => {
-    try {
-        const response = await axios.get('/agendamentos', {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao encontrar agendamentos:', error);
-        throw error;
-    }
-}
-
 const getPacientesLista = async (pesquisar) => {
     try {
         const response = await axios.get(`/usuarios?nome=${pesquisar}`, {
@@ -74,6 +42,58 @@ const getPacientesLista = async (pesquisar) => {
     }
 }
 
+export const postPaciente = async (paciente) => {
+    try {
+        const response = await axios.post('/usuarios', paciente, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao criar paciente:', error);
+        throw error;
+    }
+}
 
+export const putPaciente = async (id, paciente) => {
+    try {
+        const response = await axios.put(`/usuarios/${id}`, paciente, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao atualizar paciente:', error);
+        throw error;
+    }
+}
 
+export const putDesativarPaciente = async (id, paciente) => {
+    try {
+        const response = await axios.put(`/usuarios/${id}`, paciente, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao desativar paciente:', error);
+        throw error;
+    }
+}
 
+export const putAtualizarSenhaPaciente = async (id, senha) => {
+    try {
+        const response = await axios.put(`/usuarios/${id}/senha`, senha, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao atualizar senha:', error);
+        throw error;
+    }
+}

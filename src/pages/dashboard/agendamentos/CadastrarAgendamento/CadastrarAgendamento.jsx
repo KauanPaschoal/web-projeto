@@ -8,7 +8,7 @@ import { errorMessage, responseMessage } from '../../../../utils/alert.js'
 import axios from 'axios';
 import MainComponent from '../../components/MainComponent/MainComponent.jsx'
 import Checkbox from '../../components/Checkbox/Checkbox.jsx'
-import { getPacientesPorId, getPacientes } from '../../../../provider/api/get-fetchs.js'
+import { getPacientesPorId, getPacientes } from '../../../../provider/api/pacientes/fetchs-pacientes.js'
 
 const CadastrarAgendamento = ({ paciente }) => {
     const { id } = useParams();
