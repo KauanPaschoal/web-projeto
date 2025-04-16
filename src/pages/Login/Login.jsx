@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom"; // Certifique-se de importar o Link corretamente
 import logo from "../../assets/images/LogoTipo Branco 1.svg"; // Atualize o caminho para o logo
 import { errorMessage, responseMessage } from "../../utils/alert.js";
-import { autenticateUser } from "../../utils/auth.js";
+// import { autenticateUser } from "../../utils/auth.js";
 import "./style/login.css";
 
 const LoginPage = () => {
@@ -14,14 +14,14 @@ const LoginPage = () => {
 
     // if (!autenticateUser(email, password)) return;
 
-    fetch("/auth/login", {
+    fetch("/usuarios/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: email,
-        password: password,
+        email: email,
+        senha: password,
       }),
     })
       .then((response) => {
@@ -32,13 +32,21 @@ const LoginPage = () => {
       })
       .then((data) => {
         // Captura os dados retornados
-        const { token, username, roles } = data;
+        const { id, nome, email, token } = data;
+
+
+        const toCapitalize = (str) => {
+          return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        };
+        const nomeFormatado = toCapitalize(nome);
 
         if (token) {
           // Armazena o token no localStorage
           localStorage.setItem("authToken", token);
 
-          responseMessage(`Bem vindo, ${username}!`);
+          localStorage.setItem("nomeUsuario", nomeFormatado);
+
+          responseMessage(`Bem vindo, ${nomeFormatado}!`);
           setTimeout(() => {
             window.location.href = "/dashboard"; // Alterar para a rota da dash
           }, 2300);

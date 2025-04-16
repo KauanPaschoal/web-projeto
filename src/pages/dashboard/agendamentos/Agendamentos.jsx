@@ -1,7 +1,9 @@
 import React from 'react'
 import './Agendamentos.css'
 import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent'
-import MainComponent from '../components/mainComponent/MainComponent'
+import MainComponent from '../components/MainComponent/MainComponent'
+import { FaPlus } from 'react-icons/fa'
+
 
 const Agendamentos = () => {
 
@@ -11,15 +13,13 @@ const Agendamentos = () => {
 
   return (
     <div className='div-agendamentos flex'>
-      <MenuLateralComponent/>
+      <MenuLateralComponent />
       <MainComponent
         title="Agendamentos"
         headerContent={
-          <button
-            className="btn_agendamento"
-            onClick={redirectToCadastrarAgendamento}
-          >
-            + Agendar
+          <button className='btn_agendamento flex rounded-full' onClick={redirectToCadastrarAgendamento}>
+            <FaPlus className='icon' />
+            Agendar
           </button>
         }>
       </MainComponent>

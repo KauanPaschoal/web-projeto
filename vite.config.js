@@ -7,17 +7,17 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      "/planos": {
-        target: "http://localhost:8080",
+      "/usuarios": {
+        target: "http://localhost:8080/",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/planos/, "/planos"),
       },
-      "/auth": {
-        target: "http://localhost:8080", // Backend para /auth
+      "/usuarios/login": {
+        target: "http://localhost:8080/", // Backend para /usuarios/login
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/auth/, "/auth"), // Mantém o prefixo /auth
+        rewrite: (path) => path.replace(/^\/usuarios\/login/, "/usuarios/login"), // Mantém o prefixo /usuarios/login
       },
     },
   },
