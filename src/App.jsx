@@ -26,11 +26,12 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/agendamentos" element={<Agendamentos />} />
+            <Route path="/dashboard/agendamentos/cadastrar/:id" element={<CadastrarAgendamento/>} />
             <Route path="/dashboard/agendamentos/cadastrar" element={<CadastrarAgendamento/>} />
             <Route path="/dashboard/agendamentos/editar" element={<EditarAgendamento />} />
             <Route path="/dashboard/pacientes" element={<Pacientes />} />
             <Route path="/dashboard/administracao" element={<Administracao />} />
-            <Route path="/dashboard/pacientes/editar" element={<EditarPaciente />} />
+            <Route path="/dashboard/pacientes/editar/:id" element={<EditarPaciente />} />
             <Route path="/dashboard/pacientes/adicionar" element={<AdicionarPaciente />} />
             <Route path="/dashboard/adicionarPsicologo" element={<AdicionarPsicologo />} />
             <Route path="*" element={<h1>Página não encontrada.</h1>} />

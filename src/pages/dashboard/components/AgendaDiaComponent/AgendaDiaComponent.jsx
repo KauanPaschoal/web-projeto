@@ -1,9 +1,9 @@
 import React from 'react'
 import './AgendaDiaComponent.css'
 
-const AgendaDiaComponent = ({ nome, horario, status }) => {
+const AgendaDiaComponent = ({ nome, horario, status = 'Default' }) => {
 
-      const getStatusClass = () => {
+      const getStatusClasse = () => {
         switch (status) {
           case 'Confirmado':
             return 'status-confirmado';
@@ -18,7 +18,7 @@ const AgendaDiaComponent = ({ nome, horario, status }) => {
 
     return (
         <div className='agendaDiaComponent bg-gray-200'>
-            <span className={`status ${getStatusClass()}`}>{status}</span>
+            <span className={`status ${getStatusClasse()}`}>{status}</span>
             <div className='info-card flex'>
                 <div className='flex gap-1'>
                     <span className='font-bold'>Nome:</span><p>{nome}</p>

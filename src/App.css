@@ -70,6 +70,13 @@ button {
   border: var(--DarkestBlueFy) 2px solid;
 }
 
+.btn_primario:disabled {
+  background-color: var(--LightGrayFy);
+  border: var(--LightGrayFy) 2px solid;
+  color: var(--GrayFy);
+  cursor: not-allowed;
+}
+
 
 
 .titulo-section {

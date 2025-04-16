@@ -1,14 +1,42 @@
 import React from 'react'
 
 import './editarPaciente.css'
+import { useParams } from 'react-router-dom';
 
 import MenuLateralComponent from '../../components/MenuLateral/MenuLateralComponent'
 import CheckBox from '../../components/Checkbox/Checkbox'
 import InputField from '../../components/InputField/InputField'
 import SaveButton from '../../components/SaveButton/SaveButton'
-import MainComponent from '../../components/mainComponent/MainComponent'
+import MainComponent from '../../components/MainComponent/MainComponent';
+
 
 const EditarPaciente = () => {
+
+    const { id } = useParams();
+    const [paciente, setPaciente] = React.useState(null);
+
+    React.useEffect(() => {
+        fetch(`/usuarios/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Erro ao encontrar paciente");
+                }
+                response.json().then((pacienteResponse) => {
+                    setPaciente(pacienteResponse)
+                });
+            })
+            .catch((error) => console.error("Erro ao encontrar paciente:", error));
+    }, []);
+
+    if (!paciente) {
+        return <p>Carregando...</p>;
+    }
+
     return (
         <div className='div-administracao flex'>
             <MenuLateralComponent></MenuLateralComponent>
@@ -19,7 +47,6 @@ const EditarPaciente = () => {
                     <figure>
                         <div></div>
                         <span><span>Upload</span> imagem</span>
-
                     </figure>
 
                     <section className='fields'>
@@ -32,24 +59,24 @@ const EditarPaciente = () => {
                         <section>
                             <h2>Dados do Paciente:</h2>
                             <div className='inputArea'>
-                                <InputField labelTitle={'Nome'} />
-                                <InputField labelTitle={'CPF'} />
-                                <InputField type={'tel'} labelTitle={'Telefone'} />
-                                <InputField type={'email'} labelTitle={'E-mail'} />
-                                <InputField labelTitle={'Dia de Consultas'} />
-                                <InputField labelTitle={'Horário de Consultas'} />
-                                <InputField labelTitle={'Contato de Emergência'} />
-                                <InputField type={'tel'} labelTitle={'Telefone de Emergência'} />
+                                <InputField labelTitle={'Nome'} value={paciente.nome} />
+                                <InputField labelTitle={'CPF'} value={paciente.cpf} />
+                                <InputField type={'tel'} labelTitle={'Telefone'} value={paciente.telefone} />
+                                <InputField type={'email'} labelTitle={'E-mail'} value={paciente.email} />
+                                <InputField labelTitle={'Dia de Consultas'} value={paciente.diaConsulta} />
+                                <InputField labelTitle={'Horário de Consultas'} value={paciente.horaConsulta} />
+                                <InputField labelTitle={'Contato de Emergência'} value={paciente.nomeContato} />
+                                <InputField type={'tel'} labelTitle={'Telefone de Emergência'} value={paciente.telefoneContato} />
                             </div>
 
                             <h2>Endereço:</h2>
                             <div className='inputArea'>
-                                <InputField labelTitle={'CEP'} />
-                                <InputField labelTitle={'Cidade'} />
-                                <InputField labelTitle={'Bairro'} />
-                                <InputField labelTitle={'Número'} />
-                                <InputField labelTitle={'Logradouro'} />
-                                <InputField labelTitle={'Complemento'} />
+                                <InputField labelTitle={'CEP'} value={paciente.cep} />
+                                <InputField labelTitle={'Cidade'} value={paciente.cidade} />
+                                <InputField labelTitle={'Bairro'} value={paciente.bairro} />
+                                <InputField labelTitle={'Número'} value={paciente.numero} />
+                                <InputField labelTitle={'Logradouro'} value={paciente.logradouro} />
+                                <InputField labelTitle={'Complemento'} value={paciente.complemento} />
                             </div>
 
                         </section>
