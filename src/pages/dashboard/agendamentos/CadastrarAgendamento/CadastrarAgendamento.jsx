@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use, useEffect } from 'react'
 import './CadastrarAgendamento.css'
 import { useParams } from 'react-router-dom'
 import MenuLateralComponent from '../../components/MenuLateral/MenuLateralComponent'
@@ -8,6 +8,7 @@ import { errorMessage, responseMessage } from '../../../../utils/alert.js'
 import axios from 'axios';
 import MainComponent from '../../components/MainComponent/MainComponent.jsx'
 import Checkbox from '../../components/Checkbox/Checkbox.jsx'
+import { getPacientesPorId } from '../../../../provider/api/get-fetchs.js'
 
 const CadastrarAgendamento = ({ paciente }) => {
     const { id } = useParams();
@@ -17,24 +18,60 @@ const CadastrarAgendamento = ({ paciente }) => {
     const [query, setQuery] = React.useState(paciente ? paciente.nome : '');
     const [showSuggestions, setShowSuggestions] = React.useState(false);
     const [statusPlanoMensal, setStatusPlanoMensal] = React.useState(false);
+    const [proximosDias, setProximosDias] = React.useState([]);
+    
+    const [horario, setHorario] = React.useState('10:00');
 
-    React.useEffect(() => {
-        fetch(`/usuarios/${id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Erro ao encontrar paciente");
+    useEffect(() => {
+        if (id) {
+            const fetchPaciente = async () => {
+                try {
+                    const pacienteResponse = await getPacientesPorId(id); 
+                    const diasCalculados = getProximosDias(pacienteResponse.diaSemana);
+                    const updatedPaciente = {
+                        ...pacienteResponse,
+                        diaMes: diasCalculados,
+                        horario: pacienteResponse.horario || "00:00",
+                        selectedDate: pacienteResponse.selectedDate || "00/00",
+                        planoMensal: pacienteResponse.planoMensal || false,
+                        qtdConsultas: pacienteResponse.qtdConsultas || 0,
+                        statusAgendamento: pacienteResponse.statusAgendamento || "Pendente",
+
+                    };
+                    setPacienteSelecionado(updatedPaciente); 
+                    setQuery(pacienteResponse.nome);
+                    console.log(pacienteResponse);
+                } catch (error) {
+                    console.error("Erro ao buscar paciente:", error);
                 }
-                response.json().then((pacienteResponse) => {
-                    setPacienteSelecionado(pacienteResponse)
-                });
-            })
-            .catch((error) => console.error("Erro ao encontrar paciente:", error));
-    }, []);
+            };
+
+            fetchPaciente();
+        }
+    }, [id]);
+
+    // useEffect(() => {
+    //     if (pacienteSelecionado) {
+    //         console.log("Paciente selecionado:", pacienteSelecionado);
+    //     }
+    // }, [pacienteSelecionado]);
+
+    const getProximosDias = (diaSemana) => {
+        const hoje = new Date();
+        const dias = [];
+        diaSemana = diaSemana || hoje.getDay();
+        const inicio = 7; // Começa a contar a partir de uma semana a partir de hoje
+        const qtdDias = 4;
+
+        for (let i = 0; i < qtdDias; i++) {
+            const proximoDia = new Date(hoje);
+            const diferenca = ((diaSemana - hoje.getDay() + 7) % 7) + inicio + i * 7;
+            proximoDia.setDate(hoje.getDate() + diferenca);
+            dias.push(proximoDia.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }));
+        }
+        setProximosDias(dias);
+        return dias;
+    };
 
     const getNomeDiaSemana = (diaSemana) => {
         const dias = [
@@ -46,44 +83,36 @@ const CadastrarAgendamento = ({ paciente }) => {
             "Sexta-feira",
             "Sábado",
         ];
-        return dias[diaSemana] || "Desconhecido";
+        return dias[diaSemana] || "Indefinido";
     };
+
+    useEffect(() => {
+        console.log("Proximos dias: ", proximosDias);
+    }, [proximosDias]);
 
 
     const handlePacienteSearch = (query) => {
         setQuery(query);
-        const allPacientes = [
-            { id: 1, nome: "Paciente 1", diaSemana: 1, horario: "10:00" },
-            { id: 2, nome: "paeciente 2", diaSemana: 3, horario: "14:00" },
-            { id: 3, nome: "paegiente 3", diaSemana: 5, horario: "09:00" },
-            { id: 4, nome: "paegente 4", diaSemana: 0, horario: "11:00" },
-        ];
+
+        fetch('/usuarios', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Erro ao buscar usuários");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setPacientes(data);
+            })
+            .catch((error) => console.error("Erro ao buscar usuários:", error));
 
 
-        const agendamentos = [
-            { data: "2023-10-01", horario: "10:00", idPaciente: 1, status: "Compareceu" },
-            { data: "2023-10-02", horario: "14:00", idPaciente: 2, status: "Cancelou" },
-            { data: "2023-10-03", horario: "09:00", idPaciente: 3, status: "Reagendou" },
-            { data: "2023-10-04", horario: "11:00", idPaciente: 4, status: "Pendente" },
-            { data: "2023-10-05", horario: "10:30", idPaciente: 1, status: "Compareceu" },
-            { data: "2023-10-06", horario: "15:00", idPaciente: 2, status: "Cancelou" },
-            { data: "2023-10-07", horario: "08:30", idPaciente: 3, status: "Reagendou" },
-            { data: "2023-10-08", horario: "12:00", idPaciente: 4, status: "Pendente" },
-            { data: "2023-10-09", horario: "09:00", idPaciente: 1, status: "Compareceu" },
-            { data: "2023-10-10", horario: "13:00", idPaciente: 2, status: "Cancelou" },
-            { data: "2023-10-11", horario: "10:00", idPaciente: 3, status: "Reagendou" },
-            { data: "2023-10-12", horario: "11:30", idPaciente: 4, status: "Pendente" },
-            { data: "2023-10-13", horario: "14:00", idPaciente: 1, status: "Compareceu" },
-            { data: "2023-10-14", horario: "16:00", idPaciente: 2, status: "Cancelou" },
-            { data: "2023-10-15", horario: "07:30", idPaciente: 3, status: "Reagendou" },
-            { data: "2023-10-16", horario: "10:00", idPaciente: 4, status: "Pendente" },
-            { data: "2023-10-17", horario: "09:30", idPaciente: 1, status: "Compareceu" },
-            { data: "2023-10-18", horario: "14:30", idPaciente: 2, status: "Cancelou" },
-            { data: "2023-10-19", horario: "08:00", idPaciente: 3, status: "Reagendou" },
-            { data: "2023-10-20", horario: "12:30", idPaciente: 4, status: "Pendente" },
-        ];
-
-        const filteredPacientes = allPacientes.filter(paciente =>
+        const filteredPacientes = pacientes.filter(paciente =>
             paciente.nome.toLowerCase().includes(query.toLowerCase())
         );
 
@@ -91,11 +120,8 @@ const CadastrarAgendamento = ({ paciente }) => {
             const selectedPaciente = filteredPacientes[0];
             setPacienteSelecionado({
                 ...selectedPaciente,
-                diaMes: Array.from({ length: 4 }, (_, i) => {
-                    const data = new Date();
-                    data.setDate(data.getDate() + i * 7 + (selectedPaciente.diaSemana - data.getDay() + 7) % 7);
-                    return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                }),
+                diaMes: 
+                    getProximosDias(selectedPaciente.diaSemana)
             });
 
             const filteredAgendamentos = agendamentos.filter(
@@ -122,13 +148,12 @@ const CadastrarAgendamento = ({ paciente }) => {
     };
 
     const handlePlanoMensal = (e) => {
-        const isChecked = e.target.checked; // Captura o valor do checkbox
-        setStatusPlanoMensal(isChecked); // Atualiza o estado statusPlanoMensal
+        const isChecked = e.target.checked;
+        setStatusPlanoMensal(isChecked);
         setPacienteSelecionado((prevPaciente) => ({
             ...prevPaciente,
-            planoMensal: isChecked, // Atualiza o paciente selecionado com o valor do checkbox
+            planoMensal: isChecked,
         }));
-        console.log("Plano mensal ativo:", isChecked); // Exibe o valor do checkbox no console
     };
 
     React.useEffect(() => {
@@ -138,30 +163,62 @@ const CadastrarAgendamento = ({ paciente }) => {
         }));
     }, [statusPlanoMensal]);
 
-    
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        let novoAgendamento = {};
         if (!pacienteSelecionado) {
             errorMessage("Por favor, escolha um paciente para continuar.", "small");
-        } else if (!pacienteSelecionado.selectedDate) {
-            errorMessage("Por favor, escolha uma data para continuar.", "small");
-        } else if (!pacienteSelecionado.horario) {
-            errorMessage("Por favor, escolha um horário para continuar.", "small");
-        } else {
-            novoAgendamento = {
-                idPaciente: pacienteSelecionado.id,
-                data: pacienteSelecionado.selectedDate,
-                horario: pacienteSelecionado.horario,
-                statusPlanoMensal: pacienteSelecionado.planoMensal || false, // Use o valor atualizado
-                statusAgendamento: "Pendente",
-            };
-            responseMessage("Agendamento cadastrado com sucesso!", "small");
+            return;
         }
-        console.log(novoAgendamento);
-        console.log(pacienteSelecionado);
+
+        if (!pacienteSelecionado.selectedDate) {
+            errorMessage("Por favor, escolha uma data para continuar.", "small");
+            return;
+        }
+
+        if (!pacienteSelecionado.horario) {
+            errorMessage("Por favor, escolha um horário para continuar.", "small");
+            return;
+        }
+
+        try {
+            if (statusPlanoMensal) {
+                // Fazer 4 requisições com as próximas datas
+                const promises = pacienteSelecionado.diaMes.map(async (dia) => {
+                    const novoAgendamento = {
+                        idPaciente: pacienteSelecionado.id,
+                        data: dia,
+                        horario: pacienteSelecionado.horario,
+                        statusAgendamento: "Pendente",
+                    };
+
+                    // Enviar a requisição para cada data
+                    // return axios.post('/api/agendamentos', novoAgendamento);
+                    console.log("Agendamento (Plano Mensal):", novoAgendamento);
+                    return novoAgendamento;
+                });
+
+                // Aguarda todas as requisições serem concluídas
+                await Promise.all(promises);
+                responseMessage("Agendamentos cadastrados com sucesso!", "small");
+            } else {
+                // Fazer apenas uma requisição com a data escolhida
+                const novoAgendamento = {
+                    idPaciente: pacienteSelecionado.id,
+                    data: pacienteSelecionado.selectedDate,
+                    horario: pacienteSelecionado.horario,
+                    statusAgendamento: "Pendente",
+                };
+                console.log("Agendamento (Data Única):", novoAgendamento);
+                // await axios.post('/api/agendamentos', novoAgendamento);
+                responseMessage("Agendamento cadastrado com sucesso!", "small");
+            }
+        } catch (error) {
+            console.error("Erro ao cadastrar agendamento:", error);
+            errorMessage("Erro ao cadastrar agendamento.", "small");
+        }
     };
 
     React.useEffect(() => {
@@ -232,14 +289,14 @@ const CadastrarAgendamento = ({ paciente }) => {
                     </div>
 
                     <div className='div-escolher-paciente'>
-                        {query === '' || pacientes.length !== 1 ? (
+                        {!pacienteSelecionado ? (
                             <p className="mensagem-escolha-paciente">Escolha um paciente</p>
                         ) : null}
                         {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
                             <div className="paciente-info">
                                 <p><strong>Paciente:</strong> {pacienteSelecionado.nome}</p>
                                 <p><strong>Consultas Restantes: </strong>{pacienteSelecionado.qtdConsultas || 0}</p>
-                                <p><strong>Horário para Consultas:</strong> {pacienteSelecionado.horario}</p>
+                                <p><strong>Horário para Consultas:</strong> {pacienteSelecionado.horario || "Indefinido"}</p>
                                 <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(pacienteSelecionado.diaSemana)}</p>
                             </div>
                         )}
@@ -278,7 +335,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                     labelTitle="Horário"
                                     placeholder="Horário"
                                     required
-                                    value={query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query ? pacienteSelecionado.horario : ''}
+                                    value={pacienteSelecionado?.horario || horario}
                                     readOnly={pacienteSelecionado && pacienteSelecionado.nome === query ? false : true}
                                     className={"w-full"}
                                     width={"w-full"}
