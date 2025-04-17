@@ -6,56 +6,71 @@ import InputField from "../components/InputField/InputField";
 import SaveButton from "../components/SaveButton/SaveButton";
 
 const Administracao = () => {
-  return (
-    <div className="div-administracao flex">
-      <MenuLateralComponent />
-      <MainComponent title="Administração">
-        <div className="container-admin">
-          <div className="card-header">
-            <h2 className="card-title">Conta</h2>
-            <button className="edit-button"> Editar</button>
-          </div>
-          <div className="card">
-            <div className="card-forms">
-              <div className="forms-container">
-                {/* Coluna 1 - Dados Gerais */}
-                <form className="editar-conta">
-                  <h2>Dados Gerais:</h2>
-                  <InputField
-                    labelTitle="E-mail"
-                    value="yuri.alberto@sccp.com"
-                    type="email"
-                  />
-                  <InputField labelTitle="Nome" value="Yuri Alberto" />
-                  <InputField labelTitle="CPF" value="123.456.789-10" />
-                  <InputField labelTitle="Telefone" value="(11) 94002-8922" />
-                </form>
+    return (
+        <div className="div-administracao flex">
+            <MenuLateralComponent />
+            <MainComponent title="Configurações de Conta"
+                headerContent={
+                    <div className='flex w-full gap-2 items-center justify-between'>
+                        <button className="btn_agendamento">Voltar</button>
+                        <button className="btn_agendamento">Prefe</button>
 
-                {/* Coluna 2 - Alterar Senha */}
-                <form className="editar-conta">
-                  <h2>Alterar Senha:</h2>
-                  <InputField labelTitle="Senha" value="Yuri Alberto" />
-                  <InputField labelTitle="Nova senha" value="123.456.789-10" />
-                  <InputField
-                    labelTitle="Confirmar senha"
-                    value="(11) 94002-8922"
-                  />
-                  <button>Preferencias</button>
-                </form>
-              </div>
-            </div>
+                    </div>}>
 
-            <div className="container-botao">
+
+                <div className="form-cadastrar-agendamento">
+                    <div className="card-forms">
+                        <div className="forms-container">
+                            <form className="editar-conta">
+                                <h2>Dados Gerais:</h2>
+                                <div className="card-inputs">
+                                    <InputField
+                                        labelTitle="E-mail"
+                                        value="yuri.alberto@sccp.com"
+                                        type="email"
+                                    />
+                                    <InputField labelTitle="Nome" value="Yuri Alberto" />
+                                    <InputField labelTitle="CPF" value="123.456.789-10" />
+                                    <InputField labelTitle="Telefone" value="(11) 94002-8922" />
+                                    <SaveButton icon="📄" textContent="Salvar Alterações" />
+                                </div>
+
+
+                            </form>
+
+                            <form className="editar-conta">
+                                <h2>Alterar Senha:</h2>
+                                <div className="card-inputs">
+                                    <InputField labelTitle="Senha" value="Yuri Alberto" width={"w-full"} />
+                                    <InputField labelTitle="Nova senha" value="123.456.789-10" />
+                                    <InputField
+                                        labelTitle="Confirmar senha"
+                                        value="(11) 94002-8922"
+
+                                    />
+
+
+
+
+                                </div>
+                                <div className="inputs-button">
+                                    <SaveButton icon="🔒" textContent="Alterar Senha" outline />
+
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+
+                    {/* <div className="container-botao">
               <div className="botoes-acao">
-                <SaveButton icon="📄" textContent="Salvar Alterações" />
-                <SaveButton icon="🔒" textContent="Alterar Senha" outline />
               </div>
-            </div>
-          </div>
+            </div> */}
+                </div>
+            </MainComponent>
         </div>
-      </MainComponent>
-    </div>
-  );
+    );
 };
 
 export default Administracao;
