@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const getAgendamentosPorId = async (id) => {
+export const getAgendamentosPorId = async (id) => {
     try {
         const response = await axios.get(`/agendamentos/${id}`, {
             headers: {
@@ -14,7 +14,7 @@ const getAgendamentosPorId = async (id) => {
     }
 }
 
-const getAgendamentos = async () => {
+export const getAgendamentos = async () => {
     try {
         const response = await axios.get('/agendamentos', {
             headers: {

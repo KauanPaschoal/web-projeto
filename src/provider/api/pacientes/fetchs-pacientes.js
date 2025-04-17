@@ -28,7 +28,7 @@ export const getPacientesPorId = async (id) => {
     }
 }
 
-const getPacientesLista = async (pesquisar) => {
+export const getPacientesLista = async (pesquisar) => {
     try {
         const response = await axios.get(`/usuarios?nome=${pesquisar}`, {
             headers: {
