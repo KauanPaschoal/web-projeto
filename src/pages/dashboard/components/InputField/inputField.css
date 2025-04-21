@@ -38,7 +38,8 @@
 }
 
 .inputContainer .input-with-icon .inputField {
-    padding-right: 2.5em; /* Espaço para o ícone */
+    padding-right: 2.5em;
+    /* Espaço para o ícone */
 }
 
 .inputContainer .input-with-icon .input-icon {
@@ -46,5 +47,12 @@
     right: 10px;
     font-size: 1.2em;
     color: #888;
-    pointer-events: none; /* O ícone não interfere na interação com o input */
+    pointer-events: none;
+    /* O ícone não interfere na interação com o input */
+}
+
+.inputField:disabled {
+    background-color: #f1f1f1;
+    color: #777;
+    cursor: not-allowed;
 }
