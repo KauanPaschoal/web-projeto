@@ -34,7 +34,6 @@ const CadastrarAgendamento = ({ paciente }) => {
                         horario: pacienteResponse.horario || "00:00",
                         selectedDate: pacienteResponse.selectedDate || "00/00",
                         planoMensal: pacienteResponse.planoMensal || false,
-                        qtdConsultas: pacienteResponse.qtdConsultas || 0,
                         statusAgendamento: pacienteResponse.statusAgendamento || "Pendente",
 
                     };
@@ -81,9 +80,9 @@ const CadastrarAgendamento = ({ paciente }) => {
                 return dias[diaSemana] || "Indefinido";
             };
 
-            useEffect(() => {
-                console.log("Proximos dias: ", proximosDias);
-            }, [proximosDias]);
+            // useEffect(() => {
+            //     console.log("Proximos dias: ", proximosDias);
+            // }, [proximosDias]);
 
             useEffect(() => {
                 const fetchPacientes = async () => {
@@ -287,7 +286,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                 {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
                                     <div className="paciente-info">
                                         <p><strong>Paciente:</strong> {pacienteSelecionado.nome}</p>
-                                        <p><strong>Consultas Restantes: </strong>{pacienteSelecionado.qtdConsultas || 0}</p>
+                                        
                                         <p><strong>Horário para Consultas:</strong> {pacienteSelecionado.horario || "Indefinido"}</p>
                                         <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(pacienteSelecionado.diaSemana)}</p>
                                     </div>

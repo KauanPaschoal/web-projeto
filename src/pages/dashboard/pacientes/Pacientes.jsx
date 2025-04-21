@@ -77,11 +77,11 @@ const Pacientes = () => {
                 className='btn_agendamento flex rounded-full'
                 onClick={(e) => {
                   e.preventDefault();
-                  navigate(`/dashboard/agendamentos/cadastrar`);
+                  navigate(`/dashboard/pacientes/adicionar`);
                 }}
               >
                 <FaPlus className='icon' />
-                Agendar
+                Adicionar Paciente
               </button>
             </>
           }

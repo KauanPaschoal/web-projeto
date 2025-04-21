@@ -28,6 +28,7 @@ const EditarPaciente = () => {
                 }
                 response.json().then((pacienteResponse) => {
                     setPaciente(pacienteResponse)
+                    console.log(pacienteResponse)
                 });
             })
             .catch((error) => console.error("Erro ao encontrar paciente:", error));
