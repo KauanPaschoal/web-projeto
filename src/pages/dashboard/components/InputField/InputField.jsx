@@ -2,14 +2,28 @@ import React from 'react'
 import './inputField.css'
 
 
-const InputField = ({labelTitle, type, placeholder}) => {
+const InputField = ({labelTitle, type = 'text', placeholder, id, name, onChange, onBlur, list, required, className, value, icon, width}) => {
 
     return (
-        <div className='inputContainer'>
+        <div className= {`inputContainer ${width}`} >
             <label>{labelTitle}:</label>
-            <input type={type ? type : 'text'} placeholder={placeholder} className='inputField'/>
+            <div className="input-with-icon">
+                {icon && <span className="input-icon">{icon}</span>}
+                <input
+                    type={type}
+                    id={id}
+                    name={name}
+                    placeholder={placeholder}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    list={list}
+                    required={required}
+                    className={`inputField ${className}` }
+                    value={value}
+
+                />
+            </div>
         </div>
-        
     )
 }
 

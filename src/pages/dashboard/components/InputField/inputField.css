@@ -7,27 +7,44 @@
 .inputContainer {
     display: flex;
     flex-direction: column;
+}
+
+.inputContainer label {
     width: fit-content;
+    font-size: 14px;
+    font-weight: bold;
+    color: #21272A;
+}
 
-    label {
-        width: fit-content;
-        font-size: 14px;
-        font-weight: bold;
-        color: #21272A;
-    }
+.inputContainer .inputField {
+    width: 100%;
+    border-bottom: 1px solid #C1C7CD;
+    font-size: 14px;
+    padding: 10px 0 2px 16px;
 
-    .inputField {
-        width: 300px;
-        border-bottom: 1px solid #C1C7CD;
-        font-size: 14px;
-        padding: 10px 0 2px 16px;
+    caret-color: var(--blue-detail);
 
-        caret-color: var(--blue-detail);
+    outline: none;
+}
 
-        outline: none;
-    }
+.inputContainer .inputField:focus {
+    border-bottom-color: var(--blue-detail);
+}
 
-    .inputField:focus {
-        border-bottom-color: var(--blue-detail);
-    }
+.inputContainer .input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputContainer .input-with-icon .inputField {
+    padding-right: 2.5em; /* Espaço para o ícone */
+}
+
+.inputContainer .input-with-icon .input-icon {
+    position: absolute;
+    right: 10px;
+    font-size: 1.2em;
+    color: #888;
+    pointer-events: none; /* O ícone não interfere na interação com o input */
 }

@@ -44,6 +44,7 @@
     background-color: var(--LightBlueFy);
     border-radius: 12px 12px 0 0;
     color: white;
+    gap: 1em;
 
     h2 {
         font-size: large;
