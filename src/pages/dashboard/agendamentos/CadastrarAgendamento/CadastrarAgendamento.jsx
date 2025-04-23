@@ -280,13 +280,11 @@ const CadastrarAgendamento = ({ paciente }) => {
                             </div>
 
                             <div className='div-escolher-paciente'>
-                                {!pacienteSelecionado ? (
-                                    <p className="mensagem-escolha-paciente">Escolha um paciente</p>
-                                ) : null}
-                                {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
+                                {!pacienteSelecionado || query === '' || pacienteSelecionado.nome !== query ? (
+                                    <p className="mensagem-escolha-paciente">Selecione um paciente para continuar.</p>
+                                ) : (
                                     <div className="paciente-info">
                                         <p><strong>Paciente:</strong> {pacienteSelecionado.nome}</p>
-                                        
                                         <p><strong>Horário para Consultas:</strong> {pacienteSelecionado.horario || "Indefinido"}</p>
                                         <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(pacienteSelecionado.diaSemana)}</p>
                                     </div>
@@ -294,82 +292,82 @@ const CadastrarAgendamento = ({ paciente }) => {
                             </div>
 
                             <div className='container-sessao'>
-                                {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
-                                    <div className='container-inputs flex gap-2'>
-                                        <div className="select-container w-full">
-                                            <label htmlFor="data" className="input-label">Data:</label>
-                                            <select
-                                                id="data"
-                                                name="data"
+                                {(!pacienteSelecionado || query === '' || pacienteSelecionado.nome !== query) ? (
+                                    <p className="mensagem-escolha-paciente">Nenhum paciente selecionado. Por favor, escolha um paciente para continuar.</p>
+                                ) : (
+                                    <>
+                                        <div className='container-inputs flex gap-2'>
+                                            <div className="select-container w-full">
+                                                <label htmlFor="data" className="input-label">Data:</label>
+                                                <select
+                                                    id="data"
+                                                    name="data"
+                                                    required
+                                                    className="select-field w-full"
+                                                    value={pacienteSelecionado?.selectedDate || ''}
+                                                    onChange={(e) => setPacienteSelecionado({
+                                                        ...pacienteSelecionado,
+                                                        selectedDate: e.target.value
+                                                    })}
+                                                >
+                                                    <option value="" disabled>Selecione uma data</option>
+                                                    {pacienteSelecionado && pacienteSelecionado.diaMes
+                                                        .filter(dia => new Date(dia.split('/').reverse().join('/')) > new Date())
+                                                        .map((dia, index) => (
+                                                            <option key={index} value={dia}>
+                                                                {dia}
+                                                            </option>
+                                                        ))}
+                                                </select>
+                                            </div>
+                                            <InputField
+                                                type="text"
+                                                id="horario"
+                                                name="horario"
+                                                labelTitle="Horário"
+                                                placeholder="Horário"
                                                 required
-                                                className="select-field w-full"
-                                                value={pacienteSelecionado?.selectedDate || ''}
-                                                onChange={(e) => setPacienteSelecionado({
-                                                    ...pacienteSelecionado,
-                                                    selectedDate: e.target.value
+                                                value={pacienteSelecionado?.horario || horario}
+                                                readOnly={pacienteSelecionado && pacienteSelecionado.nome === query ? false : true}
+                                                className={"w-full"}
+                                                width={"w-full"}
+                                            />
+                                            <Checkbox
+                                                labelTitle="Plano mensal ativo?"
+                                                onChange={handlePlanoMensal}
+                                                checked={statusPlanoMensal}
+                                            />
+                                        </div>
+
+                                        <div className='agendamentos-container'>
+                                            <h3>Últimos Agendamentos</h3>
+                                            <div className='agendamentos-list'>
+                                                {agendamentos.map((agendamento, index) => {
+                                                    const getStatusSessaoClass = () => {
+                                                        switch (agendamento.status) {
+                                                            case 'Compareceu':
+                                                                return 'status-sessao-ok';
+                                                            case 'Pendente':
+                                                                return 'status-sessao-pendente';
+                                                            case 'Cancelou':
+                                                                return 'status-sessao-cancelado';
+                                                            case 'Reagendou':
+                                                                return 'status-sessao-reagendado';
+                                                            default:
+                                                                return 'status-sessao-default';
+                                                        }
+                                                    };
+                                                    return (
+                                                        <div key={index} className="agendamento-item">
+                                                            <p><strong>Data:</strong> {agendamento.data}</p>
+                                                            <p><strong>Horário:</strong> {agendamento.horario}</p>
+                                                            <p><span className={`status ${getStatusSessaoClass()}`}>{agendamento.status}</span></p>
+                                                        </div>
+                                                    )
                                                 })}
-                                            >
-                                                <option value="" disabled>Selecione uma data</option>
-                                                {pacienteSelecionado && pacienteSelecionado.diaMes
-                                                    .filter(dia => new Date(dia.split('/').reverse().join('/')) > new Date())
-                                                    .map((dia, index) => (
-                                                        <option key={index} value={dia}>
-                                                            {dia}
-                                                        </option>
-                                                    ))}
-                                            </select>
+                                            </div>
                                         </div>
-                                        <InputField
-                                            type="text"
-                                            id="horario"
-                                            name="horario"
-                                            labelTitle="Horário"
-                                            placeholder="Horário"
-                                            required
-                                            value={pacienteSelecionado?.horario || horario}
-                                            readOnly={pacienteSelecionado && pacienteSelecionado.nome === query ? false : true}
-                                            className={"w-full"}
-                                            width={"w-full"}
-                                        />
-                                        <Checkbox
-                                            labelTitle="Plano mensal ativo?"
-                                            onChange={handlePlanoMensal}
-                                            checked={statusPlanoMensal}
-                                        />
-
-                                    </div>
-                                )}
-
-                                {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
-                                    <div className='agendamentos-container'>
-                                        <h3>Últimos Agendamentos</h3>
-                                        <div className='agendamentos-list'>
-                                            {agendamentos.map((agendamento, index) => {
-                                                const getStatusSessaoClass = () => {
-                                                    switch (agendamento.status) {
-                                                        case 'Compareceu':
-                                                            return 'status-sessao-ok';
-                                                        case 'Pendente':
-                                                            return 'status-sessao-pendente';
-                                                        case 'Cancelou':
-                                                            return 'status-sessao-cancelado';
-                                                        case 'Reagendou':
-                                                            return 'status-sessao-reagendado';
-                                                        default:
-                                                            return 'status-sessao-default';
-                                                    }
-                                                };
-                                                return (
-                                                    <div key={index} className="agendamento-item">
-                                                        <p><strong>Data:</strong> {agendamento.data}</p>
-                                                        <p><strong>Horário:</strong> {agendamento.horario}</p>
-                                                        <p><span className={`status ${getStatusSessaoClass()}`}>{agendamento.status}</span></p>
-                                                    </div>
-                                                )
-                                            }
-                                            )}
-                                        </div>
-                                    </div>
+                                    </>
                                 )}
                             </div>
                             <div className='flex gap-2'>
