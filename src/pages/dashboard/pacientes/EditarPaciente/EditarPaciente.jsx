@@ -13,7 +13,23 @@ import MainComponent from '../../components/MainComponent/MainComponent';
 const EditarPaciente = () => {
 
     const { id } = useParams();
-    const [paciente, setPaciente] = React.useState(null);
+    const [paciente, setPaciente] = React.useState({
+        "id": 1,
+        "nome": "João Silva",
+        "cpf": "123.456.789-00",
+        "telefone": "(11) 98765-4321",
+        "email": "joao.silva@example.com",
+        "diaConsulta": "Segunda-feira",
+        "horaConsulta": "14:00",
+        "nomeContato": "Maria Silva",
+        "telefoneContato": "(11) 91234-5678",
+        "cep": "12345-678",
+        "cidade": "São Paulo",
+        "bairro": "Centro",
+        "numero": "123",
+        "logradouro": "Rua das Flores",
+        "complemento": "Apartamento 45"
+    });
 
     React.useEffect(() => {
         fetch(`/usuarios/${id}`, {
@@ -33,9 +49,10 @@ const EditarPaciente = () => {
             .catch((error) => console.error("Erro ao encontrar paciente:", error));
     }, []);
 
-    if (!paciente) {
-        return <p>Carregando...</p>;
-    }
+    // if (!paciente) {
+
+    //     return <p>Carregando...</p>;
+    // }
 
     return (
         <div className='div-administracao flex'>
@@ -50,11 +67,6 @@ const EditarPaciente = () => {
                     </figure>
 
                     <section className='fields'>
-
-                        <section className='checkboxContainer'>
-                            <CheckBox CheckboxValue={'mensal'} labelTitle={'Plano Mensal'}></CheckBox>
-                            <CheckBox CheckboxValue={'ativo'} labelTitle={'Paciente Ativo ?'}></CheckBox>
-                        </section>
 
                         <section>
                             <h2>Dados do Paciente:</h2>
@@ -77,6 +89,8 @@ const EditarPaciente = () => {
                                 <InputField labelTitle={'Número'} value={paciente.numero} />
                                 <InputField labelTitle={'Logradouro'} value={paciente.logradouro} />
                                 <InputField labelTitle={'Complemento'} value={paciente.complemento} />
+                                <CheckBox CheckboxValue={'mensal'} labelTitle={'Plano Mensal'}></CheckBox>
+                                <CheckBox CheckboxValue={'ativo'} labelTitle={'Paciente Ativo ?'}></CheckBox>
                             </div>
 
                         </section>
