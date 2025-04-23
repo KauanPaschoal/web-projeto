@@ -118,7 +118,17 @@ const MenuLateralComponent = () => {
         </Link>
       </section>
 
-      <button className="btn-sair" id="btn-sair" aria-label="Sair">
+      <button
+        className="btn-sair"
+        id="btn-sair"
+        aria-label="Sair"
+        onClick={() => {
+          localStorage.clear();
+          sessionStorage.clear();
+
+          window.location.href = "/";
+        }}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
