@@ -5,6 +5,7 @@ import './EditarAgendamento.css'
 import InputField from '../../components/InputField/InputField'
 import { FaDeleteLeft, FaTrashCan } from 'react-icons/fa6'
 import { FaRegSave, FaSave } from 'react-icons/fa'
+import { errorMessage, responseMessage } from '../../../../utils/alert.js'
 
 const EditarAgendamento = () => {
 
@@ -71,6 +72,11 @@ const EditarAgendamento = () => {
   const handleAtualizarAgendamento = (e) => {
     e.preventDefault();
 
+    if (!paciente.data || !paciente.horario || paciente.diaSemana === undefined) {
+      errorMessage("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
     const updatedPaciente = {
       ...paciente,
       data: paciente.data,
@@ -79,10 +85,8 @@ const EditarAgendamento = () => {
     };
     setPaciente(updatedPaciente);
 
-
-    alert("Agendamento atualizado com sucesso!");
+    responseMessage("Agendamento atualizado com sucesso!");
     console.log("Paciente atualizado:", updatedPaciente);
-    console.log("Paciente objeto:", paciente);
   }
 
 
