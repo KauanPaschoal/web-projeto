@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+
+
+.menu-lateral{
+    width: 6vw;
+    min-width: fit-content;
+    height: 100vh;
+    background-color: var(--DarkBlueFy);
+    position: fixed;
+    z-index: 0;
+    transition: all 0.5s;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    
+
+}
+
+.btns-menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2em;
+    height: 50%;
+    justify-content: space-evenly;
+
+    button{
+        background-color: var(--BlueFy);
+        border: none;
+        border-left: var(--LightBlueFy) 5px solid;
+        color: var(--WhiteFy);
+        font-size: 1em;
+        padding: 0.5em 1em;
+        cursor: pointer;
+        transition: all 0.5s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5em;
+
+        &:hover{
+            background-color: var(--DarkestBlueFy);
+        }
+
+        &.active{
+            background-color: var(--DarkestBlueFy);
+        }
+    }
+}
+
+.btn-sair{
+    background-color: var(--RedFyTransparente);
+    border: none;
+    border-left: var(--RedFy) 5px solid;
+    color: var(--WhiteFy);
+    font-size: 1em;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    transition: all 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+
+    &:hover{
+        background-color: var(--DarkRedFy);
+    }
+}
