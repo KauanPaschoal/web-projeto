@@ -14,3 +14,76 @@
     color: var(--DarkBlueFy);
     transition: 0.3s;
 }
+
+
+.calendario-container{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    border-radius: 1em;
+    padding: 0.5em 1em;
+    border: var(--BlackFy) 2px solid;
+    background-color: var(--LightGrayFy);
+}
+
+.calendario-table{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.25em;
+}
+
+.calendario-card-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0.25em 1em ;
+    gap: 1em;
+    border: 1px solid var(--DarkBlueFy);
+    background-color: var(--WhiteFy);
+}
+
+.calendario-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    width: 100%;
+    padding: 0.5em 1em;
+    border-left: 0.5em solid var(--LightGrayFy);
+    background-color: var(--WhiteFy);
+
+    span{
+        font-size: 0.8em;
+        color: var(--DarkBlueFy);
+    }
+    p{
+        font-size: 0.8em;
+        color: var(--DarkBlueFy);
+    }
+}
+
+.btn_calendario{
+    background-color: var(--LightBlueFy);
+    color: var(--WhiteFy);
+    width: 100%;
+    justify-content: center;
+    padding: 0.1em 1em;
+    font-size: smaller;
+    cursor: pointer;
+    border-radius: 12em;
+
+    &:hover{
+        background-color: var(--DarkBlueFy);
+        transition: 0.3s;
+    }
+    &:active{
+        background-color: var(--DarkBlueFy);
+        transition: 0.3s;
+    }
+}
