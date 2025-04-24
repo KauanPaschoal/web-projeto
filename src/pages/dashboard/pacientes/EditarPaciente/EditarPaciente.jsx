@@ -8,6 +8,7 @@ import CheckBox from '../../components/Checkbox/Checkbox'
 import InputField from '../../components/InputField/InputField'
 import SaveButton from '../../components/SaveButton/SaveButton'
 import MainComponent from '../../components/MainComponent/MainComponent';
+import { FaRegEdit, FaUserEdit } from 'react-icons/fa';
 
 
 const EditarPaciente = () => {
@@ -59,45 +60,51 @@ const EditarPaciente = () => {
         <div className='div-administracao flex'>
             <MenuLateralComponent></MenuLateralComponent>
 
-            <MainComponent title="Editar Paciente">
+            <MainComponent title="Editar Paciente"
+                headerContent={
+                    <button className='btn_agendamento flex rounded-full'>
+                        <FaUserEdit/>
+                        Editar
+                    </button>
+                }
+            >
                 <form className='editPaciente'>
+                    <section className='flex'>
+                        <figure>
+                            <div></div>
+                            <span><span>Upload</span> imagem</span>
+                        </figure>
 
-                    <figure>
-                        <div></div>
-                        <span><span>Upload</span> imagem</span>
-                    </figure>
+                        <section className='fields'>
 
-                    <section className='fields'>
+                            <section>
+                                <h2>Dados do Paciente:</h2>
+                                <div className='inputArea'>
+                                    <InputField labelTitle={'Nome'} value={paciente.nome} />
+                                    <InputField labelTitle={'CPF'} value={paciente.cpf} />
+                                    <InputField type={'tel'} labelTitle={'Telefone'} value={paciente.telefone} />
+                                    <InputField type={'email'} labelTitle={'E-mail'} value={paciente.email} />
+                                    <InputField labelTitle={'Dia de Consultas'} value={paciente.diaConsulta} />
+                                    <InputField labelTitle={'Horário de Consultas'} value={paciente.horaConsulta} />
+                                    <InputField labelTitle={'Contato de Emergência'} value={paciente.nomeContato} />
+                                    <InputField type={'tel'} labelTitle={'Telefone de Emergência'} value={paciente.telefoneContato} />
+                                </div>
 
-                        <section>
-                            <h2>Dados do Paciente:</h2>
-                            <div className='inputArea'>
-                                <InputField labelTitle={'Nome'} value={paciente.nome} />
-                                <InputField labelTitle={'CPF'} value={paciente.cpf} />
-                                <InputField type={'tel'} labelTitle={'Telefone'} value={paciente.telefone} />
-                                <InputField type={'email'} labelTitle={'E-mail'} value={paciente.email} />
-                                <InputField labelTitle={'Dia de Consultas'} value={paciente.diaConsulta} />
-                                <InputField labelTitle={'Horário de Consultas'} value={paciente.horaConsulta} />
-                                <InputField labelTitle={'Contato de Emergência'} value={paciente.nomeContato} />
-                                <InputField type={'tel'} labelTitle={'Telefone de Emergência'} value={paciente.telefoneContato} />
-                            </div>
-
-                            <h2>Endereço:</h2>
-                            <div className='inputArea'>
-                                <InputField labelTitle={'CEP'} value={paciente.cep} />
-                                <InputField labelTitle={'Cidade'} value={paciente.cidade} />
-                                <InputField labelTitle={'Bairro'} value={paciente.bairro} />
-                                <InputField labelTitle={'Número'} value={paciente.numero} />
-                                <InputField labelTitle={'Logradouro'} value={paciente.logradouro} />
-                                <InputField labelTitle={'Complemento'} value={paciente.complemento} />
-                                <CheckBox CheckboxValue={'mensal'} labelTitle={'Plano Mensal'}></CheckBox>
-                                <CheckBox CheckboxValue={'ativo'} labelTitle={'Paciente Ativo ?'}></CheckBox>
-                            </div>
-
+                                <h2>Endereço:</h2>
+                                <div className='inputArea'>
+                                    <InputField labelTitle={'CEP'} value={paciente.cep} />
+                                    <InputField labelTitle={'Cidade'} value={paciente.cidade} />
+                                    <InputField labelTitle={'Bairro'} value={paciente.bairro} />
+                                    <InputField labelTitle={'Número'} value={paciente.numero} />
+                                    <InputField labelTitle={'Logradouro'} value={paciente.logradouro} />
+                                    <InputField labelTitle={'Complemento'} value={paciente.complemento} />
+                                    <CheckBox CheckboxValue={'mensal'} labelTitle={'Plano Mensal'}></CheckBox>
+                                    <CheckBox CheckboxValue={'ativo'} labelTitle={'Paciente Ativo ?'}></CheckBox>
+                                </div>
+                            </section>
                         </section>
-                        <SaveButton />
                     </section>
-
+                    <SaveButton />
                 </form>
             </MainComponent>
         </div>
