@@ -1,33 +1,73 @@
-import React from 'react'
-import './Agendamentos.css'
-import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent'
-import MainComponent from '../components/MainComponent/MainComponent'
-import { FaPlus } from 'react-icons/fa'
+import React, { useEffect, useState } from 'react';
+import './Agendamentos.css';
+import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent';
+import MainComponent from '../components/MainComponent/MainComponent';
+import { FaPlus } from 'react-icons/fa';
 import CalendarCard from './components/CalendarCard/CalendarCard';
 
-
 const Agendamentos = () => {
-
-  const statusClass = {
-    Pendente: 'pendente',
-    Confirmado: 'confirmado',
-    Cancelado: 'cancelado',
-  }[status] || '';
+  const [agendamentos, setAgendamentos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const redirectToCadastrarAgendamento = () => {
-    window.location.href = './agendamentos/cadastrar'
-  }
-
-  const generateCalendarCards = () => {
-    const daysOfWeek = ['Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira'];
-    const timeSlot = '08:00 - 09:00';
-
-    return daysOfWeek.map((day, index) => (
-      <td key={index} className='calendario-card'>
-        <span>{timeSlot}</span>
-      </td>
-    ));
+    window.location.href = './agendamentos/cadastrar';
   };
+
+  const getCurrentWeekDays = () => {
+    const today = new Date();
+    const currentDay = today.getDay(); // 0 (Domingo) a 6 (Sábado)
+    const daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    const weekDays = [];
+
+    // Ajusta o índice para começar na segunda-feira
+    const adjustedDay = currentDay === 0 ? 6 : currentDay - 1;
+
+    for (let i = 0; i < 5; i++) {
+      const diff = i - adjustedDay;
+      const day = new Date(today);
+      day.setDate(today.getDate() + diff);
+
+      const dayOfMonth = day.getDate().toString().padStart(2, '0'); // Formata o dia com dois dígitos
+      const month = (day.getMonth() + 1).toString().padStart(2, '0'); // Formata o mês com dois dígitos
+      const year = day.getFullYear(); // Obtém o ano completo
+
+      weekDays.push({
+        dayName: daysOfWeek[i + 1], // Segunda a Sexta
+        date: `${dayOfMonth}/${month}/${year}`, // Formata a data como DD/MM/YYYY
+      });
+    }
+
+    return weekDays;
+  };
+
+  const weekDays = getCurrentWeekDays();
+
+  // Simula o fetch para buscar os agendamentos
+  useEffect(() => {
+    const fetchAgendamentos = async () => {
+      try {
+        setLoading(true);
+        // Simulação de um fetch para a API
+        const response = await new Promise((resolve) =>
+          setTimeout(() => {
+            resolve([
+              { date: '20/04/2025', timeSlot: '08:00 - 09:00', status: 'Confirmado', patientName: 'João Silva' },
+              { date: '20/04/2025', timeSlot: '09:00 - 10:00', status: 'Pendente', patientName: 'Maria Oliveira' },
+              { date: '21/04/2025', timeSlot: '10:00 - 11:00', status: 'Cancelado', patientName: 'Carlos Souza' },
+              { date: '22/04/2025', timeSlot: '11:00 - 12:00', status: 'Disponível', patientName: '' }
+            ]);
+          }, 1000)
+        );
+        setAgendamentos(response);
+      } catch (error) {
+        console.error('Erro ao buscar agendamentos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAgendamentos();
+  }, []);
 
   return (
     <div className='div-agendamentos flex'>
@@ -39,40 +79,58 @@ const Agendamentos = () => {
             <FaPlus className='icon' />
             Agendar
           </button>
-        }>
-
+        }
+      >
         <section className='calendario-container'>
-          <table className='calendario-table flex flex-col w-full'>
-            <thead className='flex w-full justify-between'>
-              <tr className='flex w-full justify-evenly gap-2'>
-                {['Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira'].map((day, index) => (
-                  <th key={index} className='calendario-card-header'>
-                    <span>{day}</span>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className='flex flex-col w-full gap-2'>
-              {['08:00 - 09:00', '09:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00'].map((timeSlot, rowIndex) => (
-                <tr key={rowIndex} className='flex w-full justify-evenly gap-2'>
-                  {['Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira'].map((day, colIndex) => (
-                    <td key={colIndex} className={`calendario-card`}>
-                      <CalendarCard
-                        timeSlot={timeSlot}
-                        status={colIndex % 4 === 0 ? 'Confirmado' : colIndex % 4 === 1 ? 'Pendente' : colIndex % 4 === 2 ? 'Cancelado' : 'Disponível'}
-                        patientName={colIndex % 4 === 0 ? 'Nome do Paciente' : ''}
-                      />
-                    </td>
+          {loading ? (
+            <p>Carregando agendamentos...</p>
+          ) : (
+            <>
+            <table className='calendario-table flex flex-col w-full'>
+              <thead className='flex w-full justify-between'>
+                <tr className='flex w-full justify-evenly gap-2'>
+                  {weekDays.map((day, index) => (
+                    <th key={index} className='calendario-card-header'>
+                      <span>{day.dayName}</span>
+                      <span>{day.date}</span> {/* Exibe a data no formato DD/MM */}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+            </table>
+            <table className='calendario-table flex w-full'>
+              <tbody className='table-body flex w-full flex-col justify-between'>
+                {agendamentos.map((agendamento, index) => (
+                  <tr key={index} className='flex w-full justify-evenly gap-2'>
+                    {weekDays.map((day, dayIndex) => (
+                      <td key={dayIndex} className='calendario-card'>
+                        {agendamento.date === day.date ? (
+                          <CalendarCard
+                            timeSlot={agendamento.timeSlot}
+                            status={agendamento.status}
+                            patientName={agendamento.patientName}
+                            buttonText="Ver Detalhes"
+                          />
+                        ) : (
+                          <CalendarCard
+                            timeSlot="08:00 - 09:00"
+                            status="Disponível"
+                            patientName=""
+                            buttonText="Agendar"
+                          />
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            </>
+          )}
         </section>
-
       </MainComponent>
     </div>
   );
-}
+};
 
-export default Agendamentos
+export default Agendamentos;

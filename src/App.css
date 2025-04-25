@@ -19,7 +19,25 @@
   --BlueAlertFy: #78BEFF;
 }
 
+/* Estilização do Scrollbar */
+::-webkit-scrollbar {
+  width: 10px; /* Largura do scrollbar */
+}
 
+::-webkit-scrollbar-track {
+  background: var(--LightGrayFy); /* Cor do fundo do track */
+  border-radius: 10px; /* Bordas arredondadas */
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--LightBlueFy); /* Cor do thumb */
+  border-radius: 10px; /* Bordas arredondadas */
+  border: 2px solid var(--WhiteFy); /* Espaço entre o thumb e o track */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--DarkBlueFy); /* Cor do thumb ao passar o mouse */
+}
 
 * {
   font-family: "Montserrat", sans-serif;

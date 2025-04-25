@@ -47,13 +47,9 @@ const Psicologos = () => {
     setPacientesLista(filteredPacientes);
   }
 
-    const redirectToEditarPaciente = (id) => {
-      navigate(`/dashboard/pacientes/editar/${id}`); 
-    };
-
-    const redirectToCadastrarAgendamento = (id) => {
-      navigate(`/dashboard/agendamentos/cadastrar/${id}`)
-    };
+  const redirecionarParaAdicionarPsicologo = () => {
+    navigate('/dashboard/psicologos/adicionar');
+  }
 
     return (
       <div className='div-pacientes flex'>
@@ -77,7 +73,7 @@ const Psicologos = () => {
                 className='btn_agendamento flex rounded-full'
                 onClick={(e) => {
                   e.preventDefault();
-                  navigate(`/dashboard/psicologos/adicionar`);
+                  redirecionarParaAdicionarPsicologo();
                 }}
               >
                 <FaPlus className='icon' />
