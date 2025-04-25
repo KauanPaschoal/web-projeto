@@ -42,6 +42,17 @@ const Agendamentos = () => {
 
   const weekDays = getCurrentWeekDays();
 
+  const timeSlots = [
+    '08:00 - 09:00',
+    '09:00 - 10:00',
+    '10:00 - 11:00',
+    '11:00 - 12:00',
+    '13:00 - 14:00',
+    '14:00 - 15:00',
+    '15:00 - 16:00',
+    '16:00 - 17:00',
+  ];
+
   // Simula o fetch para buscar os agendamentos
   useEffect(() => {
     const fetchAgendamentos = async () => {
@@ -51,10 +62,14 @@ const Agendamentos = () => {
         const response = await new Promise((resolve) =>
           setTimeout(() => {
             resolve([
-              { date: '20/04/2025', timeSlot: '08:00 - 09:00', status: 'Confirmado', patientName: 'João Silva' },
-              { date: '20/04/2025', timeSlot: '09:00 - 10:00', status: 'Pendente', patientName: 'Maria Oliveira' },
-              { date: '21/04/2025', timeSlot: '10:00 - 11:00', status: 'Cancelado', patientName: 'Carlos Souza' },
-              { date: '22/04/2025', timeSlot: '11:00 - 12:00', status: 'Disponível', patientName: '' }
+              { date: '23/04/2025', timeSlot: '08:00 - 09:00', status: 'Confirmado', patientName: 'Lucas Pereira' },
+              { date: '24/04/2025', timeSlot: '09:00 - 10:00', status: 'Pendente', patientName: 'Fernanda Lima' },
+              { date: '21/04/2025', timeSlot: '10:00 - 11:00', status: 'Cancelado', patientName: 'Rafael Almeida' },
+              { date: '22/04/2025', timeSlot: '11:00 - 12:00', status: 'Confirmado', patientName: 'Beatriz Santos' },
+              { date: '23/04/2025', timeSlot: '13:00 - 14:00', status: 'Confirmado', patientName: 'Gabriel Costa' },
+              { date: '24/04/2025', timeSlot: '14:00 - 15:00', status: 'Cancelado', patientName: 'Juliana Rocha' },
+              { date: '25/04/2025', timeSlot: '15:00 - 16:00', status: 'Confirmado', patientName: 'Thiago Martins' },
+              { date: '23/04/2025', timeSlot: '16:00 - 17:00', status: 'Pendente', patientName: 'Mariana Oliveira' },
             ]);
           }, 1000)
         );
@@ -86,45 +101,50 @@ const Agendamentos = () => {
             <p>Carregando agendamentos...</p>
           ) : (
             <>
-            <table className='calendario-table flex flex-col w-full'>
-              <thead className='flex w-full justify-between'>
-                <tr className='flex w-full justify-evenly gap-2'>
-                  {weekDays.map((day, index) => (
-                    <th key={index} className='calendario-card-header'>
-                      <span>{day.dayName}</span>
-                      <span>{day.date}</span> {/* Exibe a data no formato DD/MM */}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-            </table>
-            <table className='calendario-table flex w-full'>
-              <tbody className='table-body flex w-full flex-col justify-between'>
-                {agendamentos.map((agendamento, index) => (
-                  <tr key={index} className='flex w-full justify-evenly gap-2'>
-                    {weekDays.map((day, dayIndex) => (
-                      <td key={dayIndex} className='calendario-card'>
-                        {agendamento.date === day.date ? (
-                          <CalendarCard
-                            timeSlot={agendamento.timeSlot}
-                            status={agendamento.status}
-                            patientName={agendamento.patientName}
-                            buttonText="Ver Detalhes"
-                          />
-                        ) : (
-                          <CalendarCard
-                            timeSlot="08:00 - 09:00"
-                            status="Disponível"
-                            patientName=""
-                            buttonText="Agendar"
-                          />
-                        )}
-                      </td>
+              <table className='calendario-table flex flex-col w-full'>
+                <thead className='flex w-full justify-between'>
+                  <tr className='table-tr flex w-full justify-evenly gap-2' >
+                    {weekDays.map((day, index) => (
+                      <th key={index} className='calendario-card-header'>
+                        <span>{day.dayName}</span>
+                        <span>{day.date}</span> {/* Exibe a data no formato DD/MM */}
+                      </th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className='table-body flex w-full flex-col justify-between gap-2'>
+                  {timeSlots.map((timeSlot, rowIndex) => (
+                    <tr key={rowIndex} className='flex w-full justify-evenly gap-2'>
+                      {weekDays.map((day, colIndex) => {
+                        const agendamento = agendamentos.find(
+                          (a) => a.date === day.date && a.timeSlot === timeSlot
+                        );
+                        return (
+                          <td key={colIndex} className='div-calendario-card'>
+                            {agendamento ? (
+                              <CalendarCard
+                                timeSlot={agendamento.timeSlot}
+                                status={agendamento.status}
+                                patientName={agendamento.patientName}
+                                buttonText="Ver Detalhes"
+                                day={day.date}
+                              />
+                            ) : (
+                              <CalendarCard
+                                timeSlot={timeSlot}
+                                status="Disponível"
+                                patientName=""
+                                buttonText="+ Agendar"
+                                day={day.date}
+                              />
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </>
           )}
         </section>

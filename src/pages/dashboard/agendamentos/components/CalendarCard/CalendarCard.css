@@ -44,7 +44,13 @@
         transition: 0.3s;
     }
 }
-
-.agendamento-info{
-    
+.card-header{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
 }
+
+/* .agendamento-info{
+    
+} */

@@ -21,7 +21,7 @@
 
 /* Estilização do Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px; /* Largura do scrollbar */
+  width: 0.60em; /* Largura do scrollbar */
 }
 
 ::-webkit-scrollbar-track {
