@@ -32,7 +32,7 @@ const CalendarCard = ({ timeSlot, status, patientName, buttonText, day }) => {
 
   return (
     <div className="calendario-card flex flex-col justify-between" style={{ borderLeft: `4px solid ${borderColor}`, backgroundColor }}>
-      <div className="card-header">
+      <div className="card-header-calendario">
         <span>{timeSlot}</span>
       </div>
       <div className="agendamento-info">

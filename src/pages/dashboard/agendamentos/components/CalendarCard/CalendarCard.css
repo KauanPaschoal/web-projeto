@@ -44,7 +44,7 @@
         transition: 0.3s;
     }
 }
-.card-header{
+.card-header-calendario{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
