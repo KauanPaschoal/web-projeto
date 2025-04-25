@@ -7,36 +7,25 @@
 .inputContainer {
     display: flex;
     flex-direction: column;
-}
-
-.inputContainer label {
     width: fit-content;
-    font-size: 14px;
-    font-weight: bold;
-    color: #21272A;
+
+    label {
+        width: fit-content;
+        font-size: 14px;
+        font-weight: bold;
+        color: #21272A;
+    }
+
+    .inputField {
+        width: 195px;
+        border-bottom: 1px solid #C1C7CD;
+        font-size: 14px;
+        padding: 10px 0 2px 16px;
+
+        caret-color: var(--blue-detail);
+
+  }
 }
-
-.inputContainer .inputField {
-    width: 100%;
-    border-bottom: 1px solid #C1C7CD;
-    font-size: 14px;
-    padding: 10px 0 2px 16px;
-
-    caret-color: var(--blue-detail);
-
-    outline: none;
-}
-
-.inputContainer .inputField:focus {
-    border-bottom-color: var(--blue-detail);
-}
-
-.inputContainer .input-with-icon {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
 .inputContainer .input-with-icon .inputField {
     padding-right: 2.5em;
     /* Espaço para o ícone */
@@ -55,4 +44,9 @@
     background-color: #f1f1f1;
     color: #777;
     cursor: not-allowed;
+     outline: none;
 }
+
+.inputField:focus {
+        border-bottom-color: var(--blue-detail);
+    }

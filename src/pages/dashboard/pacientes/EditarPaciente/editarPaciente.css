@@ -3,10 +3,9 @@
 .editPaciente {
     display: flex;
 
-    height: 510px;
+    height: 100%;
     width: 100%;
     padding: 16px;
-
     border: 2px solid #133857;
     border-radius: 24px;
 
