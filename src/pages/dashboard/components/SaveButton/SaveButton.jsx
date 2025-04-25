@@ -1,13 +1,24 @@
-import React from 'react'
-import './saveButton.css'
+import React from "react";
+import { FaSave } from "react-icons/fa";
+import "./saveButton.css";
 
+const SaveButton = ({
+  type = "button",
+  textContent = "Salvar Alterações",
+  onClick,
+  disabled,
+}) => {
+  return (
+    <button
+      type={type}
+      className="save-btn"
+      onClick={onClick}
+      disabled={disabled}
+    >
+      <FaSave />
+      {textContent}
+    </button>
+  );
+};
 
-const InputField = ({type, textContent}) => {
-
-    return (
-        <button type={type ? type : 'submit'} className='save-btn'>🖫 {textContent ? textContent : 'Salvar Alterações'}</button>
-        
-    )
-}
-
-export default InputField
+export default SaveButton;

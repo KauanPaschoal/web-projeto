@@ -24,10 +24,29 @@
 
         caret-color: var(--blue-detail);
 
-        outline: none;
-    }
+  }
+}
+.inputContainer .input-with-icon .inputField {
+    padding-right: 2.5em;
+    /* Espaço para o ícone */
+}
 
-    .inputField:focus {
+.inputContainer .input-with-icon .input-icon {
+    position: absolute;
+    right: 10px;
+    font-size: 1.2em;
+    color: #888;
+    pointer-events: none;
+    /* O ícone não interfere na interação com o input */
+}
+
+.inputField:disabled {
+    background-color: #f1f1f1;
+    color: #777;
+    cursor: not-allowed;
+     outline: none;
+}
+
+.inputField:focus {
         border-bottom-color: var(--blue-detail);
     }
-}
