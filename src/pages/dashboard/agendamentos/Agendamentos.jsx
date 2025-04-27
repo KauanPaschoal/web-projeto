@@ -87,23 +87,44 @@ const Agendamentos = () => {
 
   useEffect(() => {
     const fetchAgendamentos = async () => {
-      try{
-        setLoading(true);
-          const agendamentos = await getAgendamentos();
-          if (Array.isArray(agendamentos)) {
-            setAgendamentos(agendamentos);
-            console.log("Agendamentos:", agendamentos);
-          } else {
-            console.error("A resposta da API não é um array:", agendamentos);
-          }
+        try {
+            setLoading(true);
+            const response = await getAgendamentos();
+
+            if (Array.isArray(response)) {
+                // Transforma os dados para garantir que `data` e `hora` estejam no formato correto
+                const agendamentosTransformados = response.map((agendamento) => ({
+                    ...agendamento,
+                    date: agendamento.data
+                        ? new Date(agendamento.data).toLocaleDateString('pt-BR', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                          })
+                        : null, // Converte `data` para o formato DD/MM/YYYY
+                    timeSlot: agendamento.hora
+                        ? `${agendamento.hora.hour.toString().padStart(2, '0')}:${agendamento.hora.minute
+                              .toString()
+                              .padStart(2, '0')}` // Converte `hora` para o formato HH:MM
+                        : '00:00',
+                    patientName: agendamento.fkPaciente?.nome || 'Desconhecido', // Nome do paciente
+                    status: agendamento.statusSessao || 'Indefinido', // Status da sessão
+                }));
+
+                setAgendamentos(agendamentosTransformados);
+                console.log("Agendamentos transformados:", agendamentosTransformados);
+            } else {
+                console.error("A resposta da API não é um array:", response);
+            }
         } catch (error) {
-          console.error("Erro ao encontrar agendamentos:", error);
+            console.error("Erro ao encontrar agendamentos:", error);
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
-      fetchAgendamentos();
-    },[]);
+    };
+
+    fetchAgendamentos();
+}, []);
     
 
 

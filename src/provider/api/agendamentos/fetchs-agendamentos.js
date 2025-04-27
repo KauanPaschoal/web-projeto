@@ -21,7 +21,7 @@ export const getAgendamentos = async () => {
                 'Content-Type': 'application/json',
             },
         });
-        console.log("response: " + response.data)
+        console.log("response: ", response.data)
         return response.data;
     } catch (error) {
         console.error('Erro ao encontrar agendamentos:', error);
