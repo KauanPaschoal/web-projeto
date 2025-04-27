@@ -25,4 +25,7 @@
 
 .save-btn:disabled {
     cursor: not-allowed;
+    color: var(--GrayFy);
+    background-color: var(--LightGrayFy);
+    border: var(--LightGrayFy) 2px solid;
 }

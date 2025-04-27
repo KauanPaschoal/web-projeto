@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+
+
 .btn_agendamento{
     background-color: var(--BlueFy);
     color: var(--WhiteFy);
@@ -14,3 +16,72 @@
     color: var(--DarkBlueFy);
     transition: 0.3s;
 }
+
+
+.calendario-container{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
+    border-radius: 1em;
+    padding: 0.5em 1em;
+    border: var(--BlackFy) 2px solid;
+    background-color: var(--LightGrayFy);
+}
+
+.calendario-table{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 0.25em;
+
+    .table-tr{
+        padding-right: 1.60em;
+    }
+    
+}
+
+.calendario-table-body{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: green;
+    overflow-y: auto;
+}
+
+.table-body{
+    height: 90%;
+    overflow-y: auto;
+    padding-right: 1em;
+}
+
+.calendario-card-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0.25em 1em ;
+    gap: 1em;
+    /* border: 1px solid var(--DarkBlueFy); */
+    background-color: var(--WhiteFy);
+}
+
+
+
+.div-calendario-card{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0em;
+    gap: 1em;
+    background-color: var(--WhiteFy);
+}
+
+

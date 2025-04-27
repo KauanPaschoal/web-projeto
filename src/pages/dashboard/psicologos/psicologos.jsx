@@ -1,36 +1,35 @@
 import React from 'react';
-import './pacientes.css';
-import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent';
+import './psicologos.css';
 import { FaPen, FaPlus, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import MainComponent from '../components/MainComponent/MainComponent';
-import { getPacientes } from '../../../provider/api/pacientes/fetchs-pacientes';
+import MenuPsicologo from './components/menuPsicologo/menuPsicologo';
 
 
 
-const Pacientes = () => {
+const Psicologos = () => {
   const [pacientes, setPacientes] = React.useState([]);
   const [pacientesLista, setPacientesLista] = React.useState([]);
   const [pesquisar, setPesquisar] = React.useState('');
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    const fetchPacientes = async () => {
-      try {
-        const pacientes = await getPacientes();
-        if (Array.isArray(pacientes)) {
+    fetch("/usuarios", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erro ao encontrar pacientes");
+        }
+        response.json().then((pacientes) => {
           setPacientes(pacientes);
           setPacientesLista(pacientes);
-          console.log("Pacientes encontrados:", pacientes);
-        } else {
-          console.error("A resposta da API não é um array:", pacientes);
-        }
-      } catch (error) {
-        console.error("Erro ao encontrar pacientes:", error);
-      }
-    };
-
-    fetchPacientes();
+        });
+      })
+      .catch((error) => console.error("Erro ao encontrar pacientes:", error));
   }, []);
 
   const handleSearch = (e) => {
@@ -48,26 +47,22 @@ const Pacientes = () => {
     setPacientesLista(filteredPacientes);
   }
 
-    const redirectToEditarPaciente = (id) => {
-      navigate(`/dashboard/pacientes/editar/${id}`); 
-    };
-
-    const redirectToCadastrarAgendamento = (id) => {
-      navigate(`/dashboard/agendamentos/cadastrar/${id}`)
-    };
+  const redirecionarParaAdicionarPsicologo = () => {
+    navigate('/dashboard/psicologos/adicionar');
+  }
 
     return (
       <div className='div-pacientes flex'>
-        <MenuLateralComponent></MenuLateralComponent>
+        <MenuPsicologo/>
         <MainComponent
-          title="Meus Pacientes"
+          title="Meus Psicólogos"
           headerContent={
             <>
               <div className="search-container flex">
                 <FaSearch className="search-icon" />
                 <input
                   type="text"
-                  placeholder="Pesquisar pacientes..."
+                  placeholder="Pesquisar psicologos..."
                   className="input-pesquisa"
                   value={pesquisar}
                   onChange={handleSearch}
@@ -78,11 +73,11 @@ const Pacientes = () => {
                 className='btn_agendamento flex rounded-full'
                 onClick={(e) => {
                   e.preventDefault();
-                  navigate(`/dashboard/pacientes/adicionar`);
+                  redirecionarParaAdicionarPsicologo();
                 }}
               >
                 <FaPlus className='icon' />
-                Adicionar Paciente
+                Adicionar Psicologo
               </button>
             </>
           }
@@ -98,20 +93,12 @@ const Pacientes = () => {
                   <p>
                     <b>Telefone:</b> {paciente.telefone}
                   </p>
-                </div>
-                <div className='flex gap-2'>
-                  <button className='btn_secundario flex rounded-full'
-                    onClick={() => redirectToEditarPaciente(paciente.id)}
-                  >
-                    <FaPen />
-                    Editar
-                  </button>
-                  <button className='btn_primario flex rounded-full'
-                    onClick={() => redirectToCadastrarAgendamento(paciente.id)}
-                  >
-                    <FaPlus className='icon' />
-                    Agendar
-                  </button>
+                  <p>
+                    <b>CRP:</b> {paciente.crp}
+                  </p>
+                  <p>
+                    <b>Email:</b> {paciente.crp}
+                  </p>
                 </div>
               </div>
             ))}
@@ -121,4 +108,4 @@ const Pacientes = () => {
     );
   };
 
-  export default Pacientes;
+  export default Psicologos;

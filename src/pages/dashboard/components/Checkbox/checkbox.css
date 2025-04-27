@@ -5,34 +5,28 @@
 }
 
 /* Esconde o checkbox padrão */
-input[type="checkbox"] {
-    appearance: none;
-    width: 14px;
-    height: 14px;
-    margin-right: 8px;
-    border: 2px solid var(--light-blue); /* Borda azul */
-    border-radius: 4px;
-    cursor: pointer;
-    position: relative;
-  }
-  
-  /* Quando o checkbox está marcado */
-  input[type="checkbox"]:checked {
-    background-color: var(--light-blue); /* Fundo azul */
-    border-color: var(--light-blue);
-  }
-  
-  /* Criando o símbolo de check */
-  input[type="checkbox"]:checked::before {
-    content: "✔";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    color: #ffffff;
-    font-size: 12px;
-  }
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-  .checkboxLabel {
-    font-weight: bold;
-  }
+.checkbox-disabled {
+  opacity: 0.5; /* Torna o checkbox e o texto mais claros */
+  pointer-events: none; /* Impede interações */
+}
+
+input[type="checkbox"]:disabled {
+  cursor: not-allowed; /* Mostra o cursor de "não permitido" */
+  background-color: #d3d3d3; /* Cor de fundo cinza para o checkbox */
+  border-color: #a9a9a9; /* Cor da borda cinza */
+}
+
+.checkboxLabel {
+  font-size: 14px;
+  color: #333;
+}
+
+.checkbox-disabled .checkboxLabel {
+  color: #a9a9a9; /* Torna o texto cinza quando desativado */
+}

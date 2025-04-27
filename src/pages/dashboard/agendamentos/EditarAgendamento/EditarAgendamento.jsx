@@ -5,13 +5,16 @@ import './EditarAgendamento.css'
 import InputField from '../../components/InputField/InputField'
 import { FaDeleteLeft, FaTrashCan } from 'react-icons/fa6'
 import { FaRegSave, FaSave } from 'react-icons/fa'
+import { errorMessage, responseMessage } from '../../../../utils/alert.js'
 
 const EditarAgendamento = () => {
 
   const [paciente, setPaciente] = React.useState([]);
   const [agendamentos, setAgendamentos] = React.useState([]);
   const [diasDoMes, setDiasDoMes] = React.useState({});
-  const [agendamento,setAgendamento] = React.useState({});
+  const [agendamento, setAgendamento] = React.useState({});
+  const [diaSemana, setDiaSemana] = React.useState(0);
+
 
   const pacienteResponse = ([
     { id: 1, nome: "Usuario da Silva", horario: "14:00", diaSemana: 2, data: "22/04/2025", status: "Pendente" },
@@ -21,15 +24,15 @@ const EditarAgendamento = () => {
     const selectedPaciente = pacienteResponse.find(p => p.id === 1);
     if (selectedPaciente) {
       setPaciente(selectedPaciente);
-        setDiasDoMes({
-            diaMes: Array.from({ length: 4 }, (_, i) => {
-                const data = new Date();
-                data.setDate(data.getDate() + i * 7 + ((selectedPaciente.diaSemana - data.getDay() + 7) % 7));
-                return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            }),
-        });
+      setDiasDoMes({
+        diaMes: Array.from({ length: 4 }, (_, i) => {
+          const data = new Date();
+          data.setDate(data.getDate() + i * 7 + ((selectedPaciente.diaSemana - data.getDay() + 7) % 7));
+          return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }),
+      });
     }
-}, []);
+  }, []);
 
 
 
@@ -42,16 +45,16 @@ const EditarAgendamento = () => {
     { data: "2023-10-01", horario: "10:00", idPaciente: 1, status: "Compareceu" },
   ]);
 
-  
+
 
   React.useEffect(() => {
     if (paciente && paciente.id) {
-        const filteredAgendamentos = agendamentosResponse.filter(
-            agendamento => agendamento.idPaciente === paciente.id
-        );
-        setAgendamentos(filteredAgendamentos);
+      const filteredAgendamentos = agendamentosResponse.filter(
+        agendamento => agendamento.idPaciente === paciente.id
+      );
+      setAgendamentos(filteredAgendamentos);
     }
-}, [paciente]);
+  }, [paciente]);
 
   const getNomeDiaSemana = (diaSemana) => {
     const dias = [
@@ -69,6 +72,11 @@ const EditarAgendamento = () => {
   const handleAtualizarAgendamento = (e) => {
     e.preventDefault();
 
+    if (!paciente.data || !paciente.horario || paciente.diaSemana === undefined) {
+      errorMessage("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
     const updatedPaciente = {
       ...paciente,
       data: paciente.data,
@@ -77,15 +85,28 @@ const EditarAgendamento = () => {
     };
     setPaciente(updatedPaciente);
 
-    
-    alert("Agendamento atualizado com sucesso!");
+    responseMessage("Agendamento atualizado com sucesso!");
     console.log("Paciente atualizado:", updatedPaciente);
-    console.log("Paciente objeto:", paciente);
   }
 
-  
 
+  const handleDiaSemanaChange = (e) => {
+    const selectedDiaSemana = parseInt(e.target.value, 10);
+    setDiaSemana(selectedDiaSemana);
 
+    const diasDoMesAtualizados = Array.from({ length: 4 }, (_, i) => {
+      const data = new Date();
+      data.setDate(data.getDate() + i * 7 + ((selectedDiaSemana - data.getDay() + 7) % 7));
+      return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    });
+
+    setDiasDoMes({ diaMes: diasDoMesAtualizados });
+    setPaciente({
+      ...paciente,
+      diaSemana: selectedDiaSemana,
+      data: diasDoMesAtualizados[0], 
+    });
+  }
 
   return (
     <>
@@ -93,9 +114,22 @@ const EditarAgendamento = () => {
       <MainComponent
         title={'Editar Agendamento'}
         headerContent={
-          <button className="btn_agendamento" onClick={() => window.location.href = '/dashboard/agendamentos'}>
-            {"< Voltar"}
-          </button>
+          <div className='flex gap-2 justify-between w-full'>
+            <button className="btn_agendamento" onClick={() => window.location.href = '/dashboard/agendamentos'}>
+              {"< Voltar"}
+            </button>
+            <button
+              className='btn_primario rounded-full flex gap-2 m-0'
+              type="button"
+              onClick={() => setPaciente({
+                ...paciente,
+                data: paciente.selectedDate
+              })}
+            >
+              <FaTrashCan className='' size={20} />
+              Cancelar Agendamento
+            </button>
+          </div>
         }
       >
 
@@ -105,7 +139,7 @@ const EditarAgendamento = () => {
           onSubmit={handleAtualizarAgendamento}>
           <div className='div-escolher-paciente'>
             {paciente && (
-              <div className="paciente-info">
+              <div className="paciente-info-editar">
                 <p><strong>Paciente Selecionado:</strong> {paciente.nome}</p>
                 <p><strong>Horário para Consultas:</strong> {paciente.horario}</p>
                 <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(paciente.diaSemana)}</p>
@@ -133,13 +167,31 @@ const EditarAgendamento = () => {
                     </label>
                   </div>
                 </div>
-                
+
               </div>
             )}
           </div>
 
-          <div className='container-sessao'>
-            <div className='container-inputs flex gap-2'>
+          <div className='container-sessao-editar'>
+            <div className='container-inputs-editar flex gap-2'>
+              <div className="select-container w-full">
+                <label htmlFor="diaSemana" className="input-label">Novo Dia da Semana:</label>
+                <select
+                  id="diaSemana"
+                  name="diaSemana"
+                  required
+                  className="select-field w-full"
+                  value={paciente?.diaSemana || ''}
+                  onChange={handleDiaSemanaChange}
+                >
+                  <option value="" disabled>Selecione um dia da semana</option>
+                  {paciente && Array.from({ length: 7 }, (_, i) => (
+                    <option key={i} value={i}>
+                      {getNomeDiaSemana(i)}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <div className="select-container w-full">
                 <label htmlFor="data" className="input-label">Nova Data:</label>
                 <select
@@ -171,54 +223,11 @@ const EditarAgendamento = () => {
                 value={paciente ? paciente.horario : ''}
                 readOnly={paciente ? false : true}
                 className={"w-full"}
-                width={"w-full"}
+                width={"w-[50%]"}
               />
             </div>
-            {paciente && (
-              <div className='agendamentos-container'>
-                <h3>Últimos Agendamentos</h3>
-                <div className='agendamentos-list'>
-                  {agendamentos.map((agendamento, index) => {
-                    const getStatusSessaoClass = () => {
-                      switch (agendamento.status) {
-                        case 'Compareceu':
-                          return 'status-sessao-ok';
-                        case 'Pendente':
-                          return 'status-sessao-pendente';
-                        case 'Cancelou':
-                          return 'status-sessao-cancelado';
-                        case 'Reagendou':
-                          return 'status-sessao-reagendado';
-                        default:
-                          return 'status-sessao-default';
-                      }
-                    };
-                    return (
-                      <div key={index} className="agendamento-item">
-                        <p><strong>Data:</strong> {agendamento.data}</p>
-                        <p><strong>Horário:</strong> {agendamento.horario}</p>
-                        <p><span className={`status ${getStatusSessaoClass()}`}>{agendamento.status}</span></p>
-                      </div>
-                    )
-                  }
-                  )}
-                </div>
-              </div>
-            )}
           </div>
-          <div className='w-[80%]'>
-            <button
-              className='btn_secundario rounded-full flex gap-2'
-              type="button"
-              onClick={() => setPaciente({
-                ...paciente,
-                data: paciente.selectedDate
-              })}
-            >
-              <FaTrashCan className='' size={20} />
-              Cancelar Agendamento
-            </button>
-          </div>
+
           <div className='flex gap-2'>
             <button type='submit' className='btn_primario rounded-full flex gap-2'>
               <FaRegSave className='' size={20} />
