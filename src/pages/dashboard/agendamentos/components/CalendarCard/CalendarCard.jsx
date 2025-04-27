@@ -19,14 +19,18 @@ const CalendarCard = ({ timeSlot, status, patientName, buttonText, day }) => {
     Disponível: 'rgba(128, 128, 128, 0.1)',
   }[status] || 'rgba(128, 128, 128, 0.1)';
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e) => {
+    const startTime = timeSlot.split(' - ')[0]; // Pega apenas o horário inicial
+
     if (status === 'Disponível') {
-      // Redireciona para cadastrar agendamento com os parâmetros timeSlot e day na query string
-      navigate(`/dashboard/agendamentos/cadastrar?timeSlot=${encodeURIComponent(timeSlot)}&day=${encodeURIComponent(day)}`);
+      e.stopPropagation();
+      // Redireciona para cadastrar agendamento com os parâmetros startTime e day na query string
+      navigate(`/dashboard/agendamentos/cadastrar?timeSlot=${encodeURIComponent(startTime)}&day=${encodeURIComponent(day)}`);
     } else {
+      e.stopPropagation();
       // Redireciona para uma página de detalhes ou então faz outra lógica
-      console.log(`Ver detalhes do agendamento para ${timeSlot} no dia ${day}`);
-      // Ex.: navigate(`/dashboard/agendamentos/detalhes?timeSlot=${encodeURIComponent(timeSlot)}&day=${encodeURIComponent(day)}`);
+      console.log(`Ver detalhes do agendamento para ${startTime} no dia ${day}`);
+      // Ex.: navigate(`/dashboard/agendamentos/detalhes?timeSlot=${encodeURIComponent(startTime)}&day=${encodeURIComponent(day)}`);
     }
   }
 

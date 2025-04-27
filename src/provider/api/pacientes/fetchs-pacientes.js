@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getPacientes = async () => {
     try {
-        const response = await axios.get('/usuarios', {
+        const response = await axios.get('/pacientes', {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -16,7 +16,7 @@ export const getPacientes = async () => {
 
 export const getPacientesPorId = async (id) => {
     try {
-        const response = await axios.get(`/usuarios/${id}`, {
+        const response = await axios.get(`/pacientes/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -30,7 +30,7 @@ export const getPacientesPorId = async (id) => {
 
 export const getPacientesLista = async (pesquisar) => {
     try {
-        const response = await axios.get(`/usuarios?nome=${pesquisar}`, {
+        const response = await axios.get(`/pacientes?nome=${pesquisar}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -44,7 +44,7 @@ export const getPacientesLista = async (pesquisar) => {
 
 export const postPaciente = async (paciente) => {
     try {
-        const response = await axios.post('/usuarios', paciente, {
+        const response = await axios.post('/pacientes', paciente, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -58,7 +58,7 @@ export const postPaciente = async (paciente) => {
 
 export const putPaciente = async (id, paciente) => {
     try {
-        const response = await axios.put(`/usuarios/${id}`, paciente, {
+        const response = await axios.put(`/pacientes/${id}`, paciente, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -72,7 +72,7 @@ export const putPaciente = async (id, paciente) => {
 
 export const putDesativarPaciente = async (id, paciente) => {
     try {
-        const response = await axios.put(`/usuarios/${id}`, paciente, {
+        const response = await axios.put(`/pacientes/${id}/desativar`, paciente, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -86,7 +86,7 @@ export const putDesativarPaciente = async (id, paciente) => {
 
 export const putAtualizarSenhaPaciente = async (id, senha) => {
     try {
-        const response = await axios.put(`/usuarios/${id}/senha`, senha, {
+        const response = await axios.put(`/pacientes/${id}/senha`, senha, {
             headers: {
                 'Content-Type': 'application/json',
             },

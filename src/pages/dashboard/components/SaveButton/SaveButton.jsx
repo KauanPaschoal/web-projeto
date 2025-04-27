@@ -11,7 +11,7 @@ const SaveButton = ({
   return (
     <button
       type={type}
-      className="save-btn"
+      className={`save-btn ${disabled ? "save-btn-disabled" : ""}`}
       onClick={onClick}
       disabled={disabled}
     >

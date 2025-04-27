@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getAgendamentosPorId = async (id) => {
     try {
-        const response = await axios.get(`/agendamentos/${id}`, {
+        const response = await axios.get(`/sessoes/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -16,11 +16,12 @@ export const getAgendamentosPorId = async (id) => {
 
 export const getAgendamentos = async () => {
     try {
-        const response = await axios.get('/agendamentos', {
+        const response = await axios.get('/sessoes', {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
+        console.log("response: " + response.data)
         return response.data;
     } catch (error) {
         console.error('Erro ao encontrar agendamentos:', error);
@@ -28,10 +29,23 @@ export const getAgendamentos = async () => {
     }
 }
 
+export const getAgendamentosPorPaciente = async (id) => {
+    try {
+        const response = await axios.get(`/sessoes/paciente/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao encontrar agendamentos por paciente:', error);
+        throw error;
+    }
+}
 
 export const postAgendamento = async (agendamento) => {
     try {
-        const response = await axios.post('/agendamentos', agendamento, {
+        const response = await axios.post('/sessoes', agendamento, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -45,7 +59,7 @@ export const postAgendamento = async (agendamento) => {
 
 export const putAgendamento = async (id, agendamento) => {
     try {
-        const response = await axios.put(`/agendamentos/${id}`, agendamento, {
+        const response = await axios.put(`/sessoes/${id}`, agendamento, {
             headers: {
                 'Content-Type': 'application/json',
             },

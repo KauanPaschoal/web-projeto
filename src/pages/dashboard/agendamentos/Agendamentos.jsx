@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import './Agendamentos.css';
 import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent';
 import MainComponent from '../components/MainComponent/MainComponent';
 import { FaPlus } from 'react-icons/fa';
 import CalendarCard from './components/CalendarCard/CalendarCard';
+import { getAgendamentos, getAgendamentosPorPaciente } from '../../../provider/api/agendamentos/fetchs-agendamentos';
 
 const Agendamentos = () => {
   const [agendamentos, setAgendamentos] = useState([]);
@@ -19,22 +20,33 @@ const Agendamentos = () => {
     const daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
     const weekDays = [];
 
-    // Ajusta o índice para começar na segunda-feira
-    const adjustedDay = currentDay === 0 ? 6 : currentDay - 1;
+    // Se for sábado ou domingo, avança para a próxima segunda-feira
+    if (currentDay === 6) {
+        today.setDate(today.getDate() + 2); // Avança para segunda-feira
+    } else if (currentDay === 0) {
+        today.setDate(today.getDate() + 1); // Avança para segunda-feira
+    }
 
+    // Gera os próximos 5 dias úteis (segunda a sexta)
     for (let i = 0; i < 5; i++) {
-      const diff = i - adjustedDay;
-      const day = new Date(today);
-      day.setDate(today.getDate() + diff);
+        const day = new Date(today);
+        day.setDate(today.getDate() + i);
 
-      const dayOfMonth = day.getDate().toString().padStart(2, '0'); // Formata o dia com dois dígitos
-      const month = (day.getMonth() + 1).toString().padStart(2, '0'); // Formata o mês com dois dígitos
-      const year = day.getFullYear(); // Obtém o ano completo
+        // Pula sábados e domingos
+        if (day.getDay() === 6 || day.getDay() === 0) {
+            i--; // Não conta sábados e domingos como dias úteis
+            today.setDate(today.getDate() + 1);
+            continue;
+        }
 
-      weekDays.push({
-        dayName: daysOfWeek[i + 1], // Segunda a Sexta
-        date: `${dayOfMonth}/${month}/${year}`, // Formata a data como DD/MM/YYYY
-      });
+        const dayOfMonth = day.getDate().toString().padStart(2, '0'); // Formata o dia com dois dígitos
+        const month = (day.getMonth() + 1).toString().padStart(2, '0'); // Formata o mês com dois dígitos
+        const year = day.getFullYear(); // Obtém o ano completo
+
+        weekDays.push({
+            dayName: daysOfWeek[day.getDay()], // Nome do dia da semana
+            date: `${dayOfMonth}/${month}/${year}`, // Formata a data como DD/MM/YYYY
+        });
     }
 
     return weekDays;
@@ -54,35 +66,76 @@ const Agendamentos = () => {
   ];
 
   // Simula o fetch para buscar os agendamentos
+  // useEffect(() => {
+  //   const fetchAgendamentos = async () => {
+  //     try{
+  //       setLoading(true);
+  //         const agendamentos = await getAgendamentosPorPaciente();
+  //         if (Array.isArray(agendamentos)) {
+  //           setAgendamentos(agendamentos);
+  //           console.log("Agendamentos:", agendamentos);
+  //         } else {
+  //           console.error("A resposta da API não é um array:", agendamentos);
+  //         }
+  //       } catch (error) {
+  //         console.error("Erro ao encontrar agendamentos:", error);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
+  //   },[]);
+
   useEffect(() => {
     const fetchAgendamentos = async () => {
-      try {
+      try{
         setLoading(true);
-        // Simulação de um fetch para a API
-        const response = await new Promise((resolve) =>
-          setTimeout(() => {
-            resolve([
-              { date: '23/04/2025', timeSlot: '08:00 - 09:00', status: 'Confirmado', patientName: 'Lucas Pereira' },
-              { date: '24/04/2025', timeSlot: '09:00 - 10:00', status: 'Pendente', patientName: 'Fernanda Lima' },
-              { date: '21/04/2025', timeSlot: '10:00 - 11:00', status: 'Cancelado', patientName: 'Rafael Almeida' },
-              { date: '22/04/2025', timeSlot: '11:00 - 12:00', status: 'Confirmado', patientName: 'Beatriz Santos' },
-              { date: '23/04/2025', timeSlot: '13:00 - 14:00', status: 'Confirmado', patientName: 'Gabriel Costa' },
-              { date: '24/04/2025', timeSlot: '14:00 - 15:00', status: 'Cancelado', patientName: 'Juliana Rocha' },
-              { date: '25/04/2025', timeSlot: '15:00 - 16:00', status: 'Confirmado', patientName: 'Thiago Martins' },
-              { date: '23/04/2025', timeSlot: '16:00 - 17:00', status: 'Pendente', patientName: 'Mariana Oliveira' },
-            ]);
-          }, 1000)
-        );
-        setAgendamentos(response);
-      } catch (error) {
-        console.error('Erro ao buscar agendamentos:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+          const agendamentos = await getAgendamentos();
+          if (Array.isArray(agendamentos)) {
+            setAgendamentos(agendamentos);
+            console.log("Agendamentos:", agendamentos);
+          } else {
+            console.error("A resposta da API não é um array:", agendamentos);
+          }
+        } catch (error) {
+          console.error("Erro ao encontrar agendamentos:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchAgendamentos();
+    },[]);
+    
 
-    fetchAgendamentos();
-  }, []);
+
+  // useEffect(() => {
+  //   const fetchAgendamentos = async () => {
+  //     try {
+  //       setLoading(true);
+  //       // Simulação de um fetch para a API
+  //       const response = await new Promise((resolve) =>
+  //         setTimeout(() => {
+  //           resolve([
+  //             { date: '23/04/2025', timeSlot: '08:00 - 09:00', status: 'Confirmado', patientName: 'Lucas Pereira' },
+  //             { date: '24/04/2025', timeSlot: '09:00 - 10:00', status: 'Pendente', patientName: 'Fernanda Lima' },
+  //             { date: '21/04/2025', timeSlot: '10:00 - 11:00', status: 'Cancelado', patientName: 'Rafael Almeida' },
+  //             { date: '22/04/2025', timeSlot: '11:00 - 12:00', status: 'Confirmado', patientName: 'Beatriz Santos' },
+  //             { date: '23/04/2025', timeSlot: '13:00 - 14:00', status: 'Confirmado', patientName: 'Gabriel Costa' },
+  //             { date: '24/04/2025', timeSlot: '14:00 - 15:00', status: 'Cancelado', patientName: 'Juliana Rocha' },
+  //             { date: '25/04/2025', timeSlot: '15:00 - 16:00', status: 'Confirmado', patientName: 'Thiago Martins' },
+  //             { date: '23/04/2025', timeSlot: '16:00 - 17:00', status: 'Pendente', patientName: 'Mariana Oliveira' },
+  //           ]);
+  //         }, 1000)
+  //       );
+  //       setAgendamentos(response);
+  //     } catch (error) {
+  //       console.error('Erro ao buscar agendamentos:', error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchAgendamentos();
+  // }, []);
 
   return (
     <div className='div-agendamentos flex'>

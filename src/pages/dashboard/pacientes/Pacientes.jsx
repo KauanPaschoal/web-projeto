@@ -4,6 +4,7 @@ import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent
 import { FaPen, FaPlus, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import MainComponent from '../components/MainComponent/MainComponent';
+import { getPacientes } from '../../../provider/api/pacientes/fetchs-pacientes';
 
 
 
@@ -14,22 +15,22 @@ const Pacientes = () => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    fetch("/usuarios", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erro ao encontrar pacientes");
-        }
-        response.json().then((pacientes) => {
+    const fetchPacientes = async () => {
+      try {
+        const pacientes = await getPacientes();
+        if (Array.isArray(pacientes)) {
           setPacientes(pacientes);
           setPacientesLista(pacientes);
-        });
-      })
-      .catch((error) => console.error("Erro ao encontrar pacientes:", error));
+          console.log("Pacientes encontrados:", pacientes);
+        } else {
+          console.error("A resposta da API não é um array:", pacientes);
+        }
+      } catch (error) {
+        console.error("Erro ao encontrar pacientes:", error);
+      }
+    };
+
+    fetchPacientes();
   }, []);
 
   const handleSearch = (e) => {
