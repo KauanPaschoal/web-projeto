@@ -11,6 +11,8 @@ import { FaUserEdit } from 'react-icons/fa';
 import { putDesativarPaciente, putPaciente } from '../../../../provider/api/pacientes/fetchs-pacientes';
 import Swal from 'sweetalert2'; // Importa o SweetAlert
 import { confirmCancelEdit, errorMessage, responseMessage } from '../../../../utils/alert';
+import { getPreferenciasPorId } from '../../../../provider/api/preferencias/fetchs-preferencias';
+
 
 const EditarPaciente = () => {
     const { id } = useParams();
@@ -18,28 +20,47 @@ const EditarPaciente = () => {
         fkEndereco: {}, // Inicializa fkEndereco como um objeto vazio
     });
     const [isEditingGeneral, setIsEditingGeneral] = useState(false); // Controle do modo de edição
-    const [isAtivo, setIsAtivo] = useState(true); // Controle do checkbox "Paciente Ativo"
+    const [isAtivo, setIsAtivo] = useState(false); // Controle do checkbox "Paciente Ativo"
     const [isPlanoAtivo, setIsPlanoAtivo] = useState(true); // Controle do checkbox "Plano Mensal"
+    const [preferencias, setPreferencias] = useState([]); // Estado para armazenar as preferências do paciente
 
     useEffect(() => {
-        fetch(`/pacientes/${id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => {
+        const fetchPaciente = async () => {
+            try {
+                const response = await fetch(`/pacientes/${id}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+                
                 if (!response.ok) {
                     throw new Error("Erro ao encontrar paciente");
                 }
-                response.json().then((pacienteResponse) => {
-                    setPaciente(pacienteResponse);
-                    setIsAtivo(pacienteResponse.ativo === "ATIVO" ? true : false); // Define o estado inicial do checkbox "Paciente Ativo"
-                    setIsPlanoAtivo(pacienteResponse.fkPlano === 2 ? true : false); // Define o estado inicial do checkbox "Plano Mensal"
-                    console.log(pacienteResponse);
-                });
-            })
-            .catch((error) => console.error("Erro ao encontrar paciente:", error));
+
+                const pacienteResponse = await response.json();
+                console.log("Response:", pacienteResponse); // Adiciona o log aqui
+                // Atualiza o estado do paciente e os checkboxes
+                setPaciente(pacienteResponse);
+                setIsAtivo(pacienteResponse.status === "ATIVO"); // Marca o checkbox "Paciente Ativo" se o status for "ATIVO"
+                setIsPlanoAtivo(pacienteResponse.fkPlano.id === 2); // Marca o checkbox "Plano Mensal" se o plano for mensal
+            } catch (error) {
+                console.error("Erro ao buscar paciente:", error);
+            }
+        };
+
+        const fetchPreferencias = async () => {
+            try {
+                const preferenciasResponse = await getPreferenciasPorId(id); // Busca as preferências do paciente
+                console.log("Preferências Response:", preferenciasResponse);
+                setPreferencias(preferenciasResponse); // Atualiza o estado com as preferências
+            } catch (error) {
+                console.error("Erro ao buscar preferências:", error);
+            }
+        };
+
+        fetchPaciente();
+        fetchPreferencias(); 
     }, [id]);
 
     const handleEditGeneral = async () => {
@@ -286,33 +307,19 @@ const EditarPaciente = () => {
                                             }))
                                         }
                                     />
-                                    <InputField
-                                        disabled={!isEditingGeneral}
-                                        labelTitle={'Complemento'}
-                                        value={paciente.fkEndereco?.complemento || ''}
-                                        onChange={(e) =>
-                                            setPaciente((prev) => ({
-                                                ...prev,
-                                                fkEndereco: {
-                                                    ...prev.fkEndereco,
-                                                    complemento: e.target.value,
-                                                },
-                                            }))
-                                        }
-                                    />
                                     <CheckBox
                                         CheckboxValue={'ativo'}
                                         labelTitle={'Plano Mensal?'}
-                                        checked={isPlanoAtivo}
+                                        checked={isPlanoAtivo} // Marca o checkbox se o plano for mensal
                                         disabled={!isEditingGeneral} // Desativa o checkbox se não estiver no modo de edição
                                         onChange={(e) => setIsPlanoAtivo(e.target.checked)} // Atualiza o estado do checkbox
                                     />
                                     <CheckBox
                                         CheckboxValue={'ativo'}
                                         labelTitle={'Paciente Ativo?'}
-                                        checked={isAtivo}
+                                        checked={isAtivo} // Usa o estado isAtivo para controlar o checkbox
                                         disabled={!isEditingGeneral} // Desativa o checkbox se não estiver no modo de edição
-                                        onChange={(e) => setIsAtivo(e.target.checked)} // Atualiza o estado do checkbox
+                                        onChange={(e) => setIsAtivo(e.target.checked)} // Atualiza o estado isAtivo
                                     />
                                 </div>
                             </section>
