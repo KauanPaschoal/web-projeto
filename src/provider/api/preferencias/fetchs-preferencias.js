@@ -28,3 +28,17 @@ export const getPreferenciasPorId = async (id) => {
     }
 }
 
+export const postPreferencia = async (preferencia) => {
+    try {
+        const response = await axios.post('/preferencias', preferencia, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao criar preferencia:', error);
+        throw error;
+    }
+};
+

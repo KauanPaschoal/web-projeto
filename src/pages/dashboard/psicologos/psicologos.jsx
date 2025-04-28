@@ -1,111 +1,117 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './psicologos.css';
 import { FaPen, FaPlus, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import MainComponent from '../components/MainComponent/MainComponent';
 import MenuPsicologo from './components/menuPsicologo/menuPsicologo';
-
-
+import { getPsicologos } from '../../../provider/api/psicologos/fetchs-psicologos'; // Importa o método de requisição
 
 const Psicologos = () => {
-  const [pacientes, setPacientes] = React.useState([]);
-  const [pacientesLista, setPacientesLista] = React.useState([]);
-  const [pesquisar, setPesquisar] = React.useState('');
+  const [psicologos, setPsicologos] = useState([]);
+  const [psicologosFiltrados, setPsicologosFiltrados] = useState([]);
+  const [pesquisar, setPesquisar] = useState('');
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    fetch("/usuarios", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erro ao encontrar pacientes");
+  useEffect(() => {
+    const fetchPsicologos = async () => {
+        try {
+            const response = await getPsicologos();
+            if (Array.isArray(response)) {
+                setPsicologos(response);
+                setPsicologosFiltrados(response);
+            } else {
+                console.error('A resposta da API não é um array:', response);
+                setPsicologos([]);
+                setPsicologosFiltrados([]);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar psicólogos:', error);
+            setPsicologos([]);
+            setPsicologosFiltrados([]);
         }
-        response.json().then((pacientes) => {
-          setPacientes(pacientes);
-          setPacientesLista(pacientes);
-        });
-      })
-      .catch((error) => console.error("Erro ao encontrar pacientes:", error));
-  }, []);
+    };
+
+    fetchPsicologos();
+}, []);
 
   const handleSearch = (e) => {
     const pesquisa = e.target.value.toLowerCase();
     setPesquisar(pesquisa);
 
     if (pesquisa === '') {
-      setPacientesLista(pacientes);
+      setPsicologosFiltrados(psicologos);
       return;
     }
 
-    const filteredPacientes = pacientes.filter((paciente) =>
-      paciente.nome.toLowerCase().startsWith(pesquisa)
+    const filteredPsicologos = psicologos.filter((psicologo) =>
+      psicologo.nome.toLowerCase().startsWith(pesquisa)
     );
-    setPacientesLista(filteredPacientes);
-  }
+    setPsicologosFiltrados(filteredPsicologos);
+  };
 
   const redirecionarParaAdicionarPsicologo = () => {
     navigate('/dashboard/psicologos/adicionar');
-  }
-
-    return (
-      <div className='div-pacientes flex'>
-        <MenuPsicologo/>
-        <MainComponent
-          title="Meus Psicólogos"
-          headerContent={
-            <>
-              <div className="search-container flex">
-                <FaSearch className="search-icon" />
-                <input
-                  type="text"
-                  placeholder="Pesquisar psicologos..."
-                  className="input-pesquisa"
-                  value={pesquisar}
-                  onChange={handleSearch}
-                />
-              </div>
-
-              <button
-                className='btn_agendamento flex rounded-full'
-                onClick={(e) => {
-                  e.preventDefault();
-                  redirecionarParaAdicionarPsicologo();
-                }}
-              >
-                <FaPlus className='icon' />
-                Adicionar Psicologo
-              </button>
-            </>
-          }
-        >
-          <div className='pacientes-container'>
-            {pacientesLista.map((paciente) => (
-              <div key={paciente.id} className='paciente-card'>
-                <div className='flex gap-2'>
-                  <h3>
-                    <b>Nome: </b>
-                    {paciente.nome}
-                  </h3>
-                  <p>
-                    <b>Telefone:</b> {paciente.telefone}
-                  </p>
-                  <p>
-                    <b>CRP:</b> {paciente.crp}
-                  </p>
-                  <p>
-                    <b>Email:</b> {paciente.crp}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </MainComponent>
-      </div>
-    );
   };
 
-  export default Psicologos;
+  return (
+    <div className='div-pacientes flex'>
+      <MenuPsicologo />
+      <MainComponent
+        title="Meus Psicólogos"
+        headerContent={
+          <>
+            <div className="search-container flex">
+              <FaSearch className="search-icon" />
+              <input
+                type="text"
+                placeholder="Pesquisar psicólogos..."
+                className="input-pesquisa"
+                value={pesquisar}
+                onChange={handleSearch}
+              />
+            </div>
+
+            <button
+              className='btn_agendamento flex rounded-full'
+              onClick={(e) => {
+                e.preventDefault();
+                redirecionarParaAdicionarPsicologo();
+              }}
+            >
+              <FaPlus className='icon' />
+              Adicionar Psicólogo
+            </button>
+          </>
+        }
+      >
+        <div className='pacientes-container'>
+            {Array.isArray(psicologosFiltrados) && psicologosFiltrados.length > 0 ? (
+                psicologosFiltrados.map((psicologo) => (
+                    <div key={psicologo.id} className='paciente-card'>
+                        <div className='flex gap-2'>
+                            <h3>
+                                <b>Nome: </b>
+                                {psicologo.nome}
+                            </h3>
+                            <p>
+                                <b>Telefone:</b> {psicologo.telefone}
+                            </p>
+                            <p>
+                                <b>CRP:</b> {psicologo.crp}
+                            </p>
+                            <p>
+                                <b>Email:</b> {psicologo.email}
+                            </p>
+                        </div>
+                    </div>
+                ))
+            ) : (
+                <p>Nenhum psicólogo encontrado.</p>
+            )}
+        </div>
+      </MainComponent>
+    </div>
+  );
+};
+
+export default Psicologos;

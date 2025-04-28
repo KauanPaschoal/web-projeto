@@ -87,23 +87,42 @@ const Agendamentos = () => {
 
   useEffect(() => {
     const fetchAgendamentos = async () => {
-      try{
-        setLoading(true);
-          const agendamentos = await getAgendamentos();
-          if (Array.isArray(agendamentos)) {
-            setAgendamentos(agendamentos);
-            console.log("Agendamentos:", agendamentos);
-          } else {
-            console.error("A resposta da API não é um array:", agendamentos);
-          }
+        try {
+            setLoading(true);
+            const response = await getAgendamentos();
+
+            if (Array.isArray(response)) {
+                // Transforma os dados para garantir que `data` e `hora` estejam no formato correto
+                const agendamentosTransformados = response.map((agendamento) => ({
+                    ...agendamento,
+                    date: agendamento.data
+                        ? new Date(agendamento.data).toLocaleDateString('pt-BR', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                          })
+                        : null, // Converte `data` para o formato DD/MM/YYYY
+                    timeSlot: agendamento.hora
+                        ? agendamento.hora.substring(0, 5) // Extrai HH:MM de `hora`
+                        : '00:00',
+                    patientName: agendamento.fkPaciente?.nome || 'Desconhecido', // Nome do paciente
+                    status: agendamento.statusSessao || 'Indefinido', // Status da sessão
+                }));
+
+                setAgendamentos(agendamentosTransformados);
+                console.log("Agendamentos transformados:", agendamentosTransformados);
+            } else {
+                console.error("A resposta da API não é um array:", response);
+            }
         } catch (error) {
-          console.error("Erro ao encontrar agendamentos:", error);
+            console.error("Erro ao encontrar agendamentos:", error);
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
-      fetchAgendamentos();
-    },[]);
+    };
+
+    fetchAgendamentos();
+}, []);
     
 
 
@@ -136,6 +155,12 @@ const Agendamentos = () => {
 
   //   fetchAgendamentos();
   // }, []);
+
+
+  const capitalizeFirstLetter = (text) => {
+    if (!text) return '';
+    return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+};
 
   return (
     <div className='div-agendamentos flex'>
@@ -170,14 +195,16 @@ const Agendamentos = () => {
                     <tr key={rowIndex} className='flex w-full justify-evenly gap-2'>
                       {weekDays.map((day, colIndex) => {
                         const agendamento = agendamentos.find(
-                          (a) => a.date === day.date && a.timeSlot === timeSlot
+                          (a) =>
+                            a.date === day.date &&
+                            a.timeSlot === timeSlot.split(" - ")[0] // Extrai o horário inicial de timeSlot
                         );
                         return (
                           <td key={colIndex} className='div-calendario-card'>
                             {agendamento ? (
                               <CalendarCard
                                 timeSlot={agendamento.timeSlot}
-                                status={agendamento.status}
+                                status={capitalizeFirstLetter(agendamento.status)} // Formata o texto do status
                                 patientName={agendamento.patientName}
                                 buttonText="Ver Detalhes"
                                 day={day.date}

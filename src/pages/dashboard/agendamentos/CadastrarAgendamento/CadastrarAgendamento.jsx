@@ -10,6 +10,7 @@ import MainComponent from '../../components/MainComponent/MainComponent.jsx'
 import Checkbox from '../../components/Checkbox/Checkbox.jsx'
 import { getPacientesPorId, getPacientes } from '../../../../provider/api/pacientes/fetchs-pacientes.js'
 import { postAgendamento } from '../../../../provider/api/agendamentos/fetchs-agendamentos'; // Importa a função de adicionar agendamento
+import { getPreferenciasPorId } from '../../../../provider/api/preferencias/fetchs-preferencias.js'
 
 const CadastrarAgendamento = ({ paciente }) => {
     const { id } = useParams();
@@ -22,6 +23,26 @@ const CadastrarAgendamento = ({ paciente }) => {
     const [statusPlanoMensal, setStatusPlanoMensal] = React.useState(false);
     const [proximosDias, setProximosDias] = React.useState([]);
     const [horario, setHorario] = React.useState('10:00');
+    const [preferencias, setPreferencias] = React.useState([]);
+
+
+
+    useEffect(() => {
+        const fetchPreferencias = async () => {
+            try {
+                if (pacienteSelecionado && pacienteSelecionado.id) { // Verifica se há um paciente selecionado
+                    const response = await getPreferenciasPorId(pacienteSelecionado.id); // Chama a função do provider
+                    setPreferencias(response); // Atualiza o estado com as preferências
+                    console.log("Preferências carregadas:", response);
+                }
+            } catch (err) {
+                console.error('Erro ao buscar preferências:', err);
+                errorMessage('Erro ao carregar as preferências.', 'small');
+            }
+        };
+
+        fetchPreferencias();
+    }, [pacienteSelecionado]); // Executa apenas quando o pacienteSelecionado mudar
 
     useEffect(() => {
         const queryTimeSlot = searchParams.get('timeSlot');
@@ -358,8 +379,8 @@ const CadastrarAgendamento = ({ paciente }) => {
                                 ) : (
                                     <div className="paciente-info">
                                         <p><strong>Paciente:</strong> {pacienteSelecionado.nome}</p>
-                                        <p><strong>Horário para Consultas:</strong> {pacienteSelecionado.horario || "Indefinido"}</p>
-                                        <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(pacienteSelecionado.diaSemana)}</p>
+                                        <p><strong>Horário para Consultas:</strong> {preferencias.horario || "Indefinido"}</p>
+                                        <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(preferencias.diaSemana)}</p>
                                     </div>
                                 )}
                             </div>
