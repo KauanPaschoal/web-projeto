@@ -8,6 +8,7 @@ const CalendarCard = ({ timeSlot, status, patientName, buttonText, day }) => {
   const borderColor = {
     Pendente: 'orange',
     Confirmado: 'green',
+    Concluida: 'blue',
     Cancelado: 'red',
     Disponível: 'gray',
   }[status] || 'gray';

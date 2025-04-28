@@ -103,9 +103,7 @@ const Agendamentos = () => {
                           })
                         : null, // Converte `data` para o formato DD/MM/YYYY
                     timeSlot: agendamento.hora
-                        ? `${agendamento.hora.hour.toString().padStart(2, '0')}:${agendamento.hora.minute
-                              .toString()
-                              .padStart(2, '0')}` // Converte `hora` para o formato HH:MM
+                        ? agendamento.hora.substring(0, 5) // Extrai HH:MM de `hora`
                         : '00:00',
                     patientName: agendamento.fkPaciente?.nome || 'Desconhecido', // Nome do paciente
                     status: agendamento.statusSessao || 'Indefinido', // Status da sessão
@@ -158,6 +156,12 @@ const Agendamentos = () => {
   //   fetchAgendamentos();
   // }, []);
 
+
+  const capitalizeFirstLetter = (text) => {
+    if (!text) return '';
+    return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+};
+
   return (
     <div className='div-agendamentos flex'>
       <MenuLateralComponent />
@@ -191,14 +195,16 @@ const Agendamentos = () => {
                     <tr key={rowIndex} className='flex w-full justify-evenly gap-2'>
                       {weekDays.map((day, colIndex) => {
                         const agendamento = agendamentos.find(
-                          (a) => a.date === day.date && a.timeSlot === timeSlot
+                          (a) =>
+                            a.date === day.date &&
+                            a.timeSlot === timeSlot.split(" - ")[0] // Extrai o horário inicial de timeSlot
                         );
                         return (
                           <td key={colIndex} className='div-calendario-card'>
                             {agendamento ? (
                               <CalendarCard
                                 timeSlot={agendamento.timeSlot}
-                                status={agendamento.status}
+                                status={capitalizeFirstLetter(agendamento.status)} // Formata o texto do status
                                 patientName={agendamento.patientName}
                                 buttonText="Ver Detalhes"
                                 day={day.date}
