@@ -34,7 +34,6 @@ export function responseMessage(mensagem, size = "small") {
 export async function popupMessage(planoId) {
   try {
     const { data } = await axios.get(`/planos`);
-    console.log(data);
 
     // Encontrar os valores de semanal e mensal no array retornado
     const semanal =
