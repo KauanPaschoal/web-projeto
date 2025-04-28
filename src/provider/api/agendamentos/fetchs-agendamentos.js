@@ -1,40 +1,8 @@
 import axios from 'axios';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-export const getPacientes = async () => {
+export const getAgendamentosPorId = async (id) => {
     try {
-        const response = await axios.get('/usuarios', {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao encontrar pacientes:', error);
-        throw error;
-    }
-}
-
-export const getPacientesPorId = async (id) => {
-    try {
-        const response = await axios.get(`/usuarios/${id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao encontrar paciente:', error);
-        throw error;
-    }
-}
-
-
-const getAgendamentosPorId = async (id) => {
-    try {
-        const response = await axios.get(`/agendamentos/${id}`, {
+        const response = await axios.get(`/sessoes/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -46,13 +14,14 @@ const getAgendamentosPorId = async (id) => {
     }
 }
 
-const getAgendamentos = async () => {
+export const getAgendamentos = async () => {
     try {
-        const response = await axios.get('/agendamentos', {
+        const response = await axios.get('/sessoes', {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
+        console.log("response: ", response.data)
         return response.data;
     } catch (error) {
         console.error('Erro ao encontrar agendamentos:', error);
@@ -60,20 +29,44 @@ const getAgendamentos = async () => {
     }
 }
 
-const getPacientesLista = async (pesquisar) => {
+export const getAgendamentosPorPaciente = async (id) => {
     try {
-        const response = await axios.get(`/usuarios?nome=${pesquisar}`, {
+        const response = await axios.get(`/sessoes/pacientes/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
         return response.data;
     } catch (error) {
-        console.error('Erro ao encontrar pacientes:', error);
+        console.error('Erro ao encontrar agendamentos por paciente:', error);
         throw error;
     }
 }
 
+export const postAgendamento = async (agendamento) => {
+    try {
+        const response = await axios.post('/sessoes', agendamento, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao criar agendamento:', error);
+        throw error;
+    }
+}
 
-
-
+export const putAgendamento = async (id, agendamento) => {
+    try {
+        const response = await axios.put(`/sessoes/${id}`, agendamento, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao atualizar agendamento:', error);
+        throw error;
+    }
+}

@@ -1,26 +1,11 @@
 import React from "react";
 import "./inputField.css";
 
-const InputField = ({
-  labelTitle,
-  type = "text",
-  placeholder,
-  id,
-  name,
-  onChange,
-  onBlur,
-  list,
-  required,
-  className,
-  value,
-  icon,
-  width,
-  disabled,
-}) => {
+const InputField = ({ labelTitle, type = "text", placeholder, id, name, onChange, onBlur, list, required, className, value, icon, width, disabled}) => {
   return (
     <div className={`inputContainer ${width || "w-[45%]"}`}>
       <label>{labelTitle}:</label>
-      <div className="input-with-icon">
+      <div className="flex">
         {icon && <span className="input-icon">{icon}</span>}
         <input
           type={type}

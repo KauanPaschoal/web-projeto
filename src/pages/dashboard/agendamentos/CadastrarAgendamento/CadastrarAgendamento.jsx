@@ -1,6 +1,6 @@
 import React, { use, useEffect } from 'react'
 import './CadastrarAgendamento.css'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import MenuLateralComponent from '../../components/MenuLateral/MenuLateralComponent'
 import InputField from '../../components/InputField/InputField'
 import { FaSearch, FaUser } from 'react-icons/fa'
@@ -8,19 +8,59 @@ import { errorMessage, responseMessage } from '../../../../utils/alert.js'
 import axios from 'axios';
 import MainComponent from '../../components/MainComponent/MainComponent.jsx'
 import Checkbox from '../../components/Checkbox/Checkbox.jsx'
-import { getPacientesPorId, getPacientes } from '../../../../provider/api/get-fetchs.js'
+import { getPacientesPorId, getPacientes } from '../../../../provider/api/pacientes/fetchs-pacientes.js'
+import { getAgendamentosPorPaciente, postAgendamento } from '../../../../provider/api/agendamentos/fetchs-agendamentos'; // Importa a função de adicionar agendamento
+import { getPreferenciasPorId } from '../../../../provider/api/preferencias/fetchs-preferencias.js'
 
 const CadastrarAgendamento = ({ paciente }) => {
     const { id } = useParams();
+    const [searchParams] = useSearchParams();
     const [pacientes, setPacientes] = React.useState([]);
     const [agendamentos, setAgendamentos] = React.useState([]);
-    const [pacienteSelecionado, setPacienteSelecionado] = React.useState([paciente || null]);
+    const [pacienteSelecionado, setPacienteSelecionado] = React.useState();
     const [query, setQuery] = React.useState(paciente ? paciente.nome : '');
     const [showSuggestions, setShowSuggestions] = React.useState(false);
     const [statusPlanoMensal, setStatusPlanoMensal] = React.useState(false);
     const [proximosDias, setProximosDias] = React.useState([]);
-
     const [horario, setHorario] = React.useState('10:00');
+    const [preferencias, setPreferencias] = React.useState([]);
+
+
+
+    useEffect(() => {
+        const fetchPreferencias = async () => {
+            try {
+                if (pacienteSelecionado && pacienteSelecionado.id) { // Verifica se há um paciente selecionado
+                    const response = await getPreferenciasPorId(pacienteSelecionado.id); // Chama a função do provider
+                    setPreferencias(response); // Atualiza o estado com as preferências
+                    console.log("Preferências carregadas:", response);
+                }
+            } catch (err) {
+                console.error('Erro ao buscar preferências:', err);
+                errorMessage('Erro ao carregar as preferências.', 'small');
+            }
+        };
+
+        fetchPreferencias();
+    }, [pacienteSelecionado]); // Executa apenas quando o pacienteSelecionado mudar
+
+    useEffect(() => {
+        const queryTimeSlot = searchParams.get('timeSlot');
+        const queryDay = searchParams.get('day');
+
+        // Atualiza apenas se os valores forem diferentes
+        if (queryTimeSlot && queryTimeSlot !== horario) {
+            setHorario(queryTimeSlot);
+        }
+
+        if (queryDay && pacienteSelecionado?.selectedDate !== queryDay) {
+            setPacienteSelecionado((prev) => ({
+                ...prev,
+                selectedDate: queryDay,
+            }));
+        }
+    }, [searchParams]); // Removido pacienteSelecionado para evitar loops
+
 
     useEffect(() => {
         if (id) {
@@ -34,9 +74,8 @@ const CadastrarAgendamento = ({ paciente }) => {
                         horario: pacienteResponse.horario || "00:00",
                         selectedDate: pacienteResponse.selectedDate || "00/00",
                         planoMensal: pacienteResponse.planoMensal || false,
-                        qtdConsultas: pacienteResponse.qtdConsultas || 0,
                         statusAgendamento: pacienteResponse.statusAgendamento || "Pendente",
-
+                        tipo: pacienteResponse.tipo || "AVULSO", // Define um valor padrão para o tipo
                     };
                     setPacienteSelecionado(updatedPaciente);
                     setQuery(pacienteResponse.nome);
@@ -49,6 +88,9 @@ const CadastrarAgendamento = ({ paciente }) => {
             fetchPaciente();
         }
     }, [id]);
+
+
+            
 
 
             const getProximosDias = (diaSemana) => {
@@ -69,21 +111,39 @@ const CadastrarAgendamento = ({ paciente }) => {
             };
 
             const getNomeDiaSemana = (diaSemana) => {
-                const dias = [
-                    "Domingo",
-                    "Segunda-feira",
-                    "Terça-feira",
-                    "Quarta-feira",
-                    "Quinta-feira",
-                    "Sexta-feira",
-                    "Sábado",
-                ];
-                return dias[diaSemana] || "Indefinido";
+                const dias = {
+                    "DOMINGO": "Domingo",
+                    "SEGUNDA": "Segunda-feira",
+                    "TERCA": "Terça-feira",
+                    "QUARTA": "Quarta-feira",
+                    "QUINTA": "Quinta-feira",
+                    "SEXTA": "Sexta-feira",
+                    "SABADO": "Sábado",
+                };
+
+                return dias[diaSemana] || "Indefinido"; // Retorna "Indefinido" se o valor não for encontrado
             };
 
             useEffect(() => {
-                console.log("Proximos dias: ", proximosDias);
-            }, [proximosDias]);
+                const fetchAgendamentosPorPaciente = async () => {
+                    try {
+                        if (pacienteSelecionado && pacienteSelecionado.id) {
+                            const response = await getAgendamentosPorPaciente(pacienteSelecionado.id);
+                            setAgendamentos(response); // Atualiza o estado com os agendamentos
+                            console.log("Agendamentos carregados:", response);
+                        }
+                    } catch (error) {
+                        console.error("Erro ao buscar agendamentos por paciente:", error);
+                        errorMessage("Erro ao carregar os agendamentos.", "small");
+                    }
+                };
+            
+                fetchAgendamentosPorPaciente();
+            }, [pacienteSelecionado]);
+
+            // useEffect(() => {
+            //     console.log("Proximos dias: ", proximosDias);
+            // }, [proximosDias]);
 
             useEffect(() => {
                 const fetchPacientes = async () => {
@@ -102,19 +162,20 @@ const CadastrarAgendamento = ({ paciente }) => {
             const handlePacienteSearch = (query) => {
                 setQuery(query);
 
-
-
                 const filteredPacientes = pacientes.filter(paciente =>
                     paciente.nome.toLowerCase().includes(query.toLowerCase())
                 );
 
                 if (filteredPacientes.length === 1) {
                     const selectedPaciente = filteredPacientes[0];
-                    setPacienteSelecionado({
+                    setPacienteSelecionado(prev => ({
                         ...selectedPaciente,
-                        diaMes:
-                            getProximosDias(selectedPaciente.diaSemana)
-                    });
+                        diaMes: getProximosDias(selectedPaciente.diaSemana),
+                        selectedDate: prev?.selectedDate || selectedPaciente.selectedDate || '',
+                        horario: prev?.horario || selectedPaciente.horario || horario,
+                        anotacao: prev?.anotacao || selectedPaciente.anotacao || 'mensagem',
+                        tipo: selectedPaciente.tipo || "AVULSO", // Define um valor padrão para o tipo
+                    }));
 
                     const filteredAgendamentos = agendamentos.filter(
                         agendamento => agendamento.idPaciente === selectedPaciente.id
@@ -144,7 +205,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                 setStatusPlanoMensal(isChecked);
                 setPacienteSelecionado((prevPaciente) => ({
                     ...prevPaciente,
-                    planoMensal: isChecked,
+                    tipo: isChecked ? "PLANO" : "AVULSO",
                 }));
             };
 
@@ -156,6 +217,11 @@ const CadastrarAgendamento = ({ paciente }) => {
             }, [statusPlanoMensal]);
 
 
+
+            const formatDateToBackend = (date) => {
+                const [day, month, year] = date.split('/');
+                return `${year}-${month}-${day}`; // Converte para o formato yyyy-MM-dd
+            };
 
             const handleSubmit = async (e) => {
                 e.preventDefault();
@@ -175,36 +241,75 @@ const CadastrarAgendamento = ({ paciente }) => {
                     return;
                 }
 
+                if (!pacienteSelecionado.tipo) {
+                    errorMessage("Por favor, escolha o tipo de sessão.", "small");
+                    return;
+                }
+
+                if (!pacienteSelecionado.anotacao) {
+                    errorMessage("Por favor, adicione uma anotação.", "small");
+                    return;
+                }
+
                 try {
                     if (statusPlanoMensal) {
+                        // Cria quatro sessões, uma por semana no mesmo dia da semana
+                        const promises = Array.from({ length: 4 }).map((_, index) => {
+                            const diaAtual = new Date(pacienteSelecionado.selectedDate);
+                            diaAtual.setDate(diaAtual.getDate() + index * 7); // Adiciona 7 dias para cada semana
 
-                        const promises = pacienteSelecionado.diaMes.map(async (dia) => {
                             const novoAgendamento = {
-                                idPaciente: pacienteSelecionado.id,
-                                data: dia,
-                                horario: pacienteSelecionado.horario,
-                                statusAgendamento: "Pendente",
+                                fkPaciente: {
+                                    id: pacienteSelecionado.id,
+                                    nome: pacienteSelecionado.nome,
+                                    cpf: pacienteSelecionado.cpf || "000.000.000-00",
+                                    email: pacienteSelecionado.email,
+                                    status: "ATIVO",
+                                    fkPlano: {
+                                        id: pacienteSelecionado.fkPlano?.id || 0,
+                                        categoria: pacienteSelecionado.fkPlano?.categoria || "Básico",
+                                        preco: pacienteSelecionado.fkPlano?.preco || 0,
+                                    },
+                                },
+                                data: formatDateToBackend(diaAtual.toLocaleDateString('pt-BR')), // Formata a data para o backend
+                                hora: pacienteSelecionado.horario + ":00", // Converte para o formato HH:mm:ss
+                                tipo: pacienteSelecionado.tipo || "AVULSO",
+                                statusSessao: "PENDENTE",
+                                anotacao: pacienteSelecionado.anotacao,
+                                createdAt: new Date().toISOString(), // Adiciona a data de criação
                             };
 
-                            // Enviar a requisição para cada data
-                            // return axios.post('/api/agendamentos', novoAgendamento);
                             console.log("Agendamento (Plano Mensal):", novoAgendamento);
-                            return novoAgendamento;
+                            return postAgendamento(novoAgendamento);
                         });
 
-                        // Aguarda todas as requisições serem concluídas
                         await Promise.all(promises);
                         responseMessage("Agendamentos cadastrados com sucesso!", "small");
                     } else {
-                        // Fazer apenas uma requisição com a data escolhida
+                        // Cria apenas um agendamento para a data selecionada
                         const novoAgendamento = {
-                            idPaciente: pacienteSelecionado.id,
-                            data: pacienteSelecionado.selectedDate,
-                            horario: pacienteSelecionado.horario,
-                            statusAgendamento: "Pendente",
+                            fkPaciente: {
+                                id: pacienteSelecionado.id,
+                                nome: pacienteSelecionado.nome,
+                                cpf: pacienteSelecionado.cpf || "000.000.000-00",
+                                email: pacienteSelecionado.email,
+                                status: "ATIVO",
+                                fkPlano: {
+                                    id: pacienteSelecionado.fkPlano?.id || 0,
+                                    categoria: pacienteSelecionado.fkPlano?.categoria || "Básico",
+                                    preco: pacienteSelecionado.fkPlano?.preco || 0,
+                                },
+                            },
+                            data: formatDateToBackend(pacienteSelecionado.selectedDate), // Formata a data para o backend
+                            hora: pacienteSelecionado.horario + ":00", // Converte para o formato HH:mm:ss
+                            tipo: pacienteSelecionado.tipo || "AVULSO",
+                            statusSessao: "PENDENTE",
+                            anotacao: pacienteSelecionado.anotacao,
+                            createdAt: new Date().toISOString(), // Adiciona a data de criação
                         };
+
                         console.log("Agendamento (Data Única):", novoAgendamento);
-                        // await axios.post('/api/agendamentos', novoAgendamento);
+                        await postAgendamento(novoAgendamento);
                         responseMessage("Agendamento cadastrado com sucesso!", "small");
                     }
                 } catch (error) {
@@ -235,7 +340,6 @@ const CadastrarAgendamento = ({ paciente }) => {
             }, []);
 
 
-
             return (
                 <>
                     <MenuLateralComponent />
@@ -262,7 +366,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                     onBlur={handleBlur}
                                     required
                                     className="styled-input"
-                                    width={"w-[30%]"}
+                                    width={"w-[40%]"}
                                     icon={<FaUser />}
                                 />
                                 {showSuggestions && pacientes.length > 0 && (
@@ -281,96 +385,109 @@ const CadastrarAgendamento = ({ paciente }) => {
                             </div>
 
                             <div className='div-escolher-paciente'>
-                                {!pacienteSelecionado ? (
-                                    <p className="mensagem-escolha-paciente">Escolha um paciente</p>
-                                ) : null}
-                                {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
+                                {!pacienteSelecionado || query === '' || pacienteSelecionado.nome !== query ? (
+                                    <p className="mensagem-escolha-paciente">Selecione um paciente para continuar.</p>
+                                ) : (
                                     <div className="paciente-info">
                                         <p><strong>Paciente:</strong> {pacienteSelecionado.nome}</p>
-                                        <p><strong>Consultas Restantes: </strong>{pacienteSelecionado.qtdConsultas || 0}</p>
-                                        <p><strong>Horário para Consultas:</strong> {pacienteSelecionado.horario || "Indefinido"}</p>
-                                        <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(pacienteSelecionado.diaSemana)}</p>
+                                        <p><strong>Horário para Consultas:</strong> { preferencias.horario || "Indefinido"}</p>
+                                        <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(preferencias.diaSemana)}</p>
                                     </div>
                                 )}
                             </div>
 
                             <div className='container-sessao'>
-                                {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
-                                    <div className='container-inputs flex gap-2'>
-                                        <div className="select-container w-full">
-                                            <label htmlFor="data" className="input-label">Data:</label>
-                                            <select
-                                                id="data"
-                                                name="data"
-                                                required
-                                                className="select-field w-full"
-                                                value={pacienteSelecionado?.selectedDate || ''}
-                                                onChange={(e) => setPacienteSelecionado({
-                                                    ...pacienteSelecionado,
-                                                    selectedDate: e.target.value
-                                                })}
-                                            >
-                                                <option value="" disabled>Selecione uma data</option>
-                                                {pacienteSelecionado && pacienteSelecionado.diaMes
-                                                    .filter(dia => new Date(dia.split('/').reverse().join('/')) > new Date())
-                                                    .map((dia, index) => (
-                                                        <option key={index} value={dia}>
-                                                            {dia}
-                                                        </option>
-                                                    ))}
-                                            </select>
-                                        </div>
-                                        <InputField
-                                            type="text"
-                                            id="horario"
-                                            name="horario"
-                                            labelTitle="Horário"
-                                            placeholder="Horário"
-                                            required
-                                            value={pacienteSelecionado?.horario || horario}
-                                            readOnly={pacienteSelecionado && pacienteSelecionado.nome === query ? false : true}
-                                            className={"w-full"}
-                                            width={"w-full"}
-                                        />
-                                        <Checkbox
-                                            labelTitle="Plano mensal ativo?"
-                                            onChange={handlePlanoMensal}
-                                            checked={statusPlanoMensal}
-                                        />
-
-                                    </div>
-                                )}
-
-                                {query !== '' && pacienteSelecionado && pacienteSelecionado.nome === query && (
-                                    <div className='agendamentos-container'>
-                                        <h3>Últimos Agendamentos</h3>
-                                        <div className='agendamentos-list'>
-                                            {agendamentos.map((agendamento, index) => {
-                                                const getStatusSessaoClass = () => {
-                                                    switch (agendamento.status) {
-                                                        case 'Compareceu':
-                                                            return 'status-sessao-ok';
-                                                        case 'Pendente':
-                                                            return 'status-sessao-pendente';
-                                                        case 'Cancelou':
-                                                            return 'status-sessao-cancelado';
-                                                        case 'Reagendou':
-                                                            return 'status-sessao-reagendado';
-                                                        default:
-                                                            return 'status-sessao-default';
+                                {(!pacienteSelecionado || query === '' || pacienteSelecionado.nome !== query) ? (
+                                    <p className="mensagem-escolha-paciente">Nenhum paciente selecionado. Por favor, escolha um paciente para continuar.</p>
+                                ) : (
+                                    <>
+                                        <div className='container-inputs flex gap-2'>
+                                            <div className="select-container w-full">
+                                                <label htmlFor="data" className="input-label">Data:</label>
+                                                <select
+                                                    id="data"
+                                                    name="data"
+                                                    required
+                                                    className="select-field w-full"
+                                                    value={pacienteSelecionado?.selectedDate || ''}
+                                                    onChange={(e) =>
+                                                        setPacienteSelecionado({
+                                                            ...pacienteSelecionado,
+                                                            selectedDate: e.target.value,
+                                                        })
                                                     }
-                                                };
-                                                return (
-                                                    <div key={index} className="agendamento-item">
-                                                        <p><strong>Data:</strong> {agendamento.data}</p>
-                                                        <p><strong>Horário:</strong> {agendamento.horario}</p>
-                                                        <p><span className={`status ${getStatusSessaoClass()}`}>{agendamento.status}</span></p>
-                                                    </div>
-                                                )
-                                            }
-                                            )}
+                                                >
+                                                    <option value="" disabled>Selecione uma data</option>
+                                                    {(() => {
+                                                        // Obtenha a lista de dias padrão
+                                                        let dias = pacienteSelecionado?.diaMes || [];
+                                                        const queryDay = searchParams.get('day');
+
+                                                        // Adiciona a nova opção como a primeira, se existir um valor em queryDay
+                                                        const options = [];
+                                                        if (queryDay) {
+                                                            options.push(
+                                                                <option key="queryDay" value={queryDay}>
+                                                                    {queryDay} (Selecionado)
+                                                                </option>
+                                                            );
+                                                        }
+
+                                                        // Adiciona os dias padrão
+                                                        dias.forEach((dia, index) => {
+                                                            options.push(
+                                                                <option key={index} value={dia}>
+                                                                    {dia}
+                                                                </option>
+                                                            );
+                                                        });
+
+                                                        return options;
+                                                    })()}
+                                                </select>
+                                            </div>
+                                            <InputField
+                                                type="text"
+                                                id="horario"
+                                                name="horario"
+                                                labelTitle="Horário"
+                                                placeholder="Horário"
+                                                required
+                                                value={pacienteSelecionado?.horario || horario}
+                                                onChange={(e) =>
+                                                    setPacienteSelecionado((prev) => ({
+                                                        ...prev,
+                                                        horario: e.target.value,
+                                                    }))
+                                                }
+                                                readOnly={pacienteSelecionado && pacienteSelecionado.nome === query ? false : true}
+                                                className={"w-full"}
+                                                width={"w-full"}
+                                            />
+                                            <Checkbox
+                                                labelTitle="Plano mensal ativo?"
+                                                onChange={handlePlanoMensal}
+                                                checked={statusPlanoMensal}
+                                            />
                                         </div>
-                                    </div>
+
+                                        <div className='agendamentos-container'>
+                                            <h3>Últimos Agendamentos</h3>
+                                            <div className='agendamentos-list'>
+                                                {agendamentos.length > 0 ? (
+                                                    agendamentos.map((agendamento, index) => (
+                                                        <div key={index} className="agendamento-item">
+                                                            <p><strong>Data:</strong> {new Date(agendamento.data).toLocaleDateString('pt-BR')}</p>
+                                                            <p><strong>Horário:</strong> {agendamento.hora}</p>
+                                                            <p><strong>Status:</strong> {agendamento.statusSessao}</p>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <p>Nenhum agendamento encontrado para este paciente.</p>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </>
                                 )}
                             </div>
                             <div className='flex gap-2'>

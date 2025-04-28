@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style/Administracao.css";
-import MenuLateralComponent from "../components/menuLateral/MenuLateralComponent";
-import MainComponent from "../components/mainComponent/MainComponent";
+
 import InputField from "../components/InputField/InputField";
 import SaveButton from "../components/SaveButton/SaveButton";
 import EditButton from "../components/EditButton/EditButton";
@@ -13,6 +12,8 @@ import {
 } from "../../../utils/alert";
 import { alterarSenha } from "../../../provider/api/alterar-senha-psi";
 import axios from "axios";
+import MainComponent from "../components/MainComponent/MainComponent";
+import MenuLateralComponent from "../components/MenuLateral/MenuLateralComponent";
 
 const Administracao = () => {
   const [isEditingGeneral, setIsEditingGeneral] = useState(false);

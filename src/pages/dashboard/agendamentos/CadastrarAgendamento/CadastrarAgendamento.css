@@ -184,7 +184,11 @@
 .select-container {
     display: flex;
     flex-direction: column;
-    width: fit-content;
+    width: 200px;
+    height: 100%;
+    padding: 0;
+    align-items: flex-start;
+    justify-content: flex-end;
 }
 
 .select-container label {
@@ -195,13 +199,10 @@
 }
 
 .select-container .select-field {
-    width: 300px;
     border-bottom: 1px solid #C1C7CD;
     font-size: 14px;
     padding: 10px 0 2px 16px;
-
     caret-color: var(--blue-detail);
-
     outline: none;
 }
 
