@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./style/Administracao.css";
 
 import InputField from "../components/InputField/InputField";
@@ -10,6 +10,7 @@ import {
   errorMessage,
   confirmCancelEdit,
 } from "../../../utils/alert";
+import { alterarSenha } from "../../../provider/api/alterar-senha-psi";
 import axios from "axios";
 import MainComponent from "../components/MainComponent/MainComponent";
 import MenuLateralComponent from "../components/MenuLateral/MenuLateralComponent";
@@ -18,13 +19,46 @@ const Administracao = () => {
   const [isEditingGeneral, setIsEditingGeneral] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
 
-  const [email, setEmail] = useState("yuri.alberto@sccp.com");
-  const [nome, setNome] = useState("Yuri Alberto");
-  const [telefone, setTelefone] = useState("(11) 94002-8922");
+  const [email, setEmail] = useState("");
+  const [nome, setNome] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [crp, setCrp] = useState("");
 
   const [senha, setSenha] = useState("");
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
+
+  const formatTelefone = (numero) => {
+    if (!numero) return "";
+    return numero.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+  };
+
+  const formatCrp = (numero) => {
+    if (!numero) return "";
+    return numero.replace(/^(\d{2})(\d{5,6})$/, "$1/$2");
+  };
+
+  const removeMask = (valor) => valor.replace(/\D/g, "");
+
+  useEffect(() => {
+    const idUsuario = localStorage.getItem("idUsuario");
+
+    if (idUsuario) {
+      axios
+        .get(`http://localhost:8080/psicologos/${idUsuario}`)
+        .then((response) => {
+          const { nome, email, telefone, crp } = response.data;
+          setNome(nome || "");
+          setEmail(email || "");
+          setTelefone(formatTelefone(telefone || "")); // Formata o telefone para exibição
+          setCrp(formatCrp(crp || "")); // Formata o CRP para exibição
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar informações do usuário:", error);
+          errorMessage("Erro ao carregar informações do usuário.");
+        });
+    }
+  }, []);
 
   const handleEditGeneral = async () => {
     if (isEditingGeneral) {
@@ -55,12 +89,13 @@ const Administracao = () => {
       errorMessage("Todos os campos devem estar preenchidos!");
       return;
     }
-
+    const idDoUsuario = localStorage.getItem("idUsuario");
     try {
-      await axios.post("/api/usuario/atualizar-dados", {
+      await axios.put(`/psicologos/${idDoUsuario}`, {
         email,
         nome,
-        telefone,
+        telefone: removeMask(telefone),
+        crp: crp.replace("/", ""), // Remove a máscara do CRP antes de enviar
       });
       responseMessage("Dados atualizados com sucesso!");
       setIsEditingGeneral(false);
@@ -77,12 +112,13 @@ const Administracao = () => {
     }
 
     if (novaSenha !== confirmarSenha) {
-      errorMessage("As senhas não coincidem!");
+      errorMessage("A nova senha e a confirmação não coincidem!");
       return;
     }
 
     try {
-      await axios.post("/api/usuario/alterar-senha", { senha, novaSenha });
+      const idDoUsuario = localStorage.getItem("idUsuario");
+      await alterarSenha(idDoUsuario, senha, novaSenha);
       responseMessage("Senha alterada com sucesso!");
       setIsEditingPassword(false);
     } catch (error) {
@@ -128,11 +164,6 @@ const Administracao = () => {
                     onChange={(e) => setNome(e.target.value)}
                   />
                   <InputField
-                    labelTitle="CPF"
-                    value="123.456.789-10"
-                    disabled={true}
-                  />
-                  <InputField
                     labelTitle="E-mail"
                     value={email}
                     type="email"
@@ -143,11 +174,13 @@ const Administracao = () => {
                     labelTitle="Telefone"
                     value={telefone}
                     disabled={!isEditingGeneral}
-                    onChange={(e) => setTelefone(e.target.value)}
+                    onChange={(e) =>
+                      setTelefone(formatTelefone(removeMask(e.target.value)))
+                    }
                   />
                   <InputField
                     labelTitle="CRP"
-                    value="12345-6"
+                    value={crp}
                     disabled={true}
                     width={"w-full"}
                   />
@@ -176,7 +209,7 @@ const Administracao = () => {
                 </h2>
                 <div className="card-inputs">
                   <InputField
-                    labelTitle="Senha"
+                    labelTitle="Senha Atual"
                     value={senha}
                     disabled={!isEditingPassword}
                     width={"w-full"}

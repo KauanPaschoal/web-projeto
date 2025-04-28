@@ -33,9 +33,13 @@ export function responseMessage(mensagem, size = "small") {
 
 export async function popupMessage(planoId) {
   try {
-    // Fetch para receber as informações dos planos
-    const { data } = await axios.get(`/api/planos/${planoId}`);
-    const { semanal, mensal } = data;
+    const { data } = await axios.get(`/planos`);
+
+    // Encontrar os valores de semanal e mensal no array retornado
+    const semanal =
+      data.find((plano) => plano.categoria === "Semanal")?.preco || 0;
+    const mensal =
+      data.find((plano) => plano.categoria === "Mensal")?.preco || 0;
 
     Swal.fire({
       title: '<span style="color: #1B66A4;">Editar Valores do Plano</span>',
@@ -106,12 +110,25 @@ export async function popupMessage(planoId) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          // mandando valores atualizados para o backend
-          // PRECISA DO ENDPOINT
-          await axios.put(`/api/planos/${planoId}`, {
-            semanal: result.value.semanal,
-            mensal: result.value.mensal,
+          const planosAtualizados = data.map((plano) => {
+            if (plano.categoria === "Semanal") {
+              return { ...plano, preco: result.value.semanal };
+            }
+            if (plano.categoria === "Mensal") {
+              return { ...plano, preco: result.value.mensal };
+            }
+            return plano;
           });
+
+          await Promise.all(
+            planosAtualizados.map((plano) =>
+              axios.put(`/planos/${plano.id}`, {
+                preco: plano.preco,
+                categoria: plano.categoria,
+              })
+            )
+          );
+
           Swal.fire(
             "Sucesso!",
             "Os valores foram atualizados com sucesso.",

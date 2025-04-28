@@ -12,9 +12,7 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // if (!autenticateUser(email, password)) return;
-
-    fetch("/usuarios/login", {
+    fetch("/psicologos/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,9 +29,7 @@ const LoginPage = () => {
         return response.json();
       })
       .then((data) => {
-        // Captura os dados retornados
         const { id, nome, email, token } = data;
-
 
         const toCapitalize = (str) => {
           return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -46,9 +42,11 @@ const LoginPage = () => {
 
           localStorage.setItem("nomeUsuario", nomeFormatado);
 
+          localStorage.setItem("idUsuario", id);
+
           responseMessage(`Bem vindo, ${nomeFormatado}!`);
           setTimeout(() => {
-            window.location.href = "/dashboard"; // Alterar para a rota da dash
+            window.location.href = "/dashboard";
           }, 2300);
         } else {
           errorMessage("Usuário ou senha inválidos");
