@@ -95,13 +95,6 @@ const Agendamentos = () => {
                 // Transforma os dados para garantir que `data` e `hora` estejam no formato correto
                 const agendamentosTransformados = response.map((agendamento) => ({
                     ...agendamento,
-                    date: agendamento.data
-                        ? new Date(agendamento.data).toLocaleDateString('pt-BR', {
-                              day: '2-digit',
-                              month: '2-digit',
-                              year: 'numeric',
-                          })
-                        : null, // Converte `data` para o formato DD/MM/YYYY
                     timeSlot: agendamento.hora
                         ? agendamento.hora.substring(0, 5) // Extrai HH:MM de `hora`
                         : '00:00',
@@ -160,6 +153,16 @@ const Agendamentos = () => {
   const capitalizeFirstLetter = (text) => {
     if (!text) return '';
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+  };
+
+  const formatDateToDisplay = (date) => {
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`; // Converte para o formato DD/MM/YYYY
+  };
+
+  const formatDateToBackend = (date) => {
+    const [day, month, year] = date.split('/');
+    return `${year}-${month}-${day}`; // Converte para o formato YYYY-MM-DD
 };
 
   return (
@@ -194,10 +197,15 @@ const Agendamentos = () => {
                   {timeSlots.map((timeSlot, rowIndex) => (
                     <tr key={rowIndex} className='flex w-full justify-evenly gap-2'>
                       {weekDays.map((day, colIndex) => {
+                        const formatDateToDisplay = (date) => {
+                          const [year, month, day] = date.split('-');
+                          return `${day}/${month}/${year}`; // Converte para o formato DD/MM/YYYY
+                        };
+
                         const agendamento = agendamentos.find(
-                          (a) =>
-                            a.date === day.date &&
-                            a.timeSlot === timeSlot.split(" - ")[0] // Extrai o horário inicial de timeSlot
+                            (a) =>
+                                a.data === formatDateToBackend(day.date) &&
+                                a.timeSlot === timeSlot.split(" - ")[0]
                         );
                         return (
                           <td key={colIndex} className='div-calendario-card'>
@@ -208,6 +216,7 @@ const Agendamentos = () => {
                                 patientName={agendamento.patientName}
                                 buttonText="Ver Detalhes"
                                 day={day.date}
+                                id={agendamento.id}
                               />
                             ) : (
                               <CalendarCard

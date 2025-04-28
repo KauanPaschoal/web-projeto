@@ -31,7 +31,7 @@ export const getAgendamentos = async () => {
 
 export const getAgendamentosPorPaciente = async (id) => {
     try {
-        const response = await axios.get(`/sessoes/paciente/${id}`, {
+        const response = await axios.get(`/sessoes/pacientes/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
             },

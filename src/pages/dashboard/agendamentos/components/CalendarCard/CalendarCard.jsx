@@ -2,12 +2,12 @@ import React from 'react';
 import './CalendarCard.css';
 import { useNavigate } from 'react-router-dom';
 
-const CalendarCard = ({ timeSlot, status, patientName, buttonText, day }) => {
+const CalendarCard = ({ timeSlot, status, patientName, buttonText, day, id }) => {
   const navigate = useNavigate();
 
   const borderColor = {
     Pendente: 'orange',
-    Confirmado: 'green',
+    Confirmada: 'green',
     Concluida: 'blue',
     Cancelado: 'red',
     Disponível: 'gray',
@@ -15,7 +15,7 @@ const CalendarCard = ({ timeSlot, status, patientName, buttonText, day }) => {
 
   const backgroundColor = {
     Pendente: 'rgba(255, 165, 0, 0.1)',
-    Confirmado: 'rgba(0, 128, 0, 0.1)',
+    Confirmada: 'rgba(0, 128, 0, 0.1)',
     Cancelado: 'rgba(255, 0, 0, 0.1)',
     Disponível: 'rgba(128, 128, 128, 0.1)',
   }[status] || 'rgba(128, 128, 128, 0.1)';
@@ -30,7 +30,7 @@ const CalendarCard = ({ timeSlot, status, patientName, buttonText, day }) => {
     } else {
       e.stopPropagation();
       // Redireciona para uma página de detalhes ou então faz outra lógica
-      console.log(`Ver detalhes do agendamento para ${startTime} no dia ${day}`);
+      navigate(`/dashboard/agendamentos/editar/${id}`);
       // Ex.: navigate(`/dashboard/agendamentos/detalhes?timeSlot=${encodeURIComponent(startTime)}&day=${encodeURIComponent(day)}`);
     }
   }
