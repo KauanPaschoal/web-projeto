@@ -11,13 +11,26 @@ export default defineConfig({
         target: "http://localhost:8080/",
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/planos/, "/planos"),
+        rewrite: (path) => path.replace(/^\/usuarios/, "/usuarios"),
       },
       "/usuarios/login": {
-        target: "http://localhost:8080/", // Backend para /usuarios/login
+        target: "http://localhost:8080/",
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/usuarios\/login/, "/usuarios/login"), // Mantém o prefixo /usuarios/login
+        rewrite: (path) =>
+          path.replace(/^\/usuarios\/login/, "/usuarios/login"),
+      },
+      "/planos": {
+        target: "http://localhost:8080/", // Backend para /planos
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/planos/, "/planos"),
+      },
+      "/psicologos": {
+        target: "http://localhost:8080/", // Backend para /psicologos
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/psicologos/, "/psicologos"),
       },
     },
   },
