@@ -14,7 +14,8 @@ import AdicionarPaciente from "./pages/dashboard/pacientes/AdicionarPaciente/Adi
 import AdicionarPsicologo from "./pages/dashboard/psicologos/adicionarPsicologo/adicionarPsicologo";
 
 import Administracao from "./pages/dashboard/administracao/Administracao";
-import Psicologos from "./pages/dashboard/psicologos/Psicologos";
+import Psicologos from "./pages/dashboard/psicologos/psicologos";
+
 
 
 
@@ -30,7 +31,7 @@ function App() {
             <Route path="/dashboard/agendamentos" element={<Agendamentos />} />
             <Route path="/dashboard/agendamentos/cadastrar/:id" element={<CadastrarAgendamento/>} />
             <Route path="/dashboard/agendamentos/cadastrar" element={<CadastrarAgendamento/>} />
-            <Route path="/dashboard/agendamentos/editar" element={<EditarAgendamento />} />
+            <Route path="/dashboard/agendamentos/editar/:id" element={<EditarAgendamento />} />
             <Route path="/dashboard/pacientes" element={<Pacientes />} />
             <Route path="/dashboard/administracao" element={<Administracao />} />
             <Route path="/dashboard/pacientes/editar/:id" element={<EditarPaciente />} />

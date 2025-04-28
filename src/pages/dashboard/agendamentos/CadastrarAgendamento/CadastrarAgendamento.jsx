@@ -9,7 +9,7 @@ import axios from 'axios';
 import MainComponent from '../../components/MainComponent/MainComponent.jsx'
 import Checkbox from '../../components/Checkbox/Checkbox.jsx'
 import { getPacientesPorId, getPacientes } from '../../../../provider/api/pacientes/fetchs-pacientes.js'
-import { postAgendamento } from '../../../../provider/api/agendamentos/fetchs-agendamentos'; // Importa a função de adicionar agendamento
+import { getAgendamentosPorPaciente, postAgendamento } from '../../../../provider/api/agendamentos/fetchs-agendamentos'; // Importa a função de adicionar agendamento
 import { getPreferenciasPorId } from '../../../../provider/api/preferencias/fetchs-preferencias.js'
 
 const CadastrarAgendamento = ({ paciente }) => {
@@ -75,6 +75,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                         selectedDate: pacienteResponse.selectedDate || "00/00",
                         planoMensal: pacienteResponse.planoMensal || false,
                         statusAgendamento: pacienteResponse.statusAgendamento || "Pendente",
+                        tipo: pacienteResponse.tipo || "AVULSO", // Define um valor padrão para o tipo
                     };
                     setPacienteSelecionado(updatedPaciente);
                     setQuery(pacienteResponse.nome);
@@ -110,17 +111,35 @@ const CadastrarAgendamento = ({ paciente }) => {
             };
 
             const getNomeDiaSemana = (diaSemana) => {
-                const dias = [
-                    "Domingo",
-                    "Segunda-feira",
-                    "Terça-feira",
-                    "Quarta-feira",
-                    "Quinta-feira",
-                    "Sexta-feira",
-                    "Sábado",
-                ];
-                return dias[diaSemana] || "Indefinido";
+                const dias = {
+                    "DOMINGO": "Domingo",
+                    "SEGUNDA": "Segunda-feira",
+                    "TERCA": "Terça-feira",
+                    "QUARTA": "Quarta-feira",
+                    "QUINTA": "Quinta-feira",
+                    "SEXTA": "Sexta-feira",
+                    "SABADO": "Sábado",
+                };
+
+                return dias[diaSemana] || "Indefinido"; // Retorna "Indefinido" se o valor não for encontrado
             };
+
+            useEffect(() => {
+                const fetchAgendamentosPorPaciente = async () => {
+                    try {
+                        if (pacienteSelecionado && pacienteSelecionado.id) {
+                            const response = await getAgendamentosPorPaciente(pacienteSelecionado.id);
+                            setAgendamentos(response); // Atualiza o estado com os agendamentos
+                            console.log("Agendamentos carregados:", response);
+                        }
+                    } catch (error) {
+                        console.error("Erro ao buscar agendamentos por paciente:", error);
+                        errorMessage("Erro ao carregar os agendamentos.", "small");
+                    }
+                };
+            
+                fetchAgendamentosPorPaciente();
+            }, [pacienteSelecionado]);
 
             // useEffect(() => {
             //     console.log("Proximos dias: ", proximosDias);
@@ -155,6 +174,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                         selectedDate: prev?.selectedDate || selectedPaciente.selectedDate || '',
                         horario: prev?.horario || selectedPaciente.horario || horario,
                         anotacao: prev?.anotacao || selectedPaciente.anotacao || 'mensagem',
+                        tipo: selectedPaciente.tipo || "AVULSO", // Define um valor padrão para o tipo
                     }));
 
                     const filteredAgendamentos = agendamentos.filter(
@@ -223,7 +243,6 @@ const CadastrarAgendamento = ({ paciente }) => {
 
                 if (!pacienteSelecionado.tipo) {
                     errorMessage("Por favor, escolha o tipo de sessão.", "small");
-                    console.log("Tipo de sessão não definido." + pacienteSelecionado);
                     return;
                 }
 
@@ -232,22 +251,13 @@ const CadastrarAgendamento = ({ paciente }) => {
                     return;
                 }
 
-                // Validação: Verifica se o horário é no futuro
-                const [hour, minute] = pacienteSelecionado.horario.split(":").map(Number);
-                const now = new Date();
-                const selectedDateTime = new Date(
-                    formatDateToBackend(pacienteSelecionado.selectedDate) + `T${hour}:${minute}:00`
-                );
-
-                if (selectedDateTime <= now) {
-                    errorMessage("O horário deve ser no futuro.", "small");
-                    return;
-                }
-
                 try {
                     if (statusPlanoMensal) {
-                        // Cria agendamentos para todas as datas do plano mensal
-                        const promises = pacienteSelecionado.diaMes.map(async (dia) => {
+                        // Cria quatro sessões, uma por semana no mesmo dia da semana
+                        const promises = Array.from({ length: 4 }).map((_, index) => {
+                            const diaAtual = new Date(pacienteSelecionado.selectedDate);
+                            diaAtual.setDate(diaAtual.getDate() + index * 7); // Adiciona 7 dias para cada semana
+
                             const novoAgendamento = {
                                 fkPaciente: {
                                     id: pacienteSelecionado.id,
@@ -261,11 +271,12 @@ const CadastrarAgendamento = ({ paciente }) => {
                                         preco: pacienteSelecionado.fkPlano?.preco || 0,
                                     },
                                 },
-                                data: formatDateToBackend(dia),
-                                hora: pacienteSelecionado.horario,
-                                tipo: pacienteSelecionado.tipo,
+                                data: formatDateToBackend(diaAtual.toLocaleDateString('pt-BR')), // Formata a data para o backend
+                                hora: pacienteSelecionado.horario + ":00", // Converte para o formato HH:mm:ss
+                                tipo: pacienteSelecionado.tipo || "AVULSO",
                                 statusSessao: "PENDENTE",
                                 anotacao: pacienteSelecionado.anotacao,
+                                createdAt: new Date().toISOString(), // Adiciona a data de criação
                             };
 
                             console.log("Agendamento (Plano Mensal):", novoAgendamento);
@@ -289,11 +300,12 @@ const CadastrarAgendamento = ({ paciente }) => {
                                     preco: pacienteSelecionado.fkPlano?.preco || 0,
                                 },
                             },
-                            data: formatDateToBackend(pacienteSelecionado.selectedDate),
-                            hora: pacienteSelecionado.horario,
+                            data: formatDateToBackend(pacienteSelecionado.selectedDate), // Formata a data para o backend
+                            hora: pacienteSelecionado.horario + ":00", // Converte para o formato HH:mm:ss
                             tipo: pacienteSelecionado.tipo || "AVULSO",
                             statusSessao: "PENDENTE",
                             anotacao: pacienteSelecionado.anotacao,
+                            createdAt: new Date().toISOString(), // Adiciona a data de criação
                         };
 
                         console.log("Agendamento (Data Única):", novoAgendamento);
@@ -326,7 +338,6 @@ const CadastrarAgendamento = ({ paciente }) => {
 
                 fetchPacientes();
             }, []);
-
 
 
             return (
@@ -379,7 +390,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                 ) : (
                                     <div className="paciente-info">
                                         <p><strong>Paciente:</strong> {pacienteSelecionado.nome}</p>
-                                        <p><strong>Horário para Consultas:</strong> {preferencias.horario || "Indefinido"}</p>
+                                        <p><strong>Horário para Consultas:</strong> { preferencias.horario || "Indefinido"}</p>
                                         <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(preferencias.diaSemana)}</p>
                                     </div>
                                 )}
@@ -463,29 +474,17 @@ const CadastrarAgendamento = ({ paciente }) => {
                                         <div className='agendamentos-container'>
                                             <h3>Últimos Agendamentos</h3>
                                             <div className='agendamentos-list'>
-                                                {agendamentos.map((agendamento, index) => {
-                                                    const getStatusSessaoClass = () => {
-                                                        switch (agendamento.status) {
-                                                            case 'Compareceu':
-                                                                return 'status-sessao-ok';
-                                                            case 'Pendente':
-                                                                return 'status-sessao-pendente';
-                                                            case 'Cancelou':
-                                                                return 'status-sessao-cancelado';
-                                                            case 'Reagendou':
-                                                                return 'status-sessao-reagendado';
-                                                            default:
-                                                                return 'status-sessao-default';
-                                                        }
-                                                    };
-                                                    return (
+                                                {agendamentos.length > 0 ? (
+                                                    agendamentos.map((agendamento, index) => (
                                                         <div key={index} className="agendamento-item">
-                                                            <p><strong>Data:</strong> {agendamento.data}</p>
-                                                            <p><strong>Horário:</strong> {agendamento.horario}</p>
-                                                            <p><span className={`status ${getStatusSessaoClass()}`}>{agendamento.status}</span></p>
+                                                            <p><strong>Data:</strong> {new Date(agendamento.data).toLocaleDateString('pt-BR')}</p>
+                                                            <p><strong>Horário:</strong> {agendamento.hora}</p>
+                                                            <p><strong>Status:</strong> {agendamento.statusSessao}</p>
                                                         </div>
-                                                    )
-                                                })}
+                                                    ))
+                                                ) : (
+                                                    <p>Nenhum agendamento encontrado para este paciente.</p>
+                                                )}
                                             </div>
                                         </div>
                                     </>
