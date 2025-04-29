@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-.agendas-diario{
+.agendas-diario {
     display: flex;
     flex-direction: column;
     gap: 1em;
@@ -8,33 +8,35 @@
     overflow-y: scroll;
     width: 100%;
     border-radius: 1em;
+    padding: inherit;
+
 }
 
-.second-section{
+.second-section {
     width: 100%;
     height: 50%;
     justify-content: space-between;
-    
+
 }
 
-.agendas-section{
+.agendas-section {
     display: flex;
     flex-direction: column;
     gap: 1em;
     width: 40%;
-    height: 100%;
+    height: 125%;
     padding: 1em;
     border-radius: 1em;
     background-color: var(--TrueWhiteFy);
     border: var(--LightGrayFy) 1px solid;
 }
 
-.grafico-section{
+.grafico-section {
     display: flex;
     flex-direction: column;
     gap: 1em;
     width: 70%;
-    height: 100%;
+    height: fit-content;
     padding: 1em;
     border-radius: 1em;
     background-color: var(--TrueWhiteFy);
