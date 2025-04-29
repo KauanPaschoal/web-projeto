@@ -13,38 +13,32 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/pacientes/, "/pacientes"),
       },
-      "/planos": {
-        target: "http://localhost:8080/",
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/planos/, "/planos"),
-      },
       "/psicologos": {
         target: "http://localhost:8080/",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/psicologos/, "/psicologos"),
-
-        "/psicologos/login": {
-          target: "http://localhost:8080/",
-          changeOrigin: true,
-          secure: false,
-          rewrite: (path) =>
-            path.replace(/^\/psicologos\/login/, "/psicologos/login"),
-        },
-        "/sessoes": {
-          target: "http://localhost:8080/",
-          changeOrigin: true,
-          secure: false,
-          rewrite: (path) => path.replace(/^\/sessoes/, "/sessoes"),
-        },
-        "/preferencias": {
-          target: "http://localhost:8080/",
-          changeOrigin: true,
-          secure: false,
-          rewrite: (path) => path.replace(/^\/preferencias/, "/preferencias"),
-        },
+      },
+      "/psicologos/login": {
+        target: "http://localhost:8080/",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) =>
+          path.replace(/^\/psicologos\/login/, "/psicologos/login"),
+      },
+      "/sessoes": {
+        target: "http://localhost:8080/",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/sessoes/, "/sessoes"),
+      },
+      "/preferencias": {
+        target: "http://localhost:8080/",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/preferencias/, "/preferencias"),
       },
     },
   },
 });
+
