@@ -214,18 +214,21 @@ const Administracao = () => {
                     disabled={!isEditingPassword}
                     width={"w-full"}
                     onChange={(e) => setSenha(e.target.value)}
+                    type="password"
                   />
                   <InputField
                     labelTitle="Nova senha"
                     value={novaSenha}
                     disabled={!isEditingPassword}
                     onChange={(e) => setNovaSenha(e.target.value)}
+                    type="password"
                   />
                   <InputField
                     labelTitle="Confirmar senha"
                     value={confirmarSenha}
                     disabled={!isEditingPassword}
                     onChange={(e) => setConfirmarSenha(e.target.value)}
+                    type="password"
                   />
                 </div>
                 <div className="inputs-button">
