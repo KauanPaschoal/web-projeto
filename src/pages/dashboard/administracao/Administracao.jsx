@@ -99,6 +99,7 @@ const Administracao = () => {
       });
       responseMessage("Dados atualizados com sucesso!");
       setIsEditingGeneral(false);
+      localStorage.setItem("nomeUsuario", nome);
     } catch (error) {
       errorMessage("Erro ao salvar dados.");
       console.error(error);
