@@ -19,6 +19,12 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/psicologos/, "/psicologos"),
       },
+      "/planos": {
+        target: "http://localhost:8080/",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/planos/, "/planos"),
+      },
       "/psicologos/login": {
         target: "http://localhost:8080/",
         changeOrigin: true,
