@@ -42,3 +42,17 @@ export const postPreferencia = async (preferencia) => {
     }
 };
 
+export const putPreferencia = async (id, preferencia) => {
+    try {
+        const response = await axios.post(`/preferencias/${id}`, preferencia, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao atualizar preferencia:', error);
+        throw error;
+    }
+};
+

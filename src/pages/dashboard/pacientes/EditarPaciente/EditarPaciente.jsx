@@ -19,7 +19,7 @@ import {
   errorMessage,
   responseMessage,
 } from "../../../../utils/alert";
-import { getPreferenciasPorId } from "../../../../provider/api/preferencias/fetchs-preferencias";
+import { getPreferenciasPorId, putPreferencia } from "../../../../provider/api/preferencias/fetchs-preferencias";
 
 const EditarPaciente = () => {
   const { id } = useParams();
@@ -86,8 +86,6 @@ const EditarPaciente = () => {
     try {
       const cpfFormatado = paciente.cpf?.trim();
 
-      const planoId = isPlanoAtivo ? 2 : 1;
-
       const pacienteAtualizado = {
         nome: paciente.nome,
         cpf: cpfFormatado,
@@ -95,12 +93,24 @@ const EditarPaciente = () => {
         senha: paciente.senha || "senha_padrao",
         status: isAtivo ? "ATIVO" : "INATIVO",
         fkPlano: {
-          id: planoId,
+          id: isPlanoAtivo ? 2 : 1,
         },
         fkEndereco: {
           id: paciente.fkEndereco?.id || null,
         },
       };
+
+      const preferenciaAtualizada = {
+        diaSemana: paciente.diaConsulta,
+        horario: paciente.horaConsulta,
+        fkPaciente: {
+            id: id
+        }
+      }
+
+      await putPreferencia(id, preferenciaAtualizada);
+
+      console.log(`STATUS PACIENTE: ${pacienteAtualizado.status}`);
 
       await putPaciente(id, pacienteAtualizado);
 
