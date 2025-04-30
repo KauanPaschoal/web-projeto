@@ -204,7 +204,7 @@ const EditarAgendamento = () => {
             {paciente && (
               <div className="paciente-info-editar">
                 <p><strong>Paciente Selecionado:</strong> {paciente.nome}</p>
-                <p><strong>Horário da Consulta:</strong> {paciente.horario}</p>
+                <p><strong>Horário Marcado:</strong> {paciente.horario}</p>
                 <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(new Date(agendamento.data).getDay())}</p>
                 <p><strong>Data Marcada:</strong> {agendamento.data}</p>
                 <div className="pendente-container">
