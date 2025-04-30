@@ -25,6 +25,8 @@ const EditarPaciente = () => {
   const { id } = useParams();
   const [paciente, setPaciente] = React.useState({
     fkEndereco: {}, // Inicializa fkEndereco como um objeto vazio
+    diaConsulta: "", // Inicializa diaConsulta como string vazia
+    horaConsulta: "", // Inicializa horaConsulta como string vazia
   });
   const [isEditingGeneral, setIsEditingGeneral] = useState(false); // Controle do modo de edição
   const [isAtivo, setIsAtivo] = useState(false); // Controle do checkbox "Paciente Ativo"
@@ -32,44 +34,29 @@ const EditarPaciente = () => {
   const [preferencias, setPreferencias] = useState([]); // Estado para armazenar as preferências do paciente
 
   useEffect(() => {
-    const fetchPaciente = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`/pacientes/${id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+        const [pacienteResponse, preferenciasResponse] = await Promise.all([
+          fetch(`/pacientes/${id}`).then((res) => res.json()),
+          getPreferenciasPorId(id),
+        ]);
+  
+        setPaciente({
+          ...pacienteResponse,
+          diaConsulta: preferenciasResponse.diaSemana,
+          horaConsulta: preferenciasResponse.horario,
         });
-
-        if (!response.ok) {
-          throw new Error("Erro ao encontrar paciente");
-        }
-
-        const pacienteResponse = await response.json();
-        console.log("Response:", pacienteResponse); // Adiciona o log aqui
-        // Atualiza o estado do paciente e os checkboxes
-        setPaciente(pacienteResponse);
-        setIsAtivo(pacienteResponse.status === "ATIVO"); // Marca o checkbox "Paciente Ativo" se o status for "ATIVO"
-        setIsPlanoAtivo(pacienteResponse.fkPlano.id === 2); // Marca o checkbox "Plano Mensal" se o plano for mensal
-      } catch (error) {
-        console.error("Erro ao buscar paciente:", error);
-      }
-    };
-
-    const fetchPreferencias = async () => {
-      try {
-        const preferenciasResponse = await getPreferenciasPorId(id);
-        console.log("Preferências Response:", preferenciasResponse);
+  
+        setIsAtivo(pacienteResponse.status === "ATIVO");
+        setIsPlanoAtivo(pacienteResponse.fkPlano.id === 2);
         setPreferencias(preferenciasResponse);
       } catch (error) {
-        console.error("Erro ao buscar preferências:", error);
+        console.error("Erro ao buscar dados:", error);
       }
     };
-
-    fetchPaciente();
-    fetchPreferencias();
+  
+    fetchData();
   }, [id]);
-
   const handleEditGeneral = async () => {
     if (isEditingGeneral) {
       const result = await confirmCancelEdit(
@@ -84,68 +71,75 @@ const EditarPaciente = () => {
 
   const handleAtualizarPaciente = async () => {
     try {
-      const cpfFormatado = paciente.cpf?.trim();
+        // const cpfFormatado = paciente.cpf?.trim();
 
-      const pacienteAtualizado = {
-        nome: paciente.nome,
-        cpf: cpfFormatado,
-        email: paciente.email,
-        senha: paciente.senha || "senha_padrao",
-        status: isAtivo ? "ATIVO" : "INATIVO",
-        fkPlano: {
-          id: isPlanoAtivo ? 2 : 1,
-        },
-        fkEndereco: {
-          id: paciente.fkEndereco?.id || null,
-        },
-      };
-
-      const preferenciaAtualizada = {
-        diaSemana: paciente.diaConsulta,
-        horario: paciente.horaConsulta,
-        fkPaciente: {
-            id: id
-        }
-      }
-
-      await putPreferencia(id, preferenciaAtualizada);
-
-      console.log(`STATUS PACIENTE: ${pacienteAtualizado.status}`);
-
-      await putPaciente(id, pacienteAtualizado);
-
-      let enderecoAtualizado = false;
-
-      if (paciente.fkEndereco?.id) {
-        const enderecoPayload = {
-          cep: paciente.fkEndereco?.cep?.trim() || "",
-          logradouro: paciente.fkEndereco?.logradouro || "",
-          bairro: paciente.fkEndereco?.bairro || "",
-          numero: paciente.fkEndereco?.numero || "",
-          cidade: paciente.fkEndereco?.cidade || "",
-          uf: paciente.fkEndereco?.uf || "",
+        const pacienteAtualizado = {
+            nome: paciente.nome,
+            email: paciente.email,
+            senha: paciente.senha || "senha_padrao",
+            status: isAtivo ? "ATIVO" : "INATIVO",
+            fkPlano: {
+                id: isPlanoAtivo ? 2 : 1,
+            },
+            fkEndereco: {
+                id: paciente.fkEndereco?.id || null,
+            },
         };
 
-        await putEndereco(paciente.fkEndereco.id, enderecoPayload);
-        enderecoAtualizado = true;
-      } else {
-        console.warn(
-          "Usuário não possui endereço cadastrado. PUT de endereço ignorado."
-        );
-      }
+        const preferenciaAtualizada = {
+            diaSemana: paciente.diaConsulta,
+            horario: paciente.horaConsulta,
+            fkPaciente: {
+                id: parseInt(id), // Certifique-se de que o ID é um número
+            },
+        };
 
-      if (enderecoAtualizado) {
-        responseMessage("Paciente e endereço atualizados com sucesso!");
-      } else {
-        responseMessage("Paciente atualizado com sucesso!");
-      }
+        // Atualiza a preferência
+        await putPreferencia(id, preferenciaAtualizada);
 
-      setIsEditingGeneral(false);
+        console.log(`STATUS PACIENTE: ${pacienteAtualizado.status}`);
+
+        // Verifica se o paciente deve ser desativado
+        if (!isAtivo) {
+            await putDesativarPaciente(id, pacienteAtualizado);
+        } else {
+            // Atualiza o paciente normalmente
+            await putPaciente(id, pacienteAtualizado);
+
+        }
+
+        let enderecoAtualizado = false;
+
+        if (paciente.fkEndereco?.id) {
+            const enderecoPayload = {
+                cep: paciente.fkEndereco?.cep?.trim() || "",
+                logradouro: paciente.fkEndereco?.logradouro || "",
+                bairro: paciente.fkEndereco?.bairro || "",
+                numero: paciente.fkEndereco?.numero || "",
+                cidade: paciente.fkEndereco?.cidade || "",
+                uf: paciente.fkEndereco?.uf || "",
+            };
+
+            await putEndereco(paciente.fkEndereco.id, enderecoPayload);
+            enderecoAtualizado = true;
+        } else {
+            console.warn(
+                "Usuário não possui endereço cadastrado. PUT de endereço ignorado."
+            );
+        }
+
+        if (enderecoAtualizado) {
+            responseMessage("Paciente e endereço atualizados com sucesso!");
+        } else {
+            responseMessage("Paciente atualizado com sucesso!");
+        }
+
+        setIsEditingGeneral(false);
     } catch (error) {
-      console.error("Erro ao atualizar paciente ou endereço:", error);
-      errorMessage("Ocorreu um erro ao atualizar o paciente ou endereço.");
+        console.error("Erro ao atualizar paciente ou endereço:", error);
+        errorMessage("Ocorreu um erro ao atualizar o paciente ou endereço.");
     }
-  };
+};
   return (
     <div className="div-administracao flex">
       <MenuLateralComponent></MenuLateralComponent>

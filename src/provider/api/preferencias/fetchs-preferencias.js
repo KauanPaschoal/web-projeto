@@ -44,7 +44,7 @@ export const postPreferencia = async (preferencia) => {
 
 export const putPreferencia = async (id, preferencia) => {
     try {
-        const response = await axios.post(`/preferencias/${id}`, preferencia, {
+        const response = await axios.put(`/preferencias/${id}`, preferencia, {
             headers: {
                 'Content-Type': 'application/json',
             },
