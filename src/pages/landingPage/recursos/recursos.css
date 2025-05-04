@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+.div-recursos{
+    width: 100%;
+    padding-top: 4em;
+}
+
+.swiper-recursos{
+    width: 80%;
+}
+
+
+.card-content-solucao{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 200px;
+    
+    transition: 0.3s;
+
+    &:hover{
+        transform: scale(1.05);
+    }
+}
+
+.card-solucao{
+    display: flex;
+    
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    padding: 1em;
+    margin: 3em;
+    box-shadow: 0px 0px 10px 0px var(--GrayFy);
+    border-radius: 12px;
+
+    h1{
+        font-size: x-large;
+        font-weight: bold;
+    }
+}
+
+.slide-img{
+    width: 20em;
+    padding: 3em;
+}	

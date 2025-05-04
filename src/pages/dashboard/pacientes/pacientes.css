@@ -1,0 +1,50 @@
+@import 'tailwindcss';
+
+.pacientes-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 1em 2em;
+    width: 100%;
+    background-color: var(--WhiteFy);
+    overflow: auto;
+    gap: 1em;
+}	
+
+.paciente-card{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    width: 100%;
+    min-height: 10vh;
+    background-color: var(--WhiteFy);
+    border-radius: 1em;
+    gap: 0.5em;
+    border: var(--LightGrayFy) 2px solid;
+}
+
+.input-pesquisa{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: var(--WhiteFy);
+    caret-color: var(--BlackFy);
+    border-radius: 1em;
+    color: var(--DarkBlueFy);
+    padding-left: 1em;
+}
+
+.search-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    border-radius: 1em;
+    gap: 0.5em;
+}

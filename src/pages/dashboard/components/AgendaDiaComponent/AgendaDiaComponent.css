@@ -1,0 +1,52 @@
+@import 'tailwindcss';
+
+.agendaDiaComponent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1em;
+    text-align: start;
+    padding: 1em;
+
+
+    button {
+        width: fit-content;
+    }
+}
+
+.status {
+    background-color: var(--GreenAlertFy);
+    padding: 0.25em 1em;
+    border-radius: 12em;
+    font-weight: bold;
+    font-size: small;
+    width: 100%;
+    text-align: center;
+}
+
+.status-confirmado {
+    background-color: var(--GreenAlertFy);
+}
+
+.status-pendente {
+    background-color: var(--YellowAlertFy);
+    color: var(--BlackFy);
+}
+
+.status-cancelado {
+    background-color: var(--RedAlertFy);
+}
+
+.status-default {
+    background-color: var(--GrayFy);
+}
+
+.info-card {
+    display: flex;
+    gap: 0.5em;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}

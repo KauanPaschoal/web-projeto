@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+.div-cadastrar-agendamento{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 1em 2em;
+    width: 94vw;
+    min-height: 100vh;
+    background-color: var(--WhiteFy);
+    overflow: hidden;
+}
+
+.form-cadastrar-agendamento{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 1em;
+    gap: 0.2em;
+    border: var(--BlackFy) 2px solid;
+    border-radius: 12px;
+    background-color: var(--LightGrayFy);
+}
+
+.container-sessao{
+    height: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: var(--WhiteFy);
+    border-radius: 2em;
+    padding: 1em;
+    width: 80%;
+    gap: 1em;
+}
+
+.div-escolher-paciente{
+    width: 80%;
+    min-height: 10vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--WhiteFy);
+    padding: 1em;
+    border-radius: 1.5em;
+}
+
+.paciente-info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1em;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    p{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    strong{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+.styled-datalist{
+    width: 100%;
+    height: 100%;
+    padding: 0.5em;
+    border-radius: 1em;
+    background-color: var(--WhiteFy);
+    border: var(--LightGrayFy) 1px solid;
+}
+
+.suggestions-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #fff;
+    position: absolute;
+    z-index: 1000;
+    width: 20%;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+.agendamentos-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    width: 60%;
+    height: 100%;
+    gap: 1em;
+    overflow-y: auto;
+}
+
+.agendamentos-list{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    width: 100%;
+    height: 100%;
+    gap: 1em;
+    overflow-y: auto;
+    padding-right: 1em;
+}
+
+.agendamento-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    padding: 1em;
+    gap: 1em;
+    border-radius: 1em;
+    background-color: #FFF;
+}
+
+
+.status{
+    color: var(--BlackFy);
+    padding: 0.5em 1em;
+    border-radius: 1em;
+    font-size: small;
+    font-weight: bold;
+}
+
+.status-sessao-ok{
+    background-color: var(--GreenAlertFy);
+    color: var(--BlackFy);
+}
+
+.status-sessao-cancelado{
+    background-color: var(--RedAlertFy);
+    color: var(--BlackFy);
+}
+
+.status-sessao-reagendado{
+    background-color: var(--YellowAlertFy);
+    color: var(--BlackFy);
+}
+
+.status-sessao-pendente{
+    background-color: var(--YellowAlertFy);
+    color: var(--BlackFy);
+}
+
+.status-sessao-default {
+    background-color: var(--GrayFy);
+}
+
+.container-inputs{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: 1em;
+}
+
+.select-container {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 100%;
+    padding: 0;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.select-container label {
+    width: fit-content;
+    font-size: 14px;
+    font-weight: bold;
+    color: #21272A;
+}
+
+.select-container .select-field {
+    border-bottom: 1px solid #C1C7CD;
+    font-size: 14px;
+    padding: 10px 0 2px 16px;
+    caret-color: var(--blue-detail);
+    outline: none;
+}
+
+.select-container .select-field:focus {
+    border-bottom-color: var(--blue-detail);
+}

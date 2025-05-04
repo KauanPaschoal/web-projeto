@@ -1,0 +1,32 @@
+@import 'tailwindcss';
+
+:root {
+    --light-blue: #1B66A4;
+}
+
+/* Esconde o checkbox padrão */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-disabled {
+  opacity: 0.5; /* Torna o checkbox e o texto mais claros */
+  pointer-events: none; /* Impede interações */
+}
+
+input[type="checkbox"]:disabled {
+  cursor: not-allowed; /* Mostra o cursor de "não permitido" */
+  background-color: #d3d3d3; /* Cor de fundo cinza para o checkbox */
+  border-color: #a9a9a9; /* Cor da borda cinza */
+}
+
+.checkboxLabel {
+  font-size: 14px;
+  color: #333;
+}
+
+.checkbox-disabled .checkboxLabel {
+  color: #a9a9a9; /* Torna o texto cinza quando desativado */
+}

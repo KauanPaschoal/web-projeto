@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "tailwindcss";
+
+:root {
+  --DarkestBlueFy: #133857;
+  --DarkBlueFy: #144B78;
+  --LightBlueFy: #1B66A4;
+  --WhiteFy: #F5F5F5;
+  --TrueWhiteFy: #FFFFFF;
+  --RedFy: #AD1C03;
+  --DarkRedFy: #7a1300;
+  --RedFyTransparente: #ad1c0378;
+  --BlackFy: #000000;
+  --LightGrayFy: #DDE1E6;
+  --GrayFy: #A5A5A5;
+  --RedAlertFy: #FF7878;
+  --YellowAlertFy: #FFD078;
+  --GreenAlertFy: #78FF8C;
+  --BlueAlertFy: #78BEFF;
+}
+
+/* Estilização do Scrollbar */
+::-webkit-scrollbar {
+  width: 0.60em; /* Largura do scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: var(--LightGrayFy); /* Cor do fundo do track */
+  border-radius: 10px; /* Bordas arredondadas */
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--LightBlueFy); /* Cor do thumb */
+  border-radius: 10px; /* Bordas arredondadas */
+  border: 2px solid var(--WhiteFy); /* Espaço entre o thumb e o track */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--DarkBlueFy); /* Cor do thumb ao passar o mouse */
+}
+
+* {
+  font-family: "Montserrat", sans-serif;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  padding: 0.5em 1em;
+  border: none;
+  font-weight: 500;
+  font-size: small;
+  align-items: center;
+  gap: 1em;
+}
+
+.btn_secundario {
+  background-color: var(--WhiteFy);
+  border: var(--LightBlueFy) 2px solid;
+  color: var(--LightBlueFy);
+  transition: ease-in-out 0.3s;
+}
+
+.btn_secundario:hover {
+  cursor: pointer;
+  background-color: var(--LightBlueFy);
+  border: var(--LightBlueFy) 2px solid;
+  color: var(--WhiteFy);
+}
+
+.btn_primario {
+  background-color: var(--LightBlueFy);
+  border: var(--LightBlueFy) 2px solid;
+  color: var(--WhiteFy);
+  transition: ease-in-out 0.3s;
+}
+
+.btn_primario:hover {
+  cursor: pointer;
+  background-color: var(--DarkestBlueFy);
+  border: var(--DarkestBlueFy) 2px solid;
+}
+
+.btn_primario:disabled {
+  background-color: var(--LightGrayFy);
+  border: var(--LightGrayFy) 2px solid;
+  color: var(--GrayFy);
+  cursor: not-allowed;
+}
+
+
+
+.titulo-section {
+  color: var(--LightBlueFy);
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.subtitulo-section {
+  color: var(--BlackFy);
+  font-size: medium;
+  font-weight: 500;
+}
+
+
+.swal-small {
+  font-size: 10px;
+  padding: 10px;
+}
+
+.swal-medium {
+  font-size: 16px;
+  padding: 20px;
+}
+
+.swal-large {
+  font-size: 20px;
+  padding: 30px;
+}
+
+
+
+
+footer {
+  background-color: var(--DarkestBlueFy);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2em 4em;
+
+  ul {
+    display: flex;
+    gap: 1em;
+
+    li {
+      list-style-type: none;
+
+      a {
+        color: var(--WhiteFy);
+        text-decoration: none;
+        font-size: smaller;
+      }
+    }
+  }
+
+  p {
+    color: var(--WhiteFy);
+  }
+}
+
+@media (max-width: 1000px) {
+  .content-solucao {
+    flex-direction: column;
+    align-items: center;
+  }
+}

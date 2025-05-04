@@ -1,0 +1,64 @@
+@import 'tailwindcss';
+
+.div-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    padding: 1em 2em;
+    margin-left: 6vw;
+    width: 94vw;
+    min-height: 100vh;
+    background-color: var(--WhiteFy);
+    overflow: hidden;
+}
+
+.titulo {
+    color: var(--BlackFy);
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.main-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    /* gap: 1em; */
+    width: 100%;
+    min-height: 80vh;
+    height: fit-content;
+
+    border: var(--LightGrayFy) 2px solid;
+    border-radius: 12px;
+    background-color: var(--WhiteFy);
+}
+
+.cabecalho {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    width: 100%;
+    padding: 0.5em;
+    background-color: var(--LightBlueFy);
+    border-radius: 12px 12px 0 0;
+    color: white;
+    gap: 1em;
+
+    h2 {
+        font-size: large;
+        font-weight: normal;
+    }
+}
+
+.conteudo {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    padding: 0.5em;
+    width: 100%;
+    height: 76vh;
+    /* overflow-y: auto; */
+}
