@@ -82,76 +82,79 @@ const AdicionarPaciente = () => {
                 }
             >
                 <form className='addPaciente' onSubmit={handleSubmit}>
-                    <h2>Dados Do Paciente:</h2>
-                    <section>
-                        <div className='flex gap-3'>
-                            <InputField
-                                labelTitle={'Nome'}
-                                value={nome}
-                                onChange={(e) => setNome(e.target.value)}
-                                required
-                            />
-                            <InputField
-                                labelTitle={'E-mail'}
-                                type={'email'}
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className='flex gap-3'>
-                            {/* <InputField
+                    <main className='div-add-paciente'>
+                        <h2>Dados Do Paciente:</h2>
+                        <section>
+                            <div className='flex gap-3'>
+                                <InputField
+                                    labelTitle={'Nome'}
+                                    value={nome}
+                                    onChange={(e) => setNome(e.target.value)}
+                                    required
+                                />
+                                <InputField
+                                    labelTitle={'E-mail'}
+                                    type={'email'}
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className='flex gap-3'>
+                                {/* <InputField
                                 labelTitle={'Dia de Consultas'}
                                 value={diaConsultas}
                                 onChange={(e) => setDiaConsultas(e.target.value)}
                                 required
                             /> */}
-                            <div className="select-container">
-                                <label htmlFor="diaConsultas">Dia de Consultas</label>
-                                <select
-                                    id="diaConsultas"
-                                    value={diaConsultas}
-                                    className='select-field w-full'
-                                    onChange={(e) => setDiaConsultas(e.target.value)}
-                                    required
-                                >
-                                    <option value="" disabled>Selecione um dia</option>
-                                    <option value="SEGUNDA">Segunda-feira</option>
-                                    <option value="TERCA">Terça-feira</option>
-                                    <option value="QUARTA">Quarta-feira</option>
-                                    <option value="QUINTA">Quinta-feira</option>
-                                    <option value="SEXTA">Sexta-feira</option>
-                                </select>
+                                <div className="select-container">
+                                    <label htmlFor="diaConsultas">Dia de Consultas</label>
+                                    <select
+                                        id="diaConsultas"
+                                        value={diaConsultas}
+                                        className='select-field w-full'
+                                        onChange={(e) => setDiaConsultas(e.target.value)}
+                                        required
+                                    >
+                                        <option value="" disabled>Selecione um dia</option>
+                                        <option value="SEGUNDA">Segunda-feira</option>
+                                        <option value="TERCA">Terça-feira</option>
+                                        <option value="QUARTA">Quarta-feira</option>
+                                        <option value="QUINTA">Quinta-feira</option>
+                                        <option value="SEXTA">Sexta-feira</option>
+                                    </select>
+                                </div>
+                                <div className="select-container">
+                                    <label htmlFor="horarioConsultas">Horário de Consultas</label>
+                                    <select
+                                        id="horarioConsultas"
+                                        value={horarioConsultas}
+                                        className='select-field w-full'
+                                        onChange={(e) => setHorarioConsultas(e.target.value)}
+                                        required
+                                    >
+                                        <option value="" disabled>Selecione um horário</option>
+                                        {Array.from({ length: 13 }, (_, i) => {
+                                            const hour = (7 + i).toString().padStart(2, '0');
+                                            return (
+                                                <option key={hour} value={`${hour}:00`}>
+                                                    {`${hour}:00`}
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
+                                </div>
                             </div>
-                            <div className="select-container">
-                                <label htmlFor="horarioConsultas">Horário de Consultas</label>
-                                <select
-                                    id="horarioConsultas"
-                                    value={horarioConsultas}
-                                    className='select-field w-full'
-                                    onChange={(e) => setHorarioConsultas(e.target.value)}
-                                    required
-                                >
-                                    <option value="" disabled>Selecione um horário</option>
-                                    {Array.from({ length: 13 }, (_, i) => {
-                                        const hour = (7 + i).toString().padStart(2, '0');
-                                        return (
-                                            <option key={hour} value={`${hour}:00`}>
-                                                {`${hour}:00`}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                            </div>
-                        </div>
-                        <CheckBox
-                            CheckboxValue={'mensal'}
-                            labelTitle={'Plano Mensal'}
-                            checked={planoMensal}
-                            onChange={(e) => setPlanoMensal(e.target.checked)}
-                        />
-                    </section>
-                    <SaveButton textContent={'Adicionar Paciente'} type="submit" />
+                            <CheckBox
+                                CheckboxValue={'mensal'}
+                                labelTitle={'Plano Mensal'}
+                                checked={planoMensal}
+                                onChange={(e) => setPlanoMensal(e.target.checked)}
+                            />
+                        </section>
+                        <SaveButton textContent={'Adicionar Paciente'} type="submit" />
+                    </main>
+
                 </form>
             </MainComponent>
         </div>
