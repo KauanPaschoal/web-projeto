@@ -41,6 +41,7 @@
         justify-content: center;
         align-items: center;
         gap: 0.5em;
+        border-radius: 0;
 
         &:hover{
             background-color: var(--DarkestBlueFy);
@@ -65,6 +66,7 @@
     justify-content: center;
     align-items: center;
     gap: 0.5em;
+    border-radius: 0;
 
     &:hover{
         background-color: var(--DarkRedFy);

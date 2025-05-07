@@ -61,22 +61,22 @@ const EditarAgendamento = () => {
 
   useEffect(() => {
     if (paciente && paciente.data) {
-        const diaSemanaCalculado = new Date(Date.UTC(
-            parseInt(paciente.data.split('-')[0], 10),
-            parseInt(paciente.data.split('-')[1], 10) - 1,
-            parseInt(paciente.data.split('-')[2], 10)
-        )).getUTCDay();
-        setDiaSemana(diaSemanaCalculado);
+      const diaSemanaCalculado = new Date(Date.UTC(
+        parseInt(paciente.data.split('-')[0], 10),
+        parseInt(paciente.data.split('-')[1], 10) - 1,
+        parseInt(paciente.data.split('-')[2], 10)
+      )).getUTCDay();
+      setDiaSemana(diaSemanaCalculado);
 
-        const diasDoMesAtualizados = Array.from({ length: 4 }, (_, i) => {
-            const data = new Date();
-            data.setDate(data.getDate() + i * 7 + ((diaSemanaCalculado - data.getDay() + 7) % 7));
-            return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        });
+      const diasDoMesAtualizados = Array.from({ length: 4 }, (_, i) => {
+        const data = new Date();
+        data.setDate(data.getDate() + i * 7 + ((diaSemanaCalculado - data.getDay() + 7) % 7));
+        return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      });
 
-        setDiasDoMes({ diaMes: diasDoMesAtualizados });
+      setDiasDoMes({ diaMes: diasDoMesAtualizados });
     }
-}, [paciente]);
+  }, [paciente]);
 
   const getNomeDiaSemana = (diaSemana) => {
     const dias = [
@@ -94,18 +94,18 @@ const EditarAgendamento = () => {
 
   const formatDateToBackend = (date) => {
     if (!date || typeof date !== 'string') {
-        console.error("Data inválida para formatDateToBackend:", date);
-        return "0000-00-00"; // Retorna um valor padrão inválido para evitar erros
+      console.error("Data inválida para formatDateToBackend:", date);
+      return "0000-00-00"; // Retorna um valor padrão inválido para evitar erros
     }
 
     const [day, month, year] = date.split('/');
     if (!day || !month || !year) {
-        console.error("Formato de data inválido para formatDateToBackend:", date);
-        return "0000-00-00";
+      console.error("Formato de data inválido para formatDateToBackend:", date);
+      return "0000-00-00";
     }
 
     return `${year}-${month}-${day}`; // Converte para o formato YYYY-MM-DD
-};
+  };
 
   const handleAtualizarAgendamento = async (e) => {
     e.preventDefault();
@@ -169,7 +169,7 @@ const EditarAgendamento = () => {
   useEffect(() => {
     console.log("Paciente Data:", paciente.data);
     console.log("Dia da Semana Calculado:", diaSemana);
-}, [paciente, diaSemana]);
+  }, [paciente, diaSemana]);
 
   return (
     <>
@@ -182,7 +182,7 @@ const EditarAgendamento = () => {
               {"< Voltar"}
             </button>
             <button
-              className='btn_primario rounded-full flex gap-2 m-0'
+              className='btn_agendamento rounded-full flex gap-2 m-0'
               type="button"
               onClick={() => setPaciente({
                 ...paciente,
@@ -200,12 +200,12 @@ const EditarAgendamento = () => {
 
           noValidates
           onSubmit={handleAtualizarAgendamento}>
-          <div className='div-escolher-paciente'>
+          <section className='container-editar-agendamento'>
+
             {paciente && (
               <div className="paciente-info-editar">
                 <p><strong>Paciente Selecionado:</strong> {paciente.nome}</p>
                 <p><strong>Horário Marcado:</strong> {paciente.horario}</p>
-                <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(new Date(agendamento.data).getDay())}</p>
                 <p><strong>Data Marcada:</strong> {agendamento.data}</p>
                 <div className="pendente-container">
                   <span className={`status ${agendamento.statusSessao === 'Pendente' ? 'status-sessao-pendente' :
@@ -216,81 +216,83 @@ const EditarAgendamento = () => {
                     {agendamento.statusSessao}
                   </span>
                   <div className="checkbox-container">
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={paciente.confirmado || false}
-                        onChange={(e) => setPaciente({
-                          ...paciente,
-                          confirmado: e.target.checked,
-                          status: e.target.checked ? 'Confirmado' : 'Pendente'
-                        })}
-                      />
+                    <input
+                      name="confirmar_checkbox"
+                      type="checkbox"
+                      checked={paciente.confirmado || false}
+                      onChange={(e) => setPaciente({
+                        ...paciente,
+                        confirmado: e.target.checked,
+                        status: e.target.checked ? 'Confirmado' : 'Pendente'
+                      })}
+                    />
+                    <label for="confirmar_checkbox">
                       Confirmar Agendamento
                     </label>
+
                   </div>
                 </div>
 
               </div>
             )}
-          </div>
 
-          <div className='container-sessao-editar'>
-            <div className='container-inputs-editar flex gap-2'>
-              <div className="select-container w-full">
-                <label htmlFor="diaSemana" className="input-label">Novo Dia da Semana:</label>
-                <select
-                  id="diaSemana"
-                  name="diaSemana"
+
+            <div className='container-sessao-editar'>
+              <div className='container-inputs-editar flex gap-2'>
+                <div className="select-container w-full">
+                  <label htmlFor="diaSemana" className="input-label">Novo Dia da Semana:</label>
+                  <select
+                    id="diaSemana"
+                    name="diaSemana"
+                    required
+                    className="select-field w-full"
+                    value={diaSemana}
+                    onChange={handleDiaSemanaChange}
+                  >
+                    <option value="" disabled>Selecione um dia da semana</option>
+                    {Array.from({ length: 7 }, (_, i) => (
+                      <option key={i} value={i}>
+                        {getNomeDiaSemana(i)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="select-container w-full">
+                  <label htmlFor="data" className="input-label">Nova Data:</label>
+                  <select
+                    id="data"
+                    name="data"
+                    required
+                    className="select-field w-full"
+                    value={paciente?.data || ''}
+                    onChange={(e) => setPaciente({
+                      ...paciente,
+                      data: e.target.value
+                    })}
+                  >
+                    <option value="" disabled>Selecione uma data</option>
+                    {paciente && diasDoMes.diaMes && diasDoMes.diaMes.map((data, index) => (
+                      <option key={index} value={data}>
+                        {data}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <InputField
+                  type="text"
+                  id="horario"
+                  name="horario"
+                  labelTitle="Horário"
+                  placeholder="Horário"
                   required
-                  className="select-field w-full"
-                  value={diaSemana}
-                  onChange={handleDiaSemanaChange}
-                >
-                  <option value="" disabled>Selecione um dia da semana</option>
-                  {Array.from({ length: 7 }, (_, i) => (
-                    <option key={i} value={i}>
-                      {getNomeDiaSemana(i)}
-                    </option>
-                  ))}
-                </select>
+                  value={paciente ? paciente.horario : ''}
+                  readOnly={paciente ? false : true}
+                  className={"w-full"}
+                  width={"w-[50%]"}
+                />
               </div>
-              <div className="select-container w-full">
-                <label htmlFor="data" className="input-label">Nova Data:</label>
-                <select
-                  id="data"
-                  name="data"
-                  required
-                  className="select-field w-full"
-                  value={paciente?.data || ''}
-                  onChange={(e) => setPaciente({
-                    ...paciente,
-                    data: e.target.value
-                  })}
-                >
-                  <option value="" disabled>Selecione uma data</option>
-                  {paciente && diasDoMes.diaMes && diasDoMes.diaMes.map((data, index) => (
-                    <option key={index} value={data}>
-                      {data}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <InputField
-                type="text"
-                id="horario"
-                name="horario"
-                labelTitle="Horário"
-                placeholder="Horário"
-                required
-                value={paciente ? paciente.horario : ''}
-                readOnly={paciente ? false : true}
-                className={"w-full"}
-                width={"w-[50%]"}
-              />
             </div>
-          </div>
-
+          </section>
           <div className='flex gap-2'>
             <button type='submit' className='btn_primario rounded-full flex gap-2'>
               <FaRegSave className='' size={20} />

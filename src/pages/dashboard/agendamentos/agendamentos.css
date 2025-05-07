@@ -3,19 +3,21 @@
 
 
 .btn_agendamento{
-    background-color: var(--BlueFy);
-    color: var(--WhiteFy);
+    background-color: var(--WhiteFy);
+    color: var(--DarkBlueFy);
     padding: 0em 1em;
     font-size: medium;
     cursor: pointer;
     border-radius: 12em;
     border: var(--WhiteFy) 2px solid;
+    transition: ease-in-out 0.3s;
 }
 
 .btn_agendamento:hover{
-    background-color: var(--WhiteFy);
-    color: var(--DarkBlueFy);
-    transition: 0.3s;
+    background-color: var(--DarkBlueFy);
+    color: var(--WhiteFy);
+
+    border: var(--DarkBlueFy) 2px solid;
 }
 
 
