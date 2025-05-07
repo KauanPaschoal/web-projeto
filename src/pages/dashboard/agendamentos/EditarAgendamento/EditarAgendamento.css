@@ -16,16 +16,19 @@
 
 .paciente-info-editar{
     display: flex;
-    flex-direction: row-reverse;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
-    gap: 1em;
-    width: 100%;
-    height: 100%;
+    align-items: start;
+    flex-wrap: wrap;
+    min-width: 40%;
+    gap: 2em;
+    border-radius: 2em;
+    padding: 2em;
+    background-color: var(--WhiteFy);
     p{
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        gap:1em;
         align-items: center;
     }
 
@@ -39,12 +42,14 @@
 
 .pendente-container{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    gap: 1em;
 
     .checkbox-container{
+        gap: 0.5em;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -55,21 +60,31 @@
 
 .container-inputs-editar{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1em;
 }
 
+
 .container-sessao-editar{
-    height: 30%;
+    height: fit-content;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
     background-color: var(--WhiteFy);
     border-radius: 2em;
-    padding: 1em;
-    width: 80%;
+    padding: 3em;
+    gap: 1em;
+}
+
+.container-editar-agendamento{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
     gap: 1em;
 }
