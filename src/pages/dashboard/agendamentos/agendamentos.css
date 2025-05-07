@@ -9,6 +9,7 @@
     font-size: medium;
     cursor: pointer;
     border-radius: 12em;
+    border: var(--WhiteFy) 2px solid;
 }
 
 .btn_agendamento:hover{

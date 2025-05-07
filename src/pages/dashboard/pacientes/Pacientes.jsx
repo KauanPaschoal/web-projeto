@@ -5,14 +5,75 @@ import { FaPen, FaPlus, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import MainComponent from '../components/MainComponent/MainComponent';
 import { getPacientes } from '../../../provider/api/pacientes/fetchs-pacientes';
+import CardPaciente from './components/CardPaciente/CardPaciente';
 
 
 
 const Pacientes = () => {
-  const [pacientes, setPacientes] = React.useState([]);
-  const [pacientesLista, setPacientesLista] = React.useState([]);
+  const [pacientes, setPacientes] = React.useState([
+    {
+      id: 1,
+      nome: "João Silva",
+      telefone: "(11) 98765-4321",
+      email: "joao.silva@example.com",
+      status: "ATIVO",
+    },
+    {
+      id: 2,
+      nome: "Maria Oliveira",
+      telefone: "(21) 91234-5678",
+      email: "maria.oliveira@example.com",
+      status: "ATIVO",
+    },
+    {
+      id: 1,
+      nome: "João Silva",
+      telefone: "(11) 98765-4321",
+      email: "joao.silva@example.com",
+      status: "ATIVO",
+    },
+    {
+      id: 2,
+      nome: "Maria Oliveira",
+      telefone: "(21) 91234-5678",
+      email: "maria.oliveira@example.com",
+      status: "ATIVO",
+    },
+    {
+      id: 1,
+      nome: "João Silva",
+      telefone: "(11) 98765-4321",
+      email: "joao.silva@example.com",
+      status: "ATIVO",
+    },
+    {
+      id: 2,
+      nome: "Maria Oliveira",
+      telefone: "(21) 91234-5678",
+      email: "maria.oliveira@example.com",
+      status: "ATIVO",
+    },
+    {
+      id: 1,
+      nome: "João Silva",
+      telefone: "(11) 98765-4321",
+      email: "joao.silva@example.com",
+      status: "ATIVO",
+    },
+    {
+      id: 2,
+      nome: "Maria Oliveira",
+      telefone: "(21) 91234-5678",
+      email: "maria.oliveira@example.com",
+      status: "ATIVO",
+    },
+  ]);
+
+  const [pacientesLista, setPacientesLista] = React.useState(pacientes);
   const [pesquisar, setPesquisar] = React.useState('');
   const navigate = useNavigate();
+
+  
 
   React.useEffect(() => {
     const fetchPacientes = async () => {
@@ -89,31 +150,12 @@ const Pacientes = () => {
         >
           <div className='pacientes-container'>
             {pacientesLista.map((paciente) => (
-              <div key={paciente.id} className='paciente-card'>
-                <div className='flex gap-2'>
-                  <h3>
-                    <b>Nome: </b>
-                    {paciente.nome}
-                  </h3>
-                  <p>
-                    <b>Telefone:</b> {paciente.telefone}
-                  </p>
-                </div>
-                <div className='flex gap-2'>
-                  <button className='btn_secundario flex rounded-full'
-                    onClick={() => redirectToEditarPaciente(paciente.id)}
-                  >
-                    <FaPen />
-                    Editar
-                  </button>
-                  <button className='btn_primario flex rounded-full'
-                    onClick={() => redirectToCadastrarAgendamento(paciente.id)}
-                  >
-                    <FaPlus className='icon' />
-                    Agendar
-                  </button>
-                </div>
-              </div>
+              <CardPaciente
+              key={paciente.id}
+              paciente={paciente}
+              onEditar={redirectToEditarPaciente}
+              onAgendar={redirectToCadastrarAgendamento}
+            />
             ))}
           </div>
         </MainComponent>
