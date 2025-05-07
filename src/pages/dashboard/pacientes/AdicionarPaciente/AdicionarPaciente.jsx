@@ -89,6 +89,7 @@ const AdicionarPaciente = () => {
                                 <InputField
                                     labelTitle={'Nome'}
                                     value={nome}
+                                    placeholder={'Nome do paciente'}
                                     onChange={(e) => setNome(e.target.value)}
                                     required
                                 />
@@ -96,6 +97,7 @@ const AdicionarPaciente = () => {
                                     labelTitle={'E-mail'}
                                     type={'email'}
                                     value={email}
+                                    placeholder={'E-mail do paciente'}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                 />

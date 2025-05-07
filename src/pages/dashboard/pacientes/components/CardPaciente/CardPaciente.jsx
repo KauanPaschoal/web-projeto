@@ -7,6 +7,7 @@ const CardPaciente = ({ paciente, onEditar, onAgendar }) => {
         <div className="paciente-card">
             
             <div className="flex gap-2">
+                <img src={paciente?.img} alt="" />
                 <h3>
                     <b>Nome: </b>
                     {paciente.nome}

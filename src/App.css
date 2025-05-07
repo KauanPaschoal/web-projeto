@@ -32,7 +32,8 @@
 ::-webkit-scrollbar-thumb {
   background: var(--LightBlueFy); /* Cor do thumb */
   border-radius: 10px; /* Bordas arredondadas */
-  border: 2px solid var(--WhiteFy); /* Espaço entre o thumb e o track */
+  border: 2px solid var(--LightGrayFy); /* Espaço entre o thumb e o track */
+  padding: 1px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

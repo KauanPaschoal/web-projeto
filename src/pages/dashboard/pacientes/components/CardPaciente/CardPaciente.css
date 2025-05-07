@@ -11,7 +11,11 @@
     background-color: var(--WhiteFy);
     border-radius: 1em;
     gap: 0.5em;
-    border: var(--LightGrayFy) 2px solid;
+    border: var(--LightGrayFy) 1px solid;
+
+    img{
+        border-radius: 1em;
+    }
 
     div{
         display: flex;

@@ -17,6 +17,7 @@ const Pacientes = () => {
       telefone: "(11) 98765-4321",
       email: "joao.silva@example.com",
       status: "ATIVO",
+      img: "https://placehold.co/100",
     },
     {
       id: 2,
@@ -24,6 +25,7 @@ const Pacientes = () => {
       telefone: "(21) 91234-5678",
       email: "maria.oliveira@example.com",
       status: "ATIVO",
+      img: "https://placehold.co/100",
     },
     {
       id: 1,
@@ -31,6 +33,7 @@ const Pacientes = () => {
       telefone: "(11) 98765-4321",
       email: "joao.silva@example.com",
       status: "ATIVO",
+      img: "https://placehold.co/100",
     },
     {
       id: 2,
@@ -38,6 +41,7 @@ const Pacientes = () => {
       telefone: "(21) 91234-5678",
       email: "maria.oliveira@example.com",
       status: "ATIVO",
+      img: "https://placehold.co/100",
     },
     {
       id: 1,
@@ -45,6 +49,7 @@ const Pacientes = () => {
       telefone: "(11) 98765-4321",
       email: "joao.silva@example.com",
       status: "ATIVO",
+      img: "https://placehold.co/100",
     },
     {
       id: 2,
@@ -52,6 +57,7 @@ const Pacientes = () => {
       telefone: "(21) 91234-5678",
       email: "maria.oliveira@example.com",
       status: "ATIVO",
+      img: "https://placehold.co/100",
     },
     {
       id: 1,
@@ -59,6 +65,7 @@ const Pacientes = () => {
       telefone: "(11) 98765-4321",
       email: "joao.silva@example.com",
       status: "ATIVO",
+      img: "https://placehold.co/100",
     },
     {
       id: 2,
@@ -66,6 +73,7 @@ const Pacientes = () => {
       telefone: "(21) 91234-5678",
       email: "maria.oliveira@example.com",
       status: "ATIVO",
+      img: "https://placehold.co/100",
     },
   ]);
 
@@ -155,6 +163,7 @@ const Pacientes = () => {
               paciente={paciente}
               onEditar={redirectToEditarPaciente}
               onAgendar={redirectToCadastrarAgendamento}
+
             />
             ))}
           </div>
