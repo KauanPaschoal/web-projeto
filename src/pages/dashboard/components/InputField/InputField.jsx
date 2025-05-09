@@ -1,7 +1,7 @@
 import React from "react";
 import "./inputField.css";
 
-const InputField = ({ labelTitle, type = "text", placeholder, id, name, onChange, onBlur, list, required, className, value, icon, width, disabled}) => {
+const InputField = ({ labelTitle, type = "text", placeholder, id, name, onChange, onBlur, list, required, className, value, icon, width, disabled, maxLength}) => {
   return (
     <div className={`inputContainer ${width || "w-[45%]"}`}>
       <label>{labelTitle}:</label>
@@ -19,6 +19,7 @@ const InputField = ({ labelTitle, type = "text", placeholder, id, name, onChange
           value={value}
           className={`inputField ${className}`}
           disabled={disabled}
+          maxLength={maxLength}
         />
       </div>
     </div>
