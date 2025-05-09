@@ -70,6 +70,20 @@ export const putPaciente = async (id, paciente) => {
   }
 };
 
+export const getEnderecoPorCep = async (cep) => {
+  try {
+    const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+
+    if (response.data.erro) {
+      throw new Error("CEP não encontrado.");
+    }
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar o endereço:", error.message);
+    throw error;
+  }
+};
+
 export const putDesativarPaciente = async (id, paciente) => {
   try {
     const response = await axios.put(`/pacientes/${id}/desativar`, paciente, {
