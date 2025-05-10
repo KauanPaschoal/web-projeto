@@ -158,33 +158,41 @@ const Administracao = () => {
                   />
                 </h2>
                 <div className="card-inputs">
-                  <InputField
-                    labelTitle="Nome"
-                    value={nome}
-                    disabled={!isEditingGeneral}
-                    onChange={(e) => setNome(e.target.value)}
-                  />
-                  <InputField
-                    labelTitle="E-mail"
-                    value={email}
-                    type="email"
-                    disabled={!isEditingGeneral}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <InputField
-                    labelTitle="Telefone"
-                    value={telefone}
-                    disabled={!isEditingGeneral}
-                    onChange={(e) =>
-                      setTelefone(formatTelefone(removeMask(e.target.value)))
-                    }
-                  />
-                  <InputField
-                    labelTitle="CRP"
-                    value={crp}
-                    disabled={true}
-                    width={"w-full"}
-                  />
+                  <div className="flex gap-2 w-full">
+                    <InputField
+                      labelTitle="Nome"
+                      value={nome}
+                      width={"w-full"}
+                      disabled={!isEditingGeneral}
+                      onChange={(e) => setNome(e.target.value)}
+                    />
+                    <InputField
+                      labelTitle="E-mail"
+                      value={email}
+                      width={"w-full"}
+                      type="email"
+                      disabled={!isEditingGeneral}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex gap-2 w-full">
+                    <InputField
+                      labelTitle="Telefone"
+                      value={telefone}
+                      width={"w-full"}
+                      disabled={!isEditingGeneral}
+                      onChange={(e) =>
+                        setTelefone(formatTelefone(removeMask(e.target.value)))
+                      }
+                    />
+                    <InputField
+                      labelTitle="CRP"
+                      value={crp}
+                      disabled={true}
+                      width={"w-full"}
+                    />
+                  </div>
+
                 </div>
                 <div className="inputs-button">
                   <SaveButton
@@ -217,20 +225,24 @@ const Administracao = () => {
                     onChange={(e) => setSenha(e.target.value)}
                     type="password"
                   />
-                  <InputField
-                    labelTitle="Nova senha"
-                    value={novaSenha}
-                    disabled={!isEditingPassword}
-                    onChange={(e) => setNovaSenha(e.target.value)}
-                    type="password"
-                  />
-                  <InputField
-                    labelTitle="Confirmar senha"
-                    value={confirmarSenha}
-                    disabled={!isEditingPassword}
-                    onChange={(e) => setConfirmarSenha(e.target.value)}
-                    type="password"
-                  />
+                  <div className="flex gap-2 w-full">
+                    <InputField
+                      labelTitle="Nova senha"
+                      value={novaSenha}
+                      width={"w-full"}
+                      disabled={!isEditingPassword}
+                      onChange={(e) => setNovaSenha(e.target.value)}
+                      type="password"
+                    />
+                    <InputField
+                      labelTitle="Confirmar senha"
+                      value={confirmarSenha}
+                      width={"w-full"}
+                      disabled={!isEditingPassword}
+                      onChange={(e) => setConfirmarSenha(e.target.value)}
+                      type="password"
+                    />
+                  </div>
                 </div>
                 <div className="inputs-button">
                   <SaveButton

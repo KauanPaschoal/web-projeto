@@ -338,6 +338,7 @@ const EditarPaciente = () => {
                   <InputField
                     disabled={!isEditingGeneral}
                     labelTitle={"Logradouro"}
+                    width={"w-full"}
                     placeholder={'Logradouro do paciente'}
                     value={paciente.fkEndereco?.logradouro || ""}
                     onChange={(e) =>
