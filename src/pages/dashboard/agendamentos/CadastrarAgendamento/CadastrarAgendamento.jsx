@@ -366,7 +366,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                     onBlur={handleBlur}
                                     required
                                     className="styled-input"
-                                    width={"w-[40%]"}
+                                    width={"w-[100%]"}
                                     icon={<FaUser />}
                                 />
                                 {showSuggestions && pacientes.length > 0 && (

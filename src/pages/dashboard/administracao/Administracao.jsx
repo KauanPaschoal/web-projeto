@@ -158,7 +158,7 @@ const Administracao = () => {
                   />
                 </h2>
                 <div className="card-inputs">
-                  <div className="flex gap-2 w-full">
+                  <div className="flex gap-2 w-full justify-center">
                     <InputField
                       labelTitle="Nome"
                       value={nome}
@@ -175,7 +175,7 @@ const Administracao = () => {
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
-                  <div className="flex gap-2 w-full">
+                  <div className="flex gap-2 w-full justify-center">
                     <InputField
                       labelTitle="Telefone"
                       value={telefone}
@@ -206,7 +206,7 @@ const Administracao = () => {
 
               {/* Card: Alterar Senha */}
               <form
-                className="editar-conta"
+                className="editar-conta "
                 onSubmit={(e) => e.preventDefault()}
               >
                 <h2 className="flex items-center justify-between">
@@ -217,15 +217,18 @@ const Administracao = () => {
                   />
                 </h2>
                 <div className="card-inputs">
-                  <InputField
-                    labelTitle="Senha Atual"
-                    value={senha}
-                    disabled={!isEditingPassword}
-                    width={"w-full"}
-                    onChange={(e) => setSenha(e.target.value)}
-                    type="password"
-                  />
-                  <div className="flex gap-2 w-full">
+                  <div className="flex flex-col gap-2 w-full items-center">
+                    <InputField
+                      labelTitle="Senha Atual"
+                      value={senha}
+                      disabled={!isEditingPassword}
+                      width={"w-full"}
+                      onChange={(e) => setSenha(e.target.value)}
+                      type="password"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2 w-full items-center">
                     <InputField
                       labelTitle="Nova senha"
                       value={novaSenha}
