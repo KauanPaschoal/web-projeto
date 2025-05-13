@@ -156,7 +156,7 @@ const Pacientes = () => {
           </>
         }
       >
-        <div className='conteudo'>
+        
           <div className='pacientes-background'>
             <div className='pacientes-container'>
               {pacientesLista.map((paciente) => (
@@ -169,7 +169,7 @@ const Pacientes = () => {
               ))}
             </div>
           </div>
-        </div>
+        
       </MainComponent>
     </div>
   );
