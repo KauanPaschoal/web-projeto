@@ -3,11 +3,11 @@ import { FaPen, FaPlus } from 'react-icons/fa';
 import './CardPaciente.css'; // Opcional: Adicione estilos específicos para o card
 
 const CardPaciente = ({ paciente, onEditar, onAgendar }) => {
+    const imgSrc = paciente?.img ? paciente.img : "https://placehold.co/100";
     return (
         <div className="paciente-card">
-            
             <div className="flex gap-2">
-                <img src={paciente?.img} alt="" />
+                <img src={imgSrc} alt="" />
                 <h3>
                     <b>Nome: </b>
                     {paciente.nome}

@@ -11,77 +11,77 @@ import CardPaciente from './components/CardPaciente/CardPaciente';
 
 const Pacientes = () => {
   const [pacientes, setPacientes] = React.useState([
-    {
-      id: 1,
-      nome: "João Silva",
-      telefone: "(11) 98765-4321",
-      email: "joao.silva@example.com",
-      status: "ATIVO",
-      img: "https://placehold.co/100",
-    },
-    {
-      id: 2,
-      nome: "Maria Oliveira",
-      telefone: "(21) 91234-5678",
-      email: "maria.oliveira@example.com",
-      status: "ATIVO",
-      img: "https://placehold.co/100",
-    },
-    {
-      id: 1,
-      nome: "João Silva",
-      telefone: "(11) 98765-4321",
-      email: "joao.silva@example.com",
-      status: "ATIVO",
-      img: "https://placehold.co/100",
-    },
-    {
-      id: 2,
-      nome: "Maria Oliveira",
-      telefone: "(21) 91234-5678",
-      email: "maria.oliveira@example.com",
-      status: "ATIVO",
-      img: "https://placehold.co/100",
-    },
-    {
-      id: 1,
-      nome: "João Silva",
-      telefone: "(11) 98765-4321",
-      email: "joao.silva@example.com",
-      status: "ATIVO",
-      img: "https://placehold.co/100",
-    },
-    {
-      id: 2,
-      nome: "Maria Oliveira",
-      telefone: "(21) 91234-5678",
-      email: "maria.oliveira@example.com",
-      status: "ATIVO",
-      img: "https://placehold.co/100",
-    },
-    {
-      id: 1,
-      nome: "João Silva",
-      telefone: "(11) 98765-4321",
-      email: "joao.silva@example.com",
-      status: "ATIVO",
-      img: "https://placehold.co/100",
-    },
-    {
-      id: 2,
-      nome: "Maria Oliveira",
-      telefone: "(21) 91234-5678",
-      email: "maria.oliveira@example.com",
-      status: "ATIVO",
-      img: "https://placehold.co/100",
-    },
+    //   {
+    //     id: 1,
+    //     nome: "João Silva",
+    //     telefone: "(11) 98765-4321",
+    //     email: "joao.silva@example.com",
+    //     status: "ATIVO",
+    //     img: "https://placehold.co/100",
+    //   },
+    //   {
+    //     id: 2,
+    //     nome: "Maria Oliveira",
+    //     telefone: "(21) 91234-5678",
+    //     email: "maria.oliveira@example.com",
+    //     status: "ATIVO",
+    //     img: "https://placehold.co/100",
+    //   },
+    //   {
+    //     id: 1,
+    //     nome: "João Silva",
+    //     telefone: "(11) 98765-4321",
+    //     email: "joao.silva@example.com",
+    //     status: "ATIVO",
+    //     img: "https://placehold.co/100",
+    //   },
+    //   {
+    //     id: 2,
+    //     nome: "Maria Oliveira",
+    //     telefone: "(21) 91234-5678",
+    //     email: "maria.oliveira@example.com",
+    //     status: "ATIVO",
+    //     img: "https://placehold.co/100",
+    //   },
+    //   {
+    //     id: 1,
+    //     nome: "João Silva",
+    //     telefone: "(11) 98765-4321",
+    //     email: "joao.silva@example.com",
+    //     status: "ATIVO",
+    //     img: "https://placehold.co/100",
+    //   },
+    //   {
+    //     id: 2,
+    //     nome: "Maria Oliveira",
+    //     telefone: "(21) 91234-5678",
+    //     email: "maria.oliveira@example.com",
+    //     status: "ATIVO",
+    //     img: "https://placehold.co/100",
+    //   },
+    //   {
+    //     id: 1,
+    //     nome: "João Silva",
+    //     telefone: "(11) 98765-4321",
+    //     email: "joao.silva@example.com",
+    //     status: "ATIVO",
+    //     img: "https://placehold.co/100",
+    //   },
+    //   {
+    //     id: 2,
+    //     nome: "Maria Oliveira",
+    //     telefone: "(21) 91234-5678",
+    //     email: "maria.oliveira@example.com",
+    //     status: "ATIVO",
+    //     img: "https://placehold.co/100",
+    //   },
   ]);
 
   const [pacientesLista, setPacientesLista] = React.useState(pacientes);
   const [pesquisar, setPesquisar] = React.useState('');
   const navigate = useNavigate();
 
-  
+
 
   React.useEffect(() => {
     const fetchPacientes = async () => {
@@ -117,59 +117,62 @@ const Pacientes = () => {
     setPacientesLista(filteredPacientes);
   }
 
-    const redirectToEditarPaciente = (id) => {
-      navigate(`/dashboard/pacientes/editar/${id}`); 
-    };
-
-    const redirectToCadastrarAgendamento = (id) => {
-      navigate(`/dashboard/agendamentos/cadastrar/${id}`)
-    };
-
-    return (
-      <div className='div-pacientes flex'>
-        <MenuLateralComponent></MenuLateralComponent>
-        <MainComponent
-          title="Meus Pacientes"
-          headerContent={
-            <>
-              <div className="search-container flex">
-                <FaSearch className="search-icon" />
-                <input
-                  type="text"
-                  placeholder="Pesquisar pacientes..."
-                  className="input-pesquisa"
-                  value={pesquisar}
-                  onChange={handleSearch}
-                />
-              </div>
-
-              <button
-                className='btn_agendamento flex rounded-full'
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate(`/dashboard/pacientes/adicionar`);
-                }}
-              >
-                <FaPlus className='icon' />
-                Adicionar Paciente
-              </button>
-            </>
-          }
-        >
-          <div className='pacientes-container'>
-            {pacientesLista.map((paciente) => (
-              <CardPaciente
-              key={paciente.id}
-              paciente={paciente}
-              onEditar={redirectToEditarPaciente}
-              onAgendar={redirectToCadastrarAgendamento}
-
-            />
-            ))}
-          </div>
-        </MainComponent>
-      </div>
-    );
+  const redirectToEditarPaciente = (id) => {
+    navigate(`/dashboard/pacientes/editar/${id}`);
   };
 
-  export default Pacientes;
+  const redirectToCadastrarAgendamento = (id) => {
+    navigate(`/dashboard/agendamentos/cadastrar/${id}`)
+  };
+
+  return (
+    <div className='div-pacientes flex'>
+      <MenuLateralComponent></MenuLateralComponent>
+      <MainComponent
+        title="Meus Pacientes"
+        headerContent={
+          <>
+            <div className="search-container flex">
+              <FaSearch className="search-icon" />
+              <input
+                type="text"
+                placeholder="Pesquisar pacientes..."
+                className="input-pesquisa"
+                value={pesquisar}
+                onChange={handleSearch}
+              />
+            </div>
+
+            <button
+              className='btn_agendamento flex rounded-full'
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(`/dashboard/pacientes/adicionar`);
+              }}
+            >
+              <FaPlus className='icon' />
+              Adicionar Paciente
+            </button>
+          </>
+        }
+      >
+        <div className='conteudo'>
+          <div className='pacientes-background'>
+            <div className='pacientes-container'>
+              {pacientesLista.map((paciente) => (
+                <CardPaciente
+                  key={paciente.id}
+                  paciente={paciente}
+                  onEditar={redirectToEditarPaciente}
+                  onAgendar={redirectToCadastrarAgendamento}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </MainComponent>
+    </div>
+  );
+};
+
+export default Pacientes;
