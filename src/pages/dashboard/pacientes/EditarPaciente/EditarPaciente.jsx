@@ -21,6 +21,7 @@ import {
 } from "../../../../utils/alert";
 import { getPreferenciasPorId, putPreferencia } from "../../../../provider/api/preferencias/fetchs-preferencias";
 import { getEnderecoPorCep } from "../../../../provider/api/pacientes/fetchs-pacientes";
+import Loading from "../../components/Loading/Loading";
 
 const EditarPaciente = () => {
   const { id } = useParams();
@@ -34,9 +35,11 @@ const EditarPaciente = () => {
   const [isPlanoAtivo, setIsPlanoAtivo] = useState(true); // Controle do checkbox "Plano Mensal"
   const [preferencias, setPreferencias] = useState([]); // Estado para armazenar as preferências do paciente
   const [erro, setErro] = useState(''); // Estado para armazenar erros
+  const [loading, setLoading] = useState(true); // Estado para controle de loading
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const [pacienteResponse, preferenciasResponse] = await Promise.all([
           fetch(`/pacientes/${id}`).then((res) => res.json()),
@@ -55,6 +58,7 @@ const EditarPaciente = () => {
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
+      setTimeout(() => setLoading(false), 500);
     };
 
     fetchData();
@@ -188,7 +192,7 @@ const EditarPaciente = () => {
   return (
     <div className="div-administracao flex">
       <MenuLateralComponent></MenuLateralComponent>
-
+      {loading && <Loading/>}
       <MainComponent
         title="Editar Paciente"
         headerContent={

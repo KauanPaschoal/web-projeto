@@ -6,84 +6,22 @@ import { useNavigate } from 'react-router-dom';
 import MainComponent from '../components/MainComponent/MainComponent';
 import { getPacientes } from '../../../provider/api/pacientes/fetchs-pacientes';
 import CardPaciente from './components/CardPaciente/CardPaciente';
+import Loading from '../components/Loading/Loading';
 
 
 
 const Pacientes = () => {
-  const [pacientes, setPacientes] = React.useState([
-    //   {
-    //     id: 1,
-    //     nome: "João Silva",
-    //     telefone: "(11) 98765-4321",
-    //     email: "joao.silva@example.com",
-    //     status: "ATIVO",
-    //     img: "https://placehold.co/100",
-    //   },
-    //   {
-    //     id: 2,
-    //     nome: "Maria Oliveira",
-    //     telefone: "(21) 91234-5678",
-    //     email: "maria.oliveira@example.com",
-    //     status: "ATIVO",
-    //     img: "https://placehold.co/100",
-    //   },
-    //   {
-    //     id: 1,
-    //     nome: "João Silva",
-    //     telefone: "(11) 98765-4321",
-    //     email: "joao.silva@example.com",
-    //     status: "ATIVO",
-    //     img: "https://placehold.co/100",
-    //   },
-    //   {
-    //     id: 2,
-    //     nome: "Maria Oliveira",
-    //     telefone: "(21) 91234-5678",
-    //     email: "maria.oliveira@example.com",
-    //     status: "ATIVO",
-    //     img: "https://placehold.co/100",
-    //   },
-    //   {
-    //     id: 1,
-    //     nome: "João Silva",
-    //     telefone: "(11) 98765-4321",
-    //     email: "joao.silva@example.com",
-    //     status: "ATIVO",
-    //     img: "https://placehold.co/100",
-    //   },
-    //   {
-    //     id: 2,
-    //     nome: "Maria Oliveira",
-    //     telefone: "(21) 91234-5678",
-    //     email: "maria.oliveira@example.com",
-    //     status: "ATIVO",
-    //     img: "https://placehold.co/100",
-    //   },
-    //   {
-    //     id: 1,
-    //     nome: "João Silva",
-    //     telefone: "(11) 98765-4321",
-    //     email: "joao.silva@example.com",
-    //     status: "ATIVO",
-    //     img: "https://placehold.co/100",
-    //   },
-    //   {
-    //     id: 2,
-    //     nome: "Maria Oliveira",
-    //     telefone: "(21) 91234-5678",
-    //     email: "maria.oliveira@example.com",
-    //     status: "ATIVO",
-    //     img: "https://placehold.co/100",
-    //   },
-  ]);
+  const [pacientes, setPacientes] = React.useState([]);
 
   const [pacientesLista, setPacientesLista] = React.useState(pacientes);
   const [pesquisar, setPesquisar] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
 
 
 
   React.useEffect(() => {
+    setLoading(true);
     const fetchPacientes = async () => {
       try {
         const pacientes = await getPacientes();
@@ -97,6 +35,7 @@ const Pacientes = () => {
       } catch (error) {
         console.error("Erro ao encontrar pacientes:", error);
       }
+      setTimeout(() => setLoading(false), 500);
     };
 
     fetchPacientes();
@@ -126,8 +65,10 @@ const Pacientes = () => {
   };
 
   return (
+    
     <div className='div-pacientes flex'>
       <MenuLateralComponent></MenuLateralComponent>
+      {loading && <Loading />}
       <MainComponent
         title="Meus Pacientes"
         headerContent={
