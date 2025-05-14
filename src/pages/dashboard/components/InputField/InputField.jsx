@@ -17,7 +17,7 @@ const InputField = ({ labelTitle, type = "text", placeholder, id, name, onChange
           list={list}
           required={required}
           value={value}
-          className={`inputField ${className}`}
+          className={`inputField ${width || "w-[100%]"}`}
           disabled={disabled}
           maxLength={maxLength}
         />

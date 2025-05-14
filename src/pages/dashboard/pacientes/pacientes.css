@@ -1,30 +1,30 @@
 @import 'tailwindcss';
 
-.pacientes-container{
+.pacientes-background{
     display: flex;
     flex-direction: column;
-    justify-content: start;
-    align-items: center;
-    padding: 1em 2em;
+    gap: 1em;
     width: 100%;
-    background-color: var(--WhiteFy);
+    height: 100%;
+    overflow-y: hidden;
+    border-radius: 1em;
+    padding: 0.5em 1em;
+    border: var(--BlackFy) 2px solid;
+    background-color: var(--LightGrayFy);
+}
+
+.pacientes-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: start;
+    padding: 1em 1em;
+    width: 100%;
+    height: 100%;
     overflow: auto;
     gap: 1em;
 }	
-
-.paciente-card{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1em;
-    width: 100%;
-    min-height: 10vh;
-    background-color: var(--WhiteFy);
-    border-radius: 1em;
-    gap: 0.5em;
-    border: var(--LightGrayFy) 2px solid;
-}
 
 .input-pesquisa{
     display: flex;
@@ -47,4 +47,19 @@
     width: 30%;
     border-radius: 1em;
     gap: 0.5em;
+}
+
+.btn_pacientes{
+    background-color: var(--BlueFy);
+    color: var(--WhiteFy);
+    padding: 0em 1em;
+    font-size: medium;
+    cursor: pointer;
+    border-radius: 12em;
+}
+
+.btn_pacientes:hover{
+    background-color: var(--WhiteFy);
+    color: var(--DarkBlueFy);
+    transition: 0.3s;
 }

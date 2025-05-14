@@ -5,6 +5,7 @@ import MainComponent from '../components/MainComponent/MainComponent';
 import { FaPlus } from 'react-icons/fa';
 import CalendarCard from './components/CalendarCard/CalendarCard';
 import { getAgendamentos, getAgendamentosPorPaciente } from '../../../provider/api/agendamentos/fetchs-agendamentos';
+import Loading from '../components/Loading/Loading';
 
 const Agendamentos = () => {
   const [agendamentos, setAgendamentos] = useState([]);
@@ -92,14 +93,13 @@ const Agendamentos = () => {
             const response = await getAgendamentos();
 
             if (Array.isArray(response)) {
-                // Transforma os dados para garantir que `data` e `hora` estejam no formato correto
                 const agendamentosTransformados = response.map((agendamento) => ({
                     ...agendamento,
                     timeSlot: agendamento.hora
-                        ? agendamento.hora.substring(0, 5) // Extrai HH:MM de `hora`
+                        ? agendamento.hora.substring(0, 5) 
                         : '00:00',
-                    patientName: agendamento.fkPaciente?.nome || 'Desconhecido', // Nome do paciente
-                    status: agendamento.statusSessao || 'Indefinido', // Status da sessão
+                    patientName: agendamento.fkPaciente?.nome || 'Desconhecido', 
+                    status: agendamento.statusSessao || 'Indefinido', 
                 }));
 
                 setAgendamentos(agendamentosTransformados);
@@ -110,46 +110,13 @@ const Agendamentos = () => {
         } catch (error) {
             console.error("Erro ao encontrar agendamentos:", error);
         } finally {
-            setLoading(false);
+            setTimeout(() => setLoading(false), 500);
         }
     };
 
     fetchAgendamentos();
 }, []);
     
-
-
-  // useEffect(() => {
-  //   const fetchAgendamentos = async () => {
-  //     try {
-  //       setLoading(true);
-  //       // Simulação de um fetch para a API
-  //       const response = await new Promise((resolve) =>
-  //         setTimeout(() => {
-  //           resolve([
-  //             { date: '23/04/2025', timeSlot: '08:00 - 09:00', status: 'Confirmado', patientName: 'Lucas Pereira' },
-  //             { date: '24/04/2025', timeSlot: '09:00 - 10:00', status: 'Pendente', patientName: 'Fernanda Lima' },
-  //             { date: '21/04/2025', timeSlot: '10:00 - 11:00', status: 'Cancelado', patientName: 'Rafael Almeida' },
-  //             { date: '22/04/2025', timeSlot: '11:00 - 12:00', status: 'Confirmado', patientName: 'Beatriz Santos' },
-  //             { date: '23/04/2025', timeSlot: '13:00 - 14:00', status: 'Confirmado', patientName: 'Gabriel Costa' },
-  //             { date: '24/04/2025', timeSlot: '14:00 - 15:00', status: 'Cancelado', patientName: 'Juliana Rocha' },
-  //             { date: '25/04/2025', timeSlot: '15:00 - 16:00', status: 'Confirmado', patientName: 'Thiago Martins' },
-  //             { date: '23/04/2025', timeSlot: '16:00 - 17:00', status: 'Pendente', patientName: 'Mariana Oliveira' },
-  //           ]);
-  //         }, 1000)
-  //       );
-  //       setAgendamentos(response);
-  //     } catch (error) {
-  //       console.error('Erro ao buscar agendamentos:', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchAgendamentos();
-  // }, []);
-
-
   const capitalizeFirstLetter = (text) => {
     if (!text) return '';
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
@@ -179,7 +146,7 @@ const Agendamentos = () => {
       >
         <section className='calendario-container'>
           {loading ? (
-            <p>Carregando agendamentos...</p>
+            <Loading />
           ) : (
             <>
               <table className='calendario-table flex flex-col w-full'>

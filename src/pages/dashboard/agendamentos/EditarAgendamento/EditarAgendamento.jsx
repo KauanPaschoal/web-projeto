@@ -288,7 +288,7 @@ const EditarAgendamento = () => {
                   value={paciente ? paciente.horario : ''}
                   readOnly={paciente ? false : true}
                   className={"w-full"}
-                  width={"w-[50%]"}
+                  width={"w-[100%]"}
                 />
               </div>
             </div>

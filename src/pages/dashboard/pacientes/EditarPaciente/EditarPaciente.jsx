@@ -24,6 +24,7 @@ import {
   putPreferencia,
 } from "../../../../provider/api/preferencias/fetchs-preferencias";
 import { getEnderecoPorCep } from "../../../../provider/api/pacientes/fetchs-pacientes";
+import Loading from "../../components/Loading/Loading";
 
 const EditarPaciente = () => {
   const { id } = useParams();
@@ -32,14 +33,16 @@ const EditarPaciente = () => {
     diaConsulta: "",
     horaConsulta: "",
   });
-  const [isEditingGeneral, setIsEditingGeneral] = useState(false);
-  const [isAtivo, setIsAtivo] = useState(false);
-  const [isPlanoAtivo, setIsPlanoAtivo] = useState(true);
-  const [preferencias, setPreferencias] = useState([]);
-  const [erro, setErro] = useState("");
+  const [isEditingGeneral, setIsEditingGeneral] = useState(false); // Controle do modo de edição
+  const [isAtivo, setIsAtivo] = useState(false); // Controle do checkbox "Paciente Ativo"
+  const [isPlanoAtivo, setIsPlanoAtivo] = useState(true); // Controle do checkbox "Plano Mensal"
+  const [preferencias, setPreferencias] = useState([]); // Estado para armazenar as preferências do paciente
+  const [erro, setErro] = useState(''); // Estado para armazenar erros
+  const [loading, setLoading] = useState(true); // Estado para controle de loading
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const [pacienteResponse, preferenciasResponse] = await Promise.all([
           fetch(`/pacientes/${id}`).then((res) => res.json()),
@@ -59,6 +62,7 @@ const EditarPaciente = () => {
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
+      setTimeout(() => setLoading(false), 500);
     };
 
     fetchData();
@@ -183,7 +187,7 @@ const EditarPaciente = () => {
   return (
     <div className="div-administracao flex">
       <MenuLateralComponent></MenuLateralComponent>
-
+      {loading && <Loading/>}
       <MainComponent
         title="Editar Paciente"
         headerContent={
@@ -221,6 +225,7 @@ const EditarPaciente = () => {
                   <InputField
                     disabled={!isEditingGeneral}
                     labelTitle={"Nome"}
+                    placeholder={'Nome do paciente'}
                     value={paciente.nome || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -231,12 +236,14 @@ const EditarPaciente = () => {
                   />
                   <InputField
                     disabled={true}
+                    placeholder={'CPF do paciente'}
                     labelTitle={"CPF"}
                     value={paciente.cpf || ""}
                   />
                   <InputField
                     disabled={!isEditingGeneral}
                     type={"tel"}
+                    placeholder={'Telefone do paciente'}
                     labelTitle={"Telefone"}
                     value={paciente.telefone || ""}
                     onChange={(e) =>
@@ -249,6 +256,7 @@ const EditarPaciente = () => {
                   <InputField
                     disabled={!isEditingGeneral}
                     type={"email"}
+                    placeholder={'E-mail do paciente'}
                     labelTitle={"E-mail"}
                     value={paciente.email || ""}
                     onChange={(e) =>
@@ -261,6 +269,7 @@ const EditarPaciente = () => {
                   <InputField
                     disabled={!isEditingGeneral}
                     labelTitle={"Dia de Consultas"}
+                    placeholder={'Dia de preferência para consultas'}
                     value={paciente.diaConsulta || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -272,6 +281,7 @@ const EditarPaciente = () => {
                   <InputField
                     disabled={!isEditingGeneral}
                     labelTitle={"Horário de Consultas"}
+                    placeholder={'Horário de preferência para consultas'}
                     value={paciente.horaConsulta || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -283,6 +293,7 @@ const EditarPaciente = () => {
                   <InputField
                     disabled={!isEditingGeneral}
                     labelTitle={"Contato de Emergência"}
+                    placeholder={'Nome do contato de emergência'}
                     value={paciente.nomeContato || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -295,6 +306,7 @@ const EditarPaciente = () => {
                     disabled={!isEditingGeneral}
                     type={"tel"}
                     labelTitle={"Telefone de Emergência"}
+                    placeholder={'Telefone do contato de emergência'}
                     value={paciente.telefoneContato || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -312,7 +324,8 @@ const EditarPaciente = () => {
                       disabled={!isEditingGeneral}
                       type={"text"}
                       labelTitle={"CEP"}
-                      value={paciente.fkEndereco?.cep || ""}
+                      placeholder={'CEP do paciente'}
+                    value={paciente.fkEndereco?.cep || ""} // Usa o operador ?. para evitar erros
                       maxLength={8}
                       onChange={(e) =>
                         setPaciente((prev) => ({
@@ -331,7 +344,8 @@ const EditarPaciente = () => {
                     disabled={!isEditingGeneral}
                     type={"text"}
                     labelTitle={"Cidade"}
-                    value={paciente.fkEndereco?.cidade || ""}
+                    placeholder={'Cidade do paciente'}
+                    value={paciente.fkEndereco?.cidade || ""} // Usa o operador ?. para evitar erros
                     onChange={(e) =>
                       setPaciente((prev) => ({
                         ...prev,
@@ -346,7 +360,8 @@ const EditarPaciente = () => {
                     disabled={!isEditingGeneral}
                     type={"text"}
                     labelTitle={"Bairro"}
-                    value={paciente.fkEndereco?.bairro || ""}
+                    placeholder={'Bairro do paciente'}
+                    value={paciente.fkEndereco?.bairro || ""} // Usa o operador ?. para evitar erros
                     onChange={(e) =>
                       setPaciente((prev) => ({
                         ...prev,
@@ -361,6 +376,7 @@ const EditarPaciente = () => {
                     disabled={!isEditingGeneral}
                     type={"text"}
                     labelTitle={"Número"}
+                    placeholder={'Número do endereço'}
                     value={paciente.fkEndereco?.numero || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -376,6 +392,8 @@ const EditarPaciente = () => {
                     disabled={!isEditingGeneral}
                     type={"text"}
                     labelTitle={"Logradouro"}
+                    width={"w-full"}
+                    placeholder={'Logradouro do paciente'}
                     value={paciente.fkEndereco?.logradouro || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
