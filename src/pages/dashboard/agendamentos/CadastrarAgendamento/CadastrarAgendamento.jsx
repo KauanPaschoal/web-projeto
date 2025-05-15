@@ -246,10 +246,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                     return;
                 }
 
-                if (!pacienteSelecionado.anotacao) {
-                    errorMessage("Por favor, adicione uma anotação.", "small");
-                    return;
-                }
+
 
                 try {
                     if (statusPlanoMensal) {
@@ -259,25 +256,24 @@ const CadastrarAgendamento = ({ paciente }) => {
                             diaAtual.setDate(diaAtual.getDate() + index * 7); // Adiciona 7 dias para cada semana
 
                             const novoAgendamento = {
-                                fkPaciente: {
-                                    id: pacienteSelecionado.id,
-                                    nome: pacienteSelecionado.nome,
-                                    cpf: pacienteSelecionado.cpf || "000.000.000-00",
-                                    email: pacienteSelecionado.email,
-                                    status: "ATIVO",
-                                    fkPlano: {
-                                        id: pacienteSelecionado.fkPlano?.id || 0,
-                                        categoria: pacienteSelecionado.fkPlano?.categoria || "Básico",
-                                        preco: pacienteSelecionado.fkPlano?.preco || 0,
-                                    },
+                            fkPaciente: {
+                                id: pacienteSelecionado.id,
+                                nome: pacienteSelecionado.nome,
+                                cpf: pacienteSelecionado.cpf || "000.000.000-00",
+                                email: pacienteSelecionado.email,
+                                status: "ATIVO",
+                                fkPlano: {
+                                    id: pacienteSelecionado.fkPlano?.id || 0,
+                                    categoria: pacienteSelecionado.fkPlano?.categoria || "Básico",
+                                    preco: pacienteSelecionado.fkPlano?.preco || 0,
                                 },
-                                data: formatDateToBackend(diaAtual.toLocaleDateString('pt-BR')), // Formata a data para o backend
-                                hora: pacienteSelecionado.horario + ":00", // Converte para o formato HH:mm:ss
-                                tipo: pacienteSelecionado.tipo || "AVULSO",
-                                statusSessao: "PENDENTE",
-                                anotacao: pacienteSelecionado.anotacao,
-                                createdAt: new Date().toISOString(), // Adiciona a data de criação
-                            };
+                            },
+                            data: formatDateToBackend(pacienteSelecionado.selectedDate), // Formata a data para o backend
+                            hora: preferencias.horario + ":00", // Converte para o formato HH:mm:ss
+                            tipo: pacienteSelecionado.tipo || "AVULSO",
+                            statusSessao: "PENDENTE",
+                            anotacao: "teste",
+                        };
 
                             console.log("Agendamento (Plano Mensal):", novoAgendamento);
                             return postAgendamento(novoAgendamento);
@@ -301,11 +297,10 @@ const CadastrarAgendamento = ({ paciente }) => {
                                 },
                             },
                             data: formatDateToBackend(pacienteSelecionado.selectedDate), // Formata a data para o backend
-                            hora: pacienteSelecionado.horario + ":00", // Converte para o formato HH:mm:ss
+                            hora: preferencias.horario + ":00", // Converte para o formato HH:mm:ss
                             tipo: pacienteSelecionado.tipo || "AVULSO",
                             statusSessao: "PENDENTE",
-                            anotacao: pacienteSelecionado.anotacao,
-                            createdAt: new Date().toISOString(), // Adiciona a data de criação
+                            anotacao: "teste",
                         };
 
                         console.log("Agendamento (Data Única):", novoAgendamento);
@@ -453,7 +448,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                                 labelTitle="Horário"
                                                 placeholder="Horário"
                                                 required
-                                                value={pacienteSelecionado?.horario || horario}
+                                                value={preferencias?.horario || horario}
                                                 onChange={(e) =>
                                                     setPacienteSelecionado((prev) => ({
                                                         ...prev,
