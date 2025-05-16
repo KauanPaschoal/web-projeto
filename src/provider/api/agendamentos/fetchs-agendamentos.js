@@ -70,3 +70,22 @@ export const putAgendamento = async (id, agendamento) => {
         throw error;
     }
 }
+
+/**
+ * Busca agendamentos por status
+ * @param {string} status - Ex: "PENDENTE", "CONFIRMADA", "CANCELADA", "AGUARDANDO", "CONCLUIDA"
+ */
+export const getAgendamentosPorStatus = async (status) => {
+    try {
+        const response = await axios.get(`/sessoes/status?status=${status}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log("response: ", response.data)
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao buscar agendamentos por status:', error);
+        throw error;
+    }
+};

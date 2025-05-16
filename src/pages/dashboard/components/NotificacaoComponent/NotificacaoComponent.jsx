@@ -1,81 +1,49 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Notificacao.css'
+import BoxNotificacao from './BoxNotificacao/BoxNotificacao'
+import { getAgendamentosPorStatus } from '../../../../provider/api/agendamentos/fetchs-agendamentos'
 
-const NotificacaoComponent = () => {
+const NotificacaoComponent = ({ aberta }) => {
+    const [agendamentos, setAgendamentos] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (aberta) {
+            setLoading(true);
+            getAgendamentosPorStatus('PENDENTE')
+                .then(setAgendamentos)
+                .catch(() => setAgendamentos([]))
+                .finally(() => setLoading(false));
+        }
+    }, [aberta]);
+
+    const handleConfirmado = (id) => {
+        // Lógica para lidar com o agendamento confirmado
+        console.log("Agendamento confirmado:", id);
+    }
+
     return (
-        <div className='container-notificacao w-96 absolute right-4 bg-white'>
-            <div className='box-notificacao px-4 gap-2'>
-                <h1 className='titulo-notificacao'>Agendamento Solicitado!</h1>
-                <p className='conteudo-notificacao'>Fulano solicitou um agendamento, confirme-o!</p>
-                <div className='flex justify-between w-full'>
-                    <button className='btn_notificacao rounded-full flex gap-2'>Visualizar</button>
-                    <button className='btn_notificacao_confirmar rounded-full flex gap-2'>Confirmar Agendamento</button>
-                </div>
+        <div className={`container-notificacao w-96 absolute right-4 bg-white${aberta ? ' aberta' : ''}`}>
+            <div>
+                <h1 className='titulo-notificacao p-2'>Notificações</h1>
             </div>
-            <div className='box-notificacao px-4 gap-2'>
-                <h1 className='titulo-notificacao'>Agendamento Solicitado!</h1>
-                <p className='conteudo-notificacao'>Fulano solicitou um agendamento, confirme-o!</p>
-                <div className='flex justify-between w-full'>
-                    <button className='btn_notificacao rounded-full flex gap-2'>Visualizar</button>
-                    <button className='btn_notificacao_confirmar rounded-full flex gap-2'>Confirmar Agendamento</button>
-                </div>
-            </div>
-            <div className='box-notificacao px-4 gap-2'>
-                <h1 className='titulo-notificacao'>Agendamento Solicitado!</h1>
-                <p className='conteudo-notificacao'>Fulano solicitou um agendamento, confirme-o!</p>
-                <div className='flex justify-between w-full'>
-                    <button className='btn_notificacao rounded-full flex gap-2'>Visualizar</button>
-                    <button className='btn_notificacao_confirmar rounded-full flex gap-2'>Confirmar Agendamento</button>
-                </div>
-            </div>
-            <div className='box-notificacao px-4 gap-2'>
-                <h1 className='titulo-notificacao'>Agendamento Solicitado!</h1>
-                <p className='conteudo-notificacao'>Fulano solicitou um agendamento, confirme-o!</p>
-                <div className='flex justify-between w-full'>
-                    <button className='btn_notificacao rounded-full flex gap-2'>Visualizar</button>
-                    <button className='btn_notificacao_confirmar rounded-full flex gap-2'>Confirmar Agendamento</button>
-                </div>
-            </div>
-            <div className='box-notificacao px-4 gap-2'>
-                <h1 className='titulo-notificacao'>Agendamento Solicitado!</h1>
-                <p className='conteudo-notificacao'>Fulano solicitou um agendamento, confirme-o!</p>
-                <div className='flex justify-between w-full'>
-                    <button className='btn_notificacao rounded-full flex gap-2'>Visualizar</button>
-                    <button className='btn_notificacao_confirmar rounded-full flex gap-2'>Confirmar Agendamento</button>
-                </div>
-            </div>
-            <div className='box-notificacao px-4 gap-2'>
-                <h1 className='titulo-notificacao'>Agendamento Solicitado!</h1>
-                <p className='conteudo-notificacao'>Fulano solicitou um agendamento, confirme-o!</p>
-                <div className='flex justify-between w-full'>
-                    <button className='btn_notificacao rounded-full flex gap-2'>Visualizar</button>
-                    <button className='btn_notificacao_confirmar rounded-full flex gap-2'>Confirmar Agendamento</button>
-                </div>
-            </div>
-            <div className='box-notificacao px-4 gap-2'>
-                <h1 className='titulo-notificacao'>Agendamento Solicitado!</h1>
-                <p className='conteudo-notificacao'>Fulano solicitou um agendamento, confirme-o!</p>
-                <div className='flex justify-between w-full'>
-                    <button className='btn_notificacao rounded-full flex gap-2'>Visualizar</button>
-                    <button className='btn_notificacao_confirmar rounded-full flex gap-2'>Confirmar Agendamento</button>
-                </div>
-            </div>
-            <div className='box-notificacao px-4 gap-2'>
-                <h1 className='titulo-notificacao'>Agendamento Solicitado!</h1>
-                <p className='conteudo-notificacao'>Fulano solicitou um agendamento, confirme-o!</p>
-                <div className='flex justify-between w-full'>
-                    <button className='btn_notificacao rounded-full flex gap-2'>Visualizar</button>
-                    <button className='btn_notificacao_confirmar rounded-full flex gap-2'>Confirmar Agendamento</button>
-                </div>
-            </div>
-            <div className='box-notificacao px-4 gap-2'>
-                <h1 className='titulo-notificacao'>Agendamento Solicitado!</h1>
-                <p className='conteudo-notificacao'>Fulano solicitou um agendamento, confirme-o!</p>
-                <div className='flex justify-between w-full'>
-                    <button className='btn_notificacao rounded-full flex gap-2'>Visualizar</button>
-                    <button className='btn_notificacao_confirmar rounded-full flex gap-2'>Confirmar Agendamento</button>
-                </div>
-            </div>
+            {loading && <div className="p-4 text-gray-500">Carregando...</div>}
+            {!loading && agendamentos.length === 0 && (
+                <div className="p-4 text-gray-500">Nenhum agendamento pendente.</div>
+            )}
+            {agendamentos.map((agendamento) => (
+                <BoxNotificacao
+                    key={agendamento.id}
+                    titulo="Agendamento Pendente"
+                    conteudo={"Confirme este agendamento."}
+                    horario={agendamento.hora}
+                    data={agendamento.data}
+                    paciente={{ nome: agendamento.fkPaciente?.nome || "Paciente" }}
+                    agendamentoId={agendamento.id}
+                    agendamento={agendamento} // <-- Passe o objeto completo aqui!
+                    onConfirmado={handleConfirmado}
+                />
+            ))}
         </div>
     )
 }
