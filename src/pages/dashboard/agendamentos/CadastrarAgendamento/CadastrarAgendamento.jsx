@@ -246,7 +246,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                     return;
                 }
 
-
+                const [hour, minute, second] = (pacienteSelecionado.horario || horario || "08:00").split(':');
 
                 try {
                     if (statusPlanoMensal) {
@@ -266,10 +266,10 @@ const CadastrarAgendamento = ({ paciente }) => {
                                     id: pacienteSelecionado.fkPlano?.id || 0,
                                     categoria: pacienteSelecionado.fkPlano?.categoria || "Básico",
                                     preco: pacienteSelecionado.fkPlano?.preco || 0,
-                                },
+                                }
                             },
-                            data: formatDateToBackend(pacienteSelecionado.selectedDate), // Formata a data para o backend
-                            hora: preferencias.horario + ":00", // Converte para o formato HH:mm:ss
+                            data: formatDateToBackend(pacienteSelecionado.selectedDate), // yyyy-MM-dd
+                            hora: pacienteSelecionado.horario || horario,
                             tipo: pacienteSelecionado.tipo || "AVULSO",
                             statusSessao: "PENDENTE",
                             anotacao: "teste",
@@ -294,10 +294,10 @@ const CadastrarAgendamento = ({ paciente }) => {
                                     id: pacienteSelecionado.fkPlano?.id || 0,
                                     categoria: pacienteSelecionado.fkPlano?.categoria || "Básico",
                                     preco: pacienteSelecionado.fkPlano?.preco || 0,
-                                },
+                                }
                             },
-                            data: formatDateToBackend(pacienteSelecionado.selectedDate), // Formata a data para o backend
-                            hora: preferencias.horario + ":00", // Converte para o formato HH:mm:ss
+                            data: formatDateToBackend(pacienteSelecionado.selectedDate), // yyyy-MM-dd
+                            hora: pacienteSelecionado.horario || horario, // <-- string!
                             tipo: pacienteSelecionado.tipo || "AVULSO",
                             statusSessao: "PENDENTE",
                             anotacao: "teste",
@@ -441,24 +441,32 @@ const CadastrarAgendamento = ({ paciente }) => {
                                                     })()}
                                                 </select>
                                             </div>
-                                            <InputField
-                                                type="text"
-                                                id="horario"
-                                                name="horario"
-                                                labelTitle="Horário"
-                                                placeholder="Horário"
-                                                required
-                                                value={preferencias?.horario || horario}
-                                                onChange={(e) =>
-                                                    setPacienteSelecionado((prev) => ({
-                                                        ...prev,
-                                                        horario: e.target.value,
-                                                    }))
-                                                }
-                                                readOnly={pacienteSelecionado && pacienteSelecionado.nome === query ? false : true}
-                                                className={"w-full"}
-                                                width={"w-full"}
-                                            />
+                                            <div className="select-container w-full">
+                                                <label htmlFor="horario" className="input-label">Horário</label>
+                                                <select
+                                                    id="horario"
+                                                    name="horario"
+                                                    required
+                                                    className="select-field w-full"
+                                                    value={pacienteSelecionado?.horario || horario}
+                                                    onChange={e =>
+                                                        setPacienteSelecionado(prev => ({
+                                                            ...prev,
+                                                            horario: e.target.value,
+                                                        }))
+                                                    }
+                                                >
+                                                    <option value="" disabled>Selecione um horário</option>
+                                                    {Array.from({ length: 9 }, (_, i) => {
+                                                        const hour = (8 + i).toString().padStart(2, '0');
+                                                        return (
+                                                            <option key={hour} value={`${hour}:00`}>
+                                                                {`${hour}:00`}
+                                                            </option>
+                                                        );
+                                                    })}
+                                                </select>
+                                            </div>
                                             <Checkbox
                                                 labelTitle="Plano mensal ativo?"
                                                 onChange={handlePlanoMensal}
