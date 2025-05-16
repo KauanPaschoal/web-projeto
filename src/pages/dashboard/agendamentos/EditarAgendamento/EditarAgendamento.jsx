@@ -80,13 +80,11 @@ const EditarAgendamento = () => {
 
   const getNomeDiaSemana = (diaSemana) => {
     const dias = [
-      "Domingo",
       "Segunda-feira",
       "Terça-feira",
       "Quarta-feira",
       "Quinta-feira",
       "Sexta-feira",
-      "Sábado",
     ];
 
     return dias[diaSemana] || "Desconhecido";
@@ -106,6 +104,13 @@ const EditarAgendamento = () => {
 
     return `${year}-${month}-${day}`; // Converte para o formato YYYY-MM-DD
   };
+
+  function formatDateToFrontend(date) {
+    if (!date || typeof date !== 'string') return '';
+    if (date.includes('/')) return date; // já está no formato certo
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
+  }
 
   const handleAtualizarAgendamento = async (e) => {
     e.preventDefault();
@@ -169,7 +174,7 @@ const EditarAgendamento = () => {
     setPaciente({
       ...paciente,
       diaSemana: selectedDiaSemana,
-      data: diasDoMesAtualizados[0],
+      data: formatDateToBackend(diasDoMesAtualizados[0]), // Salva no formato yyyy-MM-dd
     });
   }
 
@@ -215,11 +220,12 @@ const EditarAgendamento = () => {
                 <p><strong>Horário Marcado:</strong> {paciente.horario}</p>
                 <p><strong>Data Marcada:</strong> {agendamento.data}</p>
                 <div className="pendente-container">
-                  <span className={`status ${agendamento.statusSessao === 'Pendente' ? 'status-sessao-pendente' :
-                    agendamento.statusSessao === 'Confirmado' ? 'status-sessao-ok' :
-                      agendamento.statusSessao === 'Cancelado' ? 'status-cancelado' :
-                        ''
-                    }`}>
+                  <span className={`status ${
+                    agendamento.statusSessao === 'PENDENTE' ? 'status-sessao-pendente' :
+                    agendamento.statusSessao === 'CONFIRMADA' ? 'status-sessao-ok' :
+                    agendamento.statusSessao === 'CANCELADA' ? 'status-cancelado' :
+                    ''
+                  }`}>
                     {agendamento.statusSessao}
                   </span>
                 </div>
@@ -255,10 +261,10 @@ const EditarAgendamento = () => {
                     name="data"
                     required
                     className="select-field w-full"
-                    value={paciente?.data || ''}
-                    onChange={(e) => setPaciente({
+                    value={paciente?.data ? formatDateToFrontend(paciente.data) : ''}
+                    onChange={e => setPaciente({
                       ...paciente,
-                      data: e.target.value
+                      data: formatDateToBackend(e.target.value)
                     })}
                   >
                     <option value="" disabled>Selecione uma data</option>
@@ -269,18 +275,30 @@ const EditarAgendamento = () => {
                     ))}
                   </select>
                 </div>
-                <InputField
-                  type="text"
-                  id="horario"
-                  name="horario"
-                  labelTitle="Horário"
-                  placeholder="Horário"
-                  required
-                  value={paciente ? paciente.horario : ''}
-                  readOnly={paciente ? false : true}
-                  className={"w-full"}
-                  width={"w-[100%]"}
-                />
+                <div className="select-container w-full">
+                  <label htmlFor="horario" className="input-label">Novo Horário:</label>
+                  <select
+                    id="horario"
+                    name="horario"
+                    required
+                    className="select-field w-full"
+                    value={paciente ? paciente.horario : ''}
+                    onChange={e => setPaciente({
+                      ...paciente,
+                      horario: e.target.value,
+                    })}
+                  >
+                    <option value="" disabled>Selecione um horário</option>
+                    {Array.from({ length: 9 }, (_, i) => {
+                      const hour = (8 + i).toString().padStart(2, '0');
+                      return (
+                        <option key={hour} value={`${hour}:00`}>
+                          {`${hour}:00`}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
                 <div className="checkbox-container">
                   <input
                     name="confirmar_checkbox"
