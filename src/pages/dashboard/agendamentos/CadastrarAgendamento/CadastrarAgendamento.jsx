@@ -24,6 +24,9 @@ const CadastrarAgendamento = ({ paciente }) => {
     const [proximosDias, setProximosDias] = React.useState([]);
     const [horario, setHorario] = React.useState('10:00');
     const [preferencias, setPreferencias] = React.useState([]);
+    const [diaSemana, setDiaSemana] = React.useState('');
+    const [diasDoMes, setDiasDoMes] = React.useState([]);
+    const [diaMesSelecionado, setDiaMesSelecionado] = React.useState('');
 
 
 
@@ -223,6 +226,13 @@ const CadastrarAgendamento = ({ paciente }) => {
                 return `${year}-${month}-${day}`; // Converte para o formato yyyy-MM-dd
             };
 
+            function formatHoraToBackend(hora) {
+                if (!hora) return "00:00:00";
+                if (/^\d{2}:\d{2}:\d{2}$/.test(hora)) return hora;
+                if (/^\d{2}:\d{2}$/.test(hora)) return `${hora}:00`;
+                return "00:00:00";
+            }
+
             const handleSubmit = async (e) => {
                 e.preventDefault();
 
@@ -269,7 +279,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                 }
                             },
                             data: formatDateToBackend(pacienteSelecionado.selectedDate), // yyyy-MM-dd
-                            hora: pacienteSelecionado.horario || horario,
+                            hora: formatHoraToBackend(pacienteSelecionado.horario || horario),
                             tipo: pacienteSelecionado.tipo || "AVULSO",
                             statusSessao: "PENDENTE",
                             anotacao: "teste",
@@ -297,7 +307,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                 }
                             },
                             data: formatDateToBackend(pacienteSelecionado.selectedDate), // yyyy-MM-dd
-                            hora: pacienteSelecionado.horario || horario, // <-- string!
+                            hora: formatHoraToBackend(pacienteSelecionado.horario || horario), // <-- string!
                             tipo: pacienteSelecionado.tipo || "AVULSO",
                             statusSessao: "PENDENTE",
                             anotacao: "teste",
@@ -339,6 +349,34 @@ const CadastrarAgendamento = ({ paciente }) => {
                 fetchPacientes();
             }, []);
 
+
+            const handleDiaSemanaChange = (e) => {
+                const selected = parseInt(e.target.value, 10);
+                setDiaSemana(selected);
+                const dias = getProximosDiasDoMes(selected);
+                setDiasDoMes(dias);
+                setDiaMesSelecionado(dias[0]); // seleciona o primeiro dia do mês disponível
+                setPacienteSelecionado(prev => ({
+                    ...prev,
+                    diaSemana: selected,
+                    selectedDate: dias[0]
+                }));
+            };
+
+            React.useEffect(() => {
+                if (pacienteSelecionado && pacienteSelecionado.diaSemana !== undefined) {
+                    setDiaSemana(pacienteSelecionado.diaSemana);
+                    const dias = getProximosDiasDoMes(pacienteSelecionado.diaSemana);
+                    setDiasDoMes(dias);
+                    // Só atualiza se o selectedDate for diferente do primeiro dia sugerido
+                    if (pacienteSelecionado.selectedDate !== dias[0]) {
+                        setPacienteSelecionado(prev => ({
+                            ...prev,
+                            selectedDate: dias[0]
+                        }));
+                    }
+                }
+            }, [pacienteSelecionado]);
 
             return (
                 <>
@@ -403,47 +441,43 @@ const CadastrarAgendamento = ({ paciente }) => {
                                     <>
                                         <div className='container-inputs flex gap-2'>
                                             <div className="select-container w-full">
-                                                <label htmlFor="data" className="input-label">Data:</label>
+                                                <label htmlFor="diaSemana" className="input-label">Dia da Semana</label>
                                                 <select
-                                                    id="data"
-                                                    name="data"
+                                                    id="diaSemana"
+                                                    name="diaSemana"
                                                     required
                                                     className="select-field w-full"
-                                                    value={pacienteSelecionado?.selectedDate || ''}
-                                                    onChange={(e) =>
-                                                        setPacienteSelecionado({
-                                                            ...pacienteSelecionado,
-                                                            selectedDate: e.target.value,
-                                                        })
-                                                    }
+                                                    value={diaSemana}
+                                                    onChange={handleDiaSemanaChange}
                                                 >
-                                                    <option value="" disabled>Selecione uma data</option>
-                                                    {(() => {
-                                                        // Obtenha a lista de dias padrão
-                                                        let dias = pacienteSelecionado?.diaMes || [];
-                                                        const queryDay = searchParams.get('day');
-
-                                                        // Adiciona a nova opção como a primeira, se existir um valor em queryDay
-                                                        const options = [];
-                                                        if (queryDay) {
-                                                            options.push(
-                                                                <option key="queryDay" value={queryDay}>
-                                                                    {queryDay} (Selecionado)
-                                                                </option>
-                                                            );
-                                                        }
-
-                                                        // Adiciona os dias padrão
-                                                        dias.forEach((dia, index) => {
-                                                            options.push(
-                                                                <option key={index} value={dia}>
-                                                                    {dia}
-                                                                </option>
-                                                            );
-                                                        });
-
-                                                        return options;
-                                                    })()}
+                                                    <option value="" disabled>Selecione um dia da semana</option>
+                                                    <option value={1}>Segunda-feira</option>
+                                                    <option value={2}>Terça-feira</option>
+                                                    <option value={3}>Quarta-feira</option>
+                                                    <option value={4}>Quinta-feira</option>
+                                                    <option value={5}>Sexta-feira</option>
+                                                </select>
+                                            </div>
+                                            <div className="select-container w-full">
+                                                <label htmlFor="diaMes" className="input-label">Dia do Mês</label>
+                                                <select
+                                                    id="diaMes"
+                                                    name="diaMes"
+                                                    required
+                                                    className="select-field w-full"
+                                                    value={diaMesSelecionado}
+                                                    onChange={e => {
+                                                        setDiaMesSelecionado(e.target.value);
+                                                        setPacienteSelecionado(prev => ({
+                                                            ...prev,
+                                                            selectedDate: e.target.value
+                                                        }));
+                                                    }}
+                                                >
+                                                    <option value="" disabled>Selecione o dia do mês</option>
+                                                    {diasDoMes.map((dia, idx) => (
+                                                        <option key={idx} value={dia}>{dia}</option>
+                                                    ))}
                                                 </select>
                                             </div>
                                             <div className="select-container w-full">
@@ -472,6 +506,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                                     })}
                                                 </select>
                                             </div>
+                                            
                                             <Checkbox
                                                 labelTitle="Plano mensal ativo?"
                                                 onChange={handlePlanoMensal}
@@ -512,3 +547,18 @@ const CadastrarAgendamento = ({ paciente }) => {
         };
 
         export default CadastrarAgendamento
+
+        function getProximosDiasDoMes(selectedDiaSemana) {
+            const hoje = new Date();
+            const dias = [];
+            const qtdDias = 4;
+            // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
+            for (let i = 0; i < qtdDias; i++) {
+                const data = new Date(hoje);
+                // Calcula o próximo dia da semana desejado
+                const diff = (selectedDiaSemana - data.getDay() + 7) % 7 + i * 7;
+                data.setDate(data.getDate() + diff);
+                dias.push(data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }));
+            }
+            return dias;
+        }
