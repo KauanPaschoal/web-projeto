@@ -310,6 +310,11 @@ const CadastrarAgendamento = ({ paciente }) => {
                 } catch (error) {
                     console.error("Erro ao cadastrar agendamento:", error);
                     errorMessage("Erro ao cadastrar agendamento.", "small");
+                }finally{
+                    responseMessage("Agendamento confirmado com sucesso!", "small");
+                    setTimeout(() => {
+                        window.location = '/dashboard/agendamentos';
+                    }, 1200);
                 }
             };
 

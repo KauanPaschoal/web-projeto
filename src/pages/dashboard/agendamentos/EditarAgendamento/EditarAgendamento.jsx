@@ -53,7 +53,7 @@ const EditarAgendamento = () => {
         }
       } catch (error) {
         console.error("Erro ao carregar agendamento:", error);
-      }
+      } 
     };
 
     fetchAgendamento();
@@ -119,21 +119,23 @@ const EditarAgendamento = () => {
       const requestBody = {
         id: agendamento.id,
         fkPaciente: {
-          id: agendamento.fkPaciente.id,
-          nome: agendamento.fkPaciente.nome,
-          cpf: agendamento.fkPaciente.cpf,
-          email: agendamento.fkPaciente.email,
-          status: agendamento.fkPaciente.status,
+          id: paciente.id,
+          nome: paciente.nome,
+          cpf: paciente.cpf,
+          email: paciente.email,
+          status: paciente.status,
           fkPlano: {
-            id: agendamento.fkPaciente.fkPlano?.id,
-            categoria: agendamento.fkPaciente.fkPlano?.categoria,
-            preco: agendamento.fkPaciente.fkPlano?.preco,
+            id: paciente.fkPlano?.id,
+            categoria: paciente.fkPlano?.categoria,
+            preco: paciente.fkPlano?.preco,
           },
         },
-        data: agendamento.data,
-        hora: agendamento.hora,
+        data: typeof paciente.data === 'string' && paciente.data.includes('/')
+          ? formatDateToBackend(paciente.data)
+          : paciente.data,
+        hora: paciente.horario,
         tipo: agendamento.tipo,
-        statusSessao: agendamento.statusSessao,
+        statusSessao: paciente.statusSessao, // <-- valor do checkbox!
         anotacao: agendamento.anotacao,
         createdAt: agendamento.createdAt,
       };
@@ -145,7 +147,12 @@ const EditarAgendamento = () => {
     } catch (error) {
       console.error("Erro ao atualizar agendamento:", error);
       errorMessage("Erro ao atualizar agendamento.");
-    }
+    }finally {
+        responseMessage("Agendamento atualizado com sucesso!", "small");
+        setTimeout(() => {
+          window.location = '/dashboard/agendamentos';
+        }, 1200);
+      }
   };
 
   const handleDiaSemanaChange = (e) => {
@@ -215,22 +222,6 @@ const EditarAgendamento = () => {
                     }`}>
                     {agendamento.statusSessao}
                   </span>
-                  <div className="checkbox-container">
-                    <input
-                      name="confirmar_checkbox"
-                      type="checkbox"
-                      checked={paciente.confirmado || false}
-                      onChange={(e) => setPaciente({
-                        ...paciente,
-                        confirmado: e.target.checked,
-                        status: e.target.checked ? 'Confirmado' : 'Pendente'
-                      })}
-                    />
-                    <label for="confirmar_checkbox">
-                      Confirmar Agendamento
-                    </label>
-
-                  </div>
                 </div>
 
               </div>
@@ -290,6 +281,21 @@ const EditarAgendamento = () => {
                   className={"w-full"}
                   width={"w-[100%]"}
                 />
+                <div className="checkbox-container">
+                  <input
+                    name="confirmar_checkbox"
+                    type="checkbox"
+                    checked={paciente.statusSessao === 'CONFIRMADA'}
+                    onChange={e => setPaciente({
+                      ...paciente,
+                      statusSessao: e.target.checked ? 'CONFIRMADA' : 'PENDENTE'
+                    })}
+                  />
+                  <label htmlFor="confirmar_checkbox">
+                    Confirmar Agendamento
+                  </label>
+
+                </div>
               </div>
             </div>
           </section>
