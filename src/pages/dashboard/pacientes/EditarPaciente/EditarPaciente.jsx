@@ -174,8 +174,15 @@ const EditarPaciente = () => {
 
       if (enderecoAtualizado) {
         responseMessage("Paciente e endereço atualizados com sucesso!");
+        setTimeout(() => {
+          window.location = '/dashboard/pacientes';
+        }, 1200);
       } else {
         responseMessage("Paciente atualizado com sucesso!");
+        setTimeout(() => {
+          window.location = '/dashboard/pacientes';
+        }, 1200);
+                            
       }
 
       setIsEditingGeneral(false);

@@ -165,6 +165,13 @@ const CadastrarAgendamento = ({ paciente }) => {
             const handlePacienteSearch = (query) => {
                 setQuery(query);
 
+                if (!query.trim()) {
+                    setPacienteSelecionado(null);
+                    setAgendamentos([]);
+                    setShowSuggestions(false);
+                    return;
+                }
+
                 const filteredPacientes = pacientes.filter(paciente =>
                     paciente.nome.toLowerCase().includes(query.toLowerCase())
                 );
@@ -177,7 +184,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                         selectedDate: prev?.selectedDate || selectedPaciente.selectedDate || '',
                         horario: prev?.horario || selectedPaciente.horario || horario,
                         anotacao: prev?.anotacao || selectedPaciente.anotacao || 'mensagem',
-                        tipo: selectedPaciente.tipo || "AVULSO", // Define um valor padrão para o tipo
+                        tipo: selectedPaciente.tipo || "AVULSO",
                     }));
 
                     const filteredAgendamentos = agendamentos.filter(

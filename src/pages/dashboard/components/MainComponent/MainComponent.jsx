@@ -5,8 +5,17 @@ import NotificacaoComponent from '../NotificacaoComponent/NotificacaoComponent'
 
 
 
-const MainComponent = ({ title, headerContent, children }) => {
+const MainComponent = ({ title, headerContent, children, mostrarIconeNotificacao }) => {
+    const [showIconNotificacao, setShowIconNotificacao] = useState(true);
     const [showNotificacao, setShowNotificacao] = useState(false);
+
+    React.useEffect(() => {
+        if (mostrarIconeNotificacao === undefined) {
+            setShowIconNotificacao(true);
+        } else {
+            setShowIconNotificacao(mostrarIconeNotificacao);
+        }
+    }, [mostrarIconeNotificacao]);
 
 
     const toggleNotificacao = () => setShowNotificacao((prev) => !prev);
@@ -15,7 +24,7 @@ const MainComponent = ({ title, headerContent, children }) => {
         <div className='div-main'>
             <div className='flex justify-between items-center w-full p-4 relative'>
                 <h1 className='titulo'>{title}</h1>
-                <div>
+                {showIconNotificacao && (<div>
                     <FaBell className='bell-icon cursor-pointer'
                         size={24}
                         onClick={toggleNotificacao} />
@@ -25,7 +34,7 @@ const MainComponent = ({ title, headerContent, children }) => {
                             <NotificacaoComponent aberta={showNotificacao} />
                         </div>
                     )}
-                </div>
+                </div>)}
             </div>
 
             <section className='main-section'>
