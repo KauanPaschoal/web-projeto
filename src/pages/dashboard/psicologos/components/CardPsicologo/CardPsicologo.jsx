@@ -1,9 +1,15 @@
 import React from 'react';
-import { FaPen, FaPlus } from 'react-icons/fa';
+import { FaAddressCard, FaPen, FaPlus } from 'react-icons/fa';
 import './CardPsicologo.css'; // Opcional: Adicione estilos específicos para o card
 
 const CardPsicologo = ({ psicologo: psicologo, onEditar, onAgendar }) => {
     const imgSrc = psicologo?.img ? psicologo.img : "https://placehold.co/100";
+
+    const redirectToEditarPsicologo = (id) => {
+        window.location.href = `/dashboard/psicologos/editar/${id}`;
+    }
+
+
     return (
         <div className="psicologo-card">
             <div className="flex gap-2">
@@ -13,24 +19,15 @@ const CardPsicologo = ({ psicologo: psicologo, onEditar, onAgendar }) => {
                     {psicologo.nome}
                 </h3>
                 <p>
-                    <b>Telefone:</b> {psicologo.telefone}
+                    <b>CRP:</b> {psicologo.crp}
                 </p>
             </div>
-            <div className="div-buttons flex gap-2">
-                <button
-                    className="btn_secundario flex rounded-full"
-                    onClick={() => onEditar(psicologo.id)}
-                >
-                    <FaPen />
-                    Editar
+            <div>
+                <button className="btn_primario flex gap-2" onClick={() => redirectToEditarPsicologo(psicologo.id)}>
+                    <FaAddressCard />
+                    Visualizar
                 </button>
-                <button
-                    className="btn_primario flex rounded-full"
-                    onClick={() => onAgendar(psicologo.id)}
-                >
-                    <FaPlus className="icon" />
-                    Agendar
-                </button>
+                
             </div>
         </div>
     );

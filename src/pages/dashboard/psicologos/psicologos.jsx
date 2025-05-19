@@ -86,17 +86,19 @@ const Psicologos = () => {
           </>
         }
       >
-        <div className='pacientes-container'>
-          {Array.isArray(psicologosFiltrados) && psicologosFiltrados.length > 0 ? (
-            psicologosFiltrados.map((psicologo) => (
-              <CardPsicologo
-                key={psicologo.id}
-                psicologo={psicologo}
-              />
-            ))
-          ) : (
-            <p>Nenhum psicólogo encontrado.</p>
-          )}
+        <div className='pacientes-background'>
+          <div className='pacientes-container'>
+            {Array.isArray(psicologosFiltrados) && psicologosFiltrados.length > 0 ? (
+              psicologosFiltrados.map((psicologo) => (
+                <CardPsicologo
+                  key={psicologo.id}
+                  psicologo={psicologo}
+                />
+              ))
+            ) : (
+              <p>Nenhum psicólogo encontrado.</p>
+            )}
+          </div>
         </div>
       </MainComponent>
     </div>
