@@ -24,14 +24,14 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 2em;
+    margin-top: -12em;
     height: 50%;
-    justify-content: space-evenly;
 
     button{
         background-color: var(--BlueFy);
         border: none;
-        border-left: var(--LightBlueFy) 5px solid;
+        border-radius: 0.5em;
+        /* border-left: var(--LightBlueFy) 5px solid; */
         color: var(--WhiteFy);
         font-size: 1em;
         padding: 0.5em 1em;
