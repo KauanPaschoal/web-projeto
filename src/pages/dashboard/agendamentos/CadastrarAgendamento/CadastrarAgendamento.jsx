@@ -393,9 +393,11 @@ const CadastrarAgendamento = ({ paciente }) => {
                     <MainComponent
                         title="Cadastrar Agendamento"
                         headerContent={
-                            <button className="btn_agendamento" onClick={() => window.location.href = '/dashboard/agendamentos'}>
-                                {"< Voltar"}
-                            </button>
+                            <div className='flex w-full justify-start'>
+                                <button className="btn_agendamento" onClick={() => window.location.href = '/dashboard/agendamentos'}>
+                                    {"< Voltar"}
+                                </button>
+                            </div>
                         }>
                         <form className='form-cadastrar-agendamento'
                             onSubmit={handleSubmit}
