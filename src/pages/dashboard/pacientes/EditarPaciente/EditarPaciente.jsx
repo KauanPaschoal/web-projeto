@@ -40,6 +40,25 @@ const EditarPaciente = () => {
   const [erro, setErro] = useState(''); // Estado para armazenar erros
   const [loading, setLoading] = useState(true); // Estado para controle de loading
 
+  const diasSemana = [
+    "Segunda-feira",
+    "Terça-feira",
+    "Quarta-feira",
+    "Quinta-feira",
+    "Sexta-feira",
+    "Sábado",
+    "Domingo"
+  ];
+
+  // Mapeamento dos valores do backend para exibição amigável
+  const diasSemanaBackend = [
+    { value: "SEGUNDA", label: "Segunda-feira" },
+    { value: "TERCA", label: "Terça-feira" },
+    { value: "QUARTA", label: "Quarta-feira" },
+    { value: "QUINTA", label: "Quinta-feira" },
+    { value: "SEXTA", label: "Sexta-feira" }
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -182,7 +201,7 @@ const EditarPaciente = () => {
         setTimeout(() => {
           window.location = '/dashboard/pacientes';
         }, 1200);
-                            
+
       }
 
       setIsEditingGeneral(false);
@@ -194,7 +213,7 @@ const EditarPaciente = () => {
   return (
     <div className="div-administracao flex">
       <MenuLateralComponent></MenuLateralComponent>
-      {loading && <Loading/>}
+      {loading && <Loading />}
       <MainComponent
         title="Editar Paciente"
         headerContent={
@@ -242,10 +261,12 @@ const EditarPaciente = () => {
                     }
                   />
                   <InputField
+                    labelTitle="CPF"
+                    placeholder="CPF do paciente"
+                    maxLength={14}
                     disabled={true}
-                    placeholder={'CPF do paciente'}
-                    labelTitle={"CPF"}
                     value={paciente.cpf || ""}
+                    maskType="cpf"
                   />
                   <InputField
                     disabled={!isEditingGeneral}
@@ -259,6 +280,7 @@ const EditarPaciente = () => {
                         telefone: e.target.value,
                       }))
                     }
+                    maskType="telefone"
                   />
                   <InputField
                     disabled={!isEditingGeneral}
@@ -273,30 +295,56 @@ const EditarPaciente = () => {
                       }))
                     }
                   />
-                  <InputField
+                  <div className="flex flex-col gap-2">
+                  <label className="w-fit text-sm font-bold text-gray-800">Dia de Consultas:</label>
+                  <select
+                    className="border-b border-gray-300 text-sm px-0 py-2 caret-blue-500 outline-none"
                     disabled={!isEditingGeneral}
-                    labelTitle={"Dia de Consultas"}
-                    placeholder={'Dia de preferência para consultas'}
-                    value={paciente.diaConsulta || ""}
-                    onChange={(e) =>
-                      setPaciente((prev) => ({
+                    value={
+                      diasSemanaBackend.some(d => d.value === paciente.diaConsulta)
+                        ? paciente.diaConsulta
+                        : ""
+                    }
+                    onChange={e =>
+                      setPaciente(prev => ({
                         ...prev,
                         diaConsulta: e.target.value,
                       }))
                     }
-                  />
-                  <InputField
-                    disabled={!isEditingGeneral}
-                    labelTitle={"Horário de Consultas"}
-                    placeholder={'Horário de preferência para consultas'}
-                    value={paciente.horaConsulta || ""}
-                    onChange={(e) =>
-                      setPaciente((prev) => ({
-                        ...prev,
-                        horaConsulta: e.target.value,
-                      }))
-                    }
-                  />
+                  >
+                    <option value="">Selecione o dia</option>
+                    {diasSemanaBackend.map(dia => (
+                      <option key={dia.value} value={dia.value}>{dia.label}</option>
+                    ))}
+                  </select>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="w-fit text-sm font-bold text-gray-800">
+                      Horário de Consultas:</label>
+                    <select
+                      className="border-b border-gray-300 text-sm px-0 py-2 caret-blue-500 outline-none"
+
+                      disabled={!isEditingGeneral}
+                      value={paciente.horaConsulta || ""}
+                      onChange={e =>
+                        setPaciente(prev => ({
+                          ...prev,
+                          horaConsulta: e.target.value,
+                        }))
+                      }
+                    >
+                      <option value="">Selecione o horário</option>
+                      <option value="08:00">08:00</option>
+                      <option value="09:00">09:00</option>
+                      <option value="10:00">10:00</option>
+                      <option value="11:00">11:00</option>
+                      <option value="12:00">12:00</option>
+                      <option value="13:00">13:00</option>
+                      <option value="14:00">14:00</option>
+                      <option value="15:00">15:00</option>
+                      <option value="16:00">16:00</option>
+                    </select>
+                  </div>
                   <InputField
                     disabled={!isEditingGeneral}
                     labelTitle={"Contato de Emergência"}
@@ -332,8 +380,8 @@ const EditarPaciente = () => {
                       type={"text"}
                       labelTitle={"CEP"}
                       placeholder={'CEP do paciente'}
-                    value={paciente.fkEndereco?.cep || ""} // Usa o operador ?. para evitar erros
-                      maxLength={8}
+                      value={paciente.fkEndereco?.cep || ""} // Usa o operador ?. para evitar erros
+                      maxLength={9}
                       onChange={(e) =>
                         setPaciente((prev) => ({
                           ...prev,
@@ -344,6 +392,7 @@ const EditarPaciente = () => {
                         }))
                       }
                       onBlur={handleBuscarEndereco}
+                      maskType="cep"
                     />
                     {erro && <p className="text-xs text-red-500">{erro}</p>}
                   </div>
