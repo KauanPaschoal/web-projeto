@@ -13,30 +13,36 @@ import {
   putPaciente,
   putEndereco,
 } from "../../../../provider/api/pacientes/fetchs-pacientes";
-import Swal from "sweetalert2"; // Importa o SweetAlert
+import Swal from "sweetalert2";
 import {
   confirmCancelEdit,
   errorMessage,
   responseMessage,
 } from "../../../../utils/alert";
-import { getPreferenciasPorId, putPreferencia } from "../../../../provider/api/preferencias/fetchs-preferencias";
+import {
+  getPreferenciasPorId,
+  putPreferencia,
+} from "../../../../provider/api/preferencias/fetchs-preferencias";
 import { getEnderecoPorCep } from "../../../../provider/api/pacientes/fetchs-pacientes";
+import Loading from "../../components/Loading/Loading";
 
 const EditarPaciente = () => {
   const { id } = useParams();
   const [paciente, setPaciente] = React.useState({
-    fkEndereco: {}, // Inicializa fkEndereco como um objeto vazio
-    diaConsulta: "", // Inicializa diaConsulta como string vazia
-    horaConsulta: "", // Inicializa horaConsulta como string vazia
+    fkEndereco: {},
+    diaConsulta: "",
+    horaConsulta: "",
   });
   const [isEditingGeneral, setIsEditingGeneral] = useState(false); // Controle do modo de edição
   const [isAtivo, setIsAtivo] = useState(false); // Controle do checkbox "Paciente Ativo"
   const [isPlanoAtivo, setIsPlanoAtivo] = useState(true); // Controle do checkbox "Plano Mensal"
   const [preferencias, setPreferencias] = useState([]); // Estado para armazenar as preferências do paciente
   const [erro, setErro] = useState(''); // Estado para armazenar erros
+  const [loading, setLoading] = useState(true); // Estado para controle de loading
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const [pacienteResponse, preferenciasResponse] = await Promise.all([
           fetch(`/pacientes/${id}`).then((res) => res.json()),
@@ -45,6 +51,7 @@ const EditarPaciente = () => {
 
         setPaciente({
           ...pacienteResponse,
+          fkEndereco: pacienteResponse.fkEndereco || {},
           diaConsulta: preferenciasResponse.diaSemana,
           horaConsulta: preferenciasResponse.horario,
         });
@@ -55,6 +62,7 @@ const EditarPaciente = () => {
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
+      setTimeout(() => setLoading(false), 500);
     };
 
     fetchData();
@@ -86,11 +94,11 @@ const EditarPaciente = () => {
 
   const handleBuscarEndereco = async () => {
     try {
-      setErro('');
-      const cepSemFormatacao = paciente.fkEndereco?.cep?.replace(/\D/g, '');
+      setErro("");
+      const cepSemFormatacao = paciente.fkEndereco?.cep?.replace(/\D/g, "");
 
       if (!cepSemFormatacao || cepSemFormatacao.length !== 8) {
-        throw new Error('Formato de CEP inválido.');
+        throw new Error("Formato de CEP inválido.");
       }
 
       const endereco = await getEnderecoPorCep(cepSemFormatacao);
@@ -105,13 +113,12 @@ const EditarPaciente = () => {
           uf: endereco.uf || "",
         },
       }));
-
     } catch (error) {
       limparCamposEndereco();
       setErro("CEP Inválido ou não encontrado.");
-      return
+      return;
     }
-  }
+  };
 
   const handleAtualizarPaciente = async () => {
     try {
@@ -133,24 +140,16 @@ const EditarPaciente = () => {
       const preferenciaAtualizada = {
         diaSemana: paciente.diaConsulta,
         horario: paciente.horaConsulta,
-        fkPaciente: {
-          id: parseInt(id), // Certifique-se de que o ID é um número
-        },
       };
 
-      // Atualiza a preferência
-      await putPreferencia(id, preferenciaAtualizada);
+      await putPreferencia(preferencias.id, preferenciaAtualizada);
 
       console.log(`STATUS PACIENTE: ${pacienteAtualizado.status}`);
-      sessionStorage(`ENDERECO: ${paciente.fkEndereco.id}`);
 
-      // Verifica se o paciente deve ser desativado
       if (!isAtivo) {
         await putDesativarPaciente(id, pacienteAtualizado);
       } else {
-        // Atualiza o paciente normalmente
         await putPaciente(id, pacienteAtualizado);
-
       }
 
       let enderecoAtualizado = false;
@@ -175,8 +174,15 @@ const EditarPaciente = () => {
 
       if (enderecoAtualizado) {
         responseMessage("Paciente e endereço atualizados com sucesso!");
+        setTimeout(() => {
+          window.location = '/dashboard/pacientes';
+        }, 1200);
       } else {
         responseMessage("Paciente atualizado com sucesso!");
+        setTimeout(() => {
+          window.location = '/dashboard/pacientes';
+        }, 1200);
+                            
       }
 
       setIsEditingGeneral(false);
@@ -188,7 +194,7 @@ const EditarPaciente = () => {
   return (
     <div className="div-administracao flex">
       <MenuLateralComponent></MenuLateralComponent>
-
+      {loading && <Loading/>}
       <MainComponent
         title="Editar Paciente"
         headerContent={
@@ -226,6 +232,7 @@ const EditarPaciente = () => {
                   <InputField
                     disabled={!isEditingGeneral}
                     labelTitle={"Nome"}
+                    placeholder={'Nome do paciente'}
                     value={paciente.nome || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -236,12 +243,14 @@ const EditarPaciente = () => {
                   />
                   <InputField
                     disabled={true}
+                    placeholder={'CPF do paciente'}
                     labelTitle={"CPF"}
                     value={paciente.cpf || ""}
                   />
                   <InputField
                     disabled={!isEditingGeneral}
                     type={"tel"}
+                    placeholder={'Telefone do paciente'}
                     labelTitle={"Telefone"}
                     value={paciente.telefone || ""}
                     onChange={(e) =>
@@ -254,6 +263,7 @@ const EditarPaciente = () => {
                   <InputField
                     disabled={!isEditingGeneral}
                     type={"email"}
+                    placeholder={'E-mail do paciente'}
                     labelTitle={"E-mail"}
                     value={paciente.email || ""}
                     onChange={(e) =>
@@ -266,6 +276,7 @@ const EditarPaciente = () => {
                   <InputField
                     disabled={!isEditingGeneral}
                     labelTitle={"Dia de Consultas"}
+                    placeholder={'Dia de preferência para consultas'}
                     value={paciente.diaConsulta || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -277,6 +288,7 @@ const EditarPaciente = () => {
                   <InputField
                     disabled={!isEditingGeneral}
                     labelTitle={"Horário de Consultas"}
+                    placeholder={'Horário de preferência para consultas'}
                     value={paciente.horaConsulta || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -288,6 +300,7 @@ const EditarPaciente = () => {
                   <InputField
                     disabled={!isEditingGeneral}
                     labelTitle={"Contato de Emergência"}
+                    placeholder={'Nome do contato de emergência'}
                     value={paciente.nomeContato || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -300,6 +313,7 @@ const EditarPaciente = () => {
                     disabled={!isEditingGeneral}
                     type={"tel"}
                     labelTitle={"Telefone de Emergência"}
+                    placeholder={'Telefone do contato de emergência'}
                     value={paciente.telefoneContato || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -317,7 +331,8 @@ const EditarPaciente = () => {
                       disabled={!isEditingGeneral}
                       type={"text"}
                       labelTitle={"CEP"}
-                      value={paciente.fkEndereco?.cep || ""} // Usa o operador ?. para evitar erros
+                      placeholder={'CEP do paciente'}
+                    value={paciente.fkEndereco?.cep || ""} // Usa o operador ?. para evitar erros
                       maxLength={8}
                       onChange={(e) =>
                         setPaciente((prev) => ({
@@ -330,12 +345,13 @@ const EditarPaciente = () => {
                       }
                       onBlur={handleBuscarEndereco}
                     />
-                    {erro && <p className='text-xs text-red-500'>{erro}</p>}
+                    {erro && <p className="text-xs text-red-500">{erro}</p>}
                   </div>
                   <InputField
                     disabled={!isEditingGeneral}
                     type={"text"}
                     labelTitle={"Cidade"}
+                    placeholder={'Cidade do paciente'}
                     value={paciente.fkEndereco?.cidade || ""} // Usa o operador ?. para evitar erros
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -351,6 +367,7 @@ const EditarPaciente = () => {
                     disabled={!isEditingGeneral}
                     type={"text"}
                     labelTitle={"Bairro"}
+                    placeholder={'Bairro do paciente'}
                     value={paciente.fkEndereco?.bairro || ""} // Usa o operador ?. para evitar erros
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -366,6 +383,7 @@ const EditarPaciente = () => {
                     disabled={!isEditingGeneral}
                     type={"text"}
                     labelTitle={"Número"}
+                    placeholder={'Número do endereço'}
                     value={paciente.fkEndereco?.numero || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -381,6 +399,8 @@ const EditarPaciente = () => {
                     disabled={!isEditingGeneral}
                     type={"text"}
                     labelTitle={"Logradouro"}
+                    width={"w-full"}
+                    placeholder={'Logradouro do paciente'}
                     value={paciente.fkEndereco?.logradouro || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
@@ -393,8 +413,11 @@ const EditarPaciente = () => {
                     }
                   />
                   <div className="flex flex-col gap-2">
-                    <label className="w-fit text-sm font-bold text-gray-800">Estado:</label>
-                    <select className="border-b border-gray-300 text-sm px-0 py-2 caret-blue-500 outline-none"
+                    <label className="w-fit text-sm font-bold text-gray-800">
+                      Estado:
+                    </label>
+                    <select
+                      className="border-b border-gray-300 text-sm px-0 py-2 caret-blue-500 outline-none"
                       disabled={!isEditingGeneral}
                       type={"text"}
                       labelTitle={"Estado"}

@@ -57,13 +57,17 @@ const AdicionarPaciente = () => {
             await postPreferencia(novaPreferencia);
             console.log("Preferência cadastrada:", novaPreferencia);
 
-            responseMessage('Paciente e preferências cadastrados com sucesso!');
+            responseMessage("Paciente e endereço atualizados com sucesso!");
+            
             // Limpa os campos após o sucesso
             setNome('');
             setEmail('');
             setDiaConsultas('');
             setHorarioConsultas('');
             setPlanoMensal(false);
+            setTimeout(() => {
+                window.location = '/dashboard/pacientes';
+            }, 1200);
         } catch (error) {
             console.error('Erro ao adicionar paciente ou preferências:', error);
             errorMessage('Erro ao adicionar paciente ou preferências. Tente novamente.');
@@ -89,6 +93,8 @@ const AdicionarPaciente = () => {
                                 <InputField
                                     labelTitle={'Nome'}
                                     value={nome}
+                                    width={'w-full'}
+                                    placeholder={'Nome do paciente'}
                                     onChange={(e) => setNome(e.target.value)}
                                     required
                                 />
@@ -96,17 +102,13 @@ const AdicionarPaciente = () => {
                                     labelTitle={'E-mail'}
                                     type={'email'}
                                     value={email}
+                                    width={'w-full'}
+                                    placeholder={'E-mail do paciente'}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                 />
                             </div>
                             <div className='flex gap-3'>
-                                {/* <InputField
-                                labelTitle={'Dia de Consultas'}
-                                value={diaConsultas}
-                                onChange={(e) => setDiaConsultas(e.target.value)}
-                                required
-                            /> */}
                                 <div className="select-container">
                                     <label htmlFor="diaConsultas">Dia de Consultas</label>
                                     <select
@@ -134,8 +136,8 @@ const AdicionarPaciente = () => {
                                         required
                                     >
                                         <option value="" disabled>Selecione um horário</option>
-                                        {Array.from({ length: 13 }, (_, i) => {
-                                            const hour = (7 + i).toString().padStart(2, '0');
+                                        {Array.from({ length: 9 }, (_, i) => {
+                                            const hour = (8 + i).toString().padStart(2, '0');
                                             return (
                                                 <option key={hour} value={`${hour}:00`}>
                                                     {`${hour}:00`}

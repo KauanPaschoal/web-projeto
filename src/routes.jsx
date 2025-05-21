@@ -11,6 +11,7 @@ import Administracao from "./pages/dashboard/administracao/Administracao";
 import Psicologos from "./pages/dashboard/psicologos/psicologos";
 import AdicionarPsicologo from "./pages/dashboard/psicologos/adicionarPsicologo/adicionarPsicologo";
 import LoginPage from "./pages/Login/Login";
+import EditarPsicologo from "./pages/dashboard/psicologos/visualizarPsicologo/EditarPsicologo";
 
 export const routes = createBrowserRouter([
     { path: "/", element: <LandingPage /> },
@@ -26,5 +27,6 @@ export const routes = createBrowserRouter([
     { path: "/dashboard/administracao", element: <Administracao /> },
     { path: "/dashboard/psicologos", element: <Psicologos /> },
     { path: "/dashboard/psicologos/adicionar", element: <AdicionarPsicologo /> },
+    { path: "/dashboard/psicologos/editar/:id", element: <EditarPsicologo /> },
     { path: "*", element: <h1>Página não encontrada.</h1> }
 ]);

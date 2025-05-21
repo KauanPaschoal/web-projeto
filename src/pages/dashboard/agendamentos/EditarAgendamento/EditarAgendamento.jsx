@@ -53,7 +53,7 @@ const EditarAgendamento = () => {
         }
       } catch (error) {
         console.error("Erro ao carregar agendamento:", error);
-      }
+      } 
     };
 
     fetchAgendamento();
@@ -80,13 +80,11 @@ const EditarAgendamento = () => {
 
   const getNomeDiaSemana = (diaSemana) => {
     const dias = [
-      "Domingo",
       "Segunda-feira",
       "Terça-feira",
       "Quarta-feira",
       "Quinta-feira",
       "Sexta-feira",
-      "Sábado",
     ];
 
     return dias[diaSemana] || "Desconhecido";
@@ -107,6 +105,13 @@ const EditarAgendamento = () => {
     return `${year}-${month}-${day}`; // Converte para o formato YYYY-MM-DD
   };
 
+  function formatDateToFrontend(date) {
+    if (!date || typeof date !== 'string') return '';
+    if (date.includes('/')) return date; // já está no formato certo
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
+  }
+
   const handleAtualizarAgendamento = async (e) => {
     e.preventDefault();
 
@@ -119,21 +124,23 @@ const EditarAgendamento = () => {
       const requestBody = {
         id: agendamento.id,
         fkPaciente: {
-          id: agendamento.fkPaciente.id,
-          nome: agendamento.fkPaciente.nome,
-          cpf: agendamento.fkPaciente.cpf,
-          email: agendamento.fkPaciente.email,
-          status: agendamento.fkPaciente.status,
+          id: paciente.id,
+          nome: paciente.nome,
+          cpf: paciente.cpf,
+          email: paciente.email,
+          status: paciente.status,
           fkPlano: {
-            id: agendamento.fkPaciente.fkPlano?.id,
-            categoria: agendamento.fkPaciente.fkPlano?.categoria,
-            preco: agendamento.fkPaciente.fkPlano?.preco,
+            id: paciente.fkPlano?.id,
+            categoria: paciente.fkPlano?.categoria,
+            preco: paciente.fkPlano?.preco,
           },
         },
-        data: agendamento.data,
-        hora: agendamento.hora,
+        data: typeof paciente.data === 'string' && paciente.data.includes('/')
+          ? formatDateToBackend(paciente.data)
+          : paciente.data,
+        hora: paciente.horario,
         tipo: agendamento.tipo,
-        statusSessao: agendamento.statusSessao,
+        statusSessao: paciente.statusSessao, // <-- valor do checkbox!
         anotacao: agendamento.anotacao,
         createdAt: agendamento.createdAt,
       };
@@ -145,7 +152,12 @@ const EditarAgendamento = () => {
     } catch (error) {
       console.error("Erro ao atualizar agendamento:", error);
       errorMessage("Erro ao atualizar agendamento.");
-    }
+    }finally {
+        responseMessage("Agendamento atualizado com sucesso!", "small");
+        setTimeout(() => {
+          window.location = '/dashboard/agendamentos';
+        }, 1200);
+      }
   };
 
   const handleDiaSemanaChange = (e) => {
@@ -162,7 +174,7 @@ const EditarAgendamento = () => {
     setPaciente({
       ...paciente,
       diaSemana: selectedDiaSemana,
-      data: diasDoMesAtualizados[0],
+      data: formatDateToBackend(diasDoMesAtualizados[0]), // Salva no formato yyyy-MM-dd
     });
   }
 
@@ -208,29 +220,14 @@ const EditarAgendamento = () => {
                 <p><strong>Horário Marcado:</strong> {paciente.horario}</p>
                 <p><strong>Data Marcada:</strong> {agendamento.data}</p>
                 <div className="pendente-container">
-                  <span className={`status ${agendamento.statusSessao === 'Pendente' ? 'status-sessao-pendente' :
-                    agendamento.statusSessao === 'Confirmado' ? 'status-sessao-ok' :
-                      agendamento.statusSessao === 'Cancelado' ? 'status-cancelado' :
-                        ''
-                    }`}>
+                  <span className={`status ${
+                    agendamento.statusSessao === 'PENDENTE' ? 'status-sessao-pendente' :
+                    agendamento.statusSessao === 'CONFIRMADA' ? 'status-sessao-ok' :
+                    agendamento.statusSessao === 'CANCELADA' ? 'status-cancelado' :
+                    ''
+                  }`}>
                     {agendamento.statusSessao}
                   </span>
-                  <div className="checkbox-container">
-                    <input
-                      name="confirmar_checkbox"
-                      type="checkbox"
-                      checked={paciente.confirmado || false}
-                      onChange={(e) => setPaciente({
-                        ...paciente,
-                        confirmado: e.target.checked,
-                        status: e.target.checked ? 'Confirmado' : 'Pendente'
-                      })}
-                    />
-                    <label for="confirmar_checkbox">
-                      Confirmar Agendamento
-                    </label>
-
-                  </div>
                 </div>
 
               </div>
@@ -264,10 +261,10 @@ const EditarAgendamento = () => {
                     name="data"
                     required
                     className="select-field w-full"
-                    value={paciente?.data || ''}
-                    onChange={(e) => setPaciente({
+                    value={paciente?.data ? formatDateToFrontend(paciente.data) : ''}
+                    onChange={e => setPaciente({
                       ...paciente,
-                      data: e.target.value
+                      data: formatDateToBackend(e.target.value)
                     })}
                   >
                     <option value="" disabled>Selecione uma data</option>
@@ -278,18 +275,45 @@ const EditarAgendamento = () => {
                     ))}
                   </select>
                 </div>
-                <InputField
-                  type="text"
-                  id="horario"
-                  name="horario"
-                  labelTitle="Horário"
-                  placeholder="Horário"
-                  required
-                  value={paciente ? paciente.horario : ''}
-                  readOnly={paciente ? false : true}
-                  className={"w-full"}
-                  width={"w-[50%]"}
-                />
+                <div className="select-container w-full">
+                  <label htmlFor="horario" className="input-label">Novo Horário:</label>
+                  <select
+                    id="horario"
+                    name="horario"
+                    required
+                    className="select-field w-full"
+                    value={paciente ? paciente.horario : ''}
+                    onChange={e => setPaciente({
+                      ...paciente,
+                      horario: e.target.value,
+                    })}
+                  >
+                    <option value="" disabled>Selecione um horário</option>
+                    {Array.from({ length: 9 }, (_, i) => {
+                      const hour = (8 + i).toString().padStart(2, '0');
+                      return (
+                        <option key={hour} value={`${hour}:00`}>
+                          {`${hour}:00`}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div className="checkbox-container">
+                  <input
+                    name="confirmar_checkbox"
+                    type="checkbox"
+                    checked={paciente.statusSessao === 'CONFIRMADA'}
+                    onChange={e => setPaciente({
+                      ...paciente,
+                      statusSessao: e.target.checked ? 'CONFIRMADA' : 'PENDENTE'
+                    })}
+                  />
+                  <label htmlFor="confirmar_checkbox">
+                    Confirmar Agendamento
+                  </label>
+
+                </div>
               </div>
             </div>
           </section>

@@ -4,6 +4,7 @@ import logo from "../../assets/images/LogoTipo Branco 1.svg"; // Atualize o cami
 import { errorMessage, responseMessage } from "../../utils/alert.js";
 // import { autenticateUser } from "../../utils/auth.js";
 import "./style/login.css";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -59,7 +60,8 @@ const LoginPage = () => {
     <div className="background">
       <div className="card">
         <div className="login-container">
-          <Link to="/" className="">
+          <Link to="/" className="flex items-center mb-4 gap-2">
+            <FaArrowAltCircleLeft/>
             Voltar
           </Link>
           <h1 className="text-2xl font-semibold">Que bom te ver de novo!</h1>
