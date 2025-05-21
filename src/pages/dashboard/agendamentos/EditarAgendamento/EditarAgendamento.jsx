@@ -247,7 +247,7 @@ const EditarAgendamento = () => {
                     onChange={handleDiaSemanaChange}
                   >
                     <option value="" disabled>Selecione um dia da semana</option>
-                    {Array.from({ length: 7 }, (_, i) => (
+                    {Array.from({ length: 5 }, (_, i) => (
                       <option key={i} value={i}>
                         {getNomeDiaSemana(i)}
                       </option>
@@ -291,6 +291,7 @@ const EditarAgendamento = () => {
                     <option value="" disabled>Selecione um horário</option>
                     {Array.from({ length: 9 }, (_, i) => {
                       const hour = (8 + i).toString().padStart(2, '0');
+                      if (hour === "12") return null; // Não renderiza 12:00
                       return (
                         <option key={hour} value={`${hour}:00`}>
                           {`${hour}:00`}

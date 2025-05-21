@@ -5,7 +5,7 @@ const InputField = ({ labelTitle, type = "text", placeholder, id, name, onChange
   return (
     <div className={`inputContainer ${width || "w-[45%]"}`}>
       <label>{labelTitle}:</label>
-      <div className="flex">
+      <div className="flex items-center gap-2">
         {icon && <span className="input-icon">{icon}</span>}
         <input
           type={type}

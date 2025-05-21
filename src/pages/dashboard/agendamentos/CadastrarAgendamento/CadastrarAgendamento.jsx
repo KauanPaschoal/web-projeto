@@ -115,13 +115,11 @@ const CadastrarAgendamento = ({ paciente }) => {
 
             const getNomeDiaSemana = (diaSemana) => {
                 const dias = {
-                    "DOMINGO": "Domingo",
                     "SEGUNDA": "Segunda-feira",
                     "TERCA": "Terça-feira",
                     "QUARTA": "Quarta-feira",
                     "QUINTA": "Quinta-feira",
                     "SEXTA": "Sexta-feira",
-                    "SABADO": "Sábado",
                 };
 
                 return dias[diaSemana] || "Indefinido"; // Retorna "Indefinido" se o valor não for encontrado
@@ -144,10 +142,6 @@ const CadastrarAgendamento = ({ paciente }) => {
                 fetchAgendamentosPorPaciente();
             }, [pacienteSelecionado]);
 
-            // useEffect(() => {
-            //     console.log("Proximos dias: ", proximosDias);
-            // }, [proximosDias]);
-
             useEffect(() => {
                 const fetchPacientes = async () => {
                     try {
@@ -160,7 +154,6 @@ const CadastrarAgendamento = ({ paciente }) => {
 
                 fetchPacientes();
             }, []);
-
 
             const handlePacienteSearch = (query) => {
                 setQuery(query);
@@ -375,7 +368,6 @@ const CadastrarAgendamento = ({ paciente }) => {
                     setDiaSemana(pacienteSelecionado.diaSemana);
                     const dias = getProximosDiasDoMes(pacienteSelecionado.diaSemana);
                     setDiasDoMes(dias);
-                    // Só atualiza se o selectedDate for diferente do primeiro dia sugerido
                     if (pacienteSelecionado.selectedDate !== dias[0]) {
                         setPacienteSelecionado(prev => ({
                             ...prev,
@@ -505,6 +497,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                                     <option value="" disabled>Selecione um horário</option>
                                                     {Array.from({ length: 9 }, (_, i) => {
                                                         const hour = (8 + i).toString().padStart(2, '0');
+                                                        if (hour === "12") return null; // Não renderiza 12:00
                                                         return (
                                                             <option key={hour} value={`${hour}:00`}>
                                                                 {`${hour}:00`}

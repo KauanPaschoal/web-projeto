@@ -138,6 +138,7 @@ const AdicionarPaciente = () => {
                                         <option value="" disabled>Selecione um horário</option>
                                         {Array.from({ length: 9 }, (_, i) => {
                                             const hour = (8 + i).toString().padStart(2, '0');
+                                            if (hour === "12") return null; // Não renderiza 12:00
                                             return (
                                                 <option key={hour} value={`${hour}:00`}>
                                                     {`${hour}:00`}
