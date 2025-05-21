@@ -58,7 +58,7 @@ const AdicionarPaciente = () => {
             console.log("Preferência cadastrada:", novaPreferencia);
 
             responseMessage("Paciente e endereço atualizados com sucesso!");
-            
+
             // Limpa os campos após o sucesso
             setNome('');
             setEmail('');
@@ -80,9 +80,11 @@ const AdicionarPaciente = () => {
 
             <MainComponent title="Adicionar Paciente"
                 headerContent={
-                    <button className="btn_agendamento" onClick={() => window.location.href = '/dashboard/pacientes'}>
-                        {"< Voltar"}
-                    </button>
+                    <div className='flex w-full justify-start'>
+                        <button className="btn_agendamento" onClick={() => window.location.href = '/dashboard/pacientes'}>
+                            {"< Voltar"}
+                        </button>
+                    </div>
                 }
             >
                 <form className='addPaciente' onSubmit={handleSubmit}>

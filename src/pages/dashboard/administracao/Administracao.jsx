@@ -134,8 +134,7 @@ const Administracao = () => {
       <MainComponent
         title="Configurações de Conta"
         headerContent={
-          <div className="flex w-full gap-2 items-center justify-between">
-            <button className="btn_agendamento">Voltar</button>
+          <div className="flex w-full gap-2 items-center justify-end">
             <button className="btn_agendamento" onClick={() => popupMessage()}>
               Preferências
             </button>
