@@ -15,6 +15,7 @@ import { getPreferenciasPorId } from '../../../../provider/api/preferencias/fetc
 const CadastrarAgendamento = ({ paciente }) => {
     const { id } = useParams();
     const [searchParams] = useSearchParams();
+    const [todosPacientes, setTodosPacientes] = React.useState([]);
     const [pacientes, setPacientes] = React.useState([]);
     const [agendamentos, setAgendamentos] = React.useState([]);
     const [pacienteSelecionado, setPacienteSelecionado] = React.useState();
@@ -146,6 +147,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                 const fetchPacientes = async () => {
                     try {
                         const data = await getPacientes(); // Chama a função de busca de pacientes
+                        setTodosPacientes(data);
                         setPacientes(data); // Atualiza o estado com os pacientes retornados
                     } catch (error) {
                         console.error("Erro ao buscar usuários:", error);
@@ -157,15 +159,17 @@ const CadastrarAgendamento = ({ paciente }) => {
 
             const handlePacienteSearch = (query) => {
                 setQuery(query);
+                console.log("Query:", query);
 
                 if (!query.trim()) {
+                    setPacientes(todosPacientes); // Restaura todos
                     setPacienteSelecionado(null);
                     setAgendamentos([]);
                     setShowSuggestions(false);
                     return;
                 }
 
-                const filteredPacientes = pacientes.filter(paciente =>
+                const filteredPacientes = todosPacientes.filter(paciente =>
                     paciente.nome.toLowerCase().includes(query.toLowerCase())
                 );
 
@@ -260,30 +264,36 @@ const CadastrarAgendamento = ({ paciente }) => {
 
                 try {
                     if (statusPlanoMensal) {
-                        // Cria quatro sessões, uma por semana no mesmo dia da semana
                         const promises = Array.from({ length: 4 }).map((_, index) => {
-                            const diaAtual = new Date(pacienteSelecionado.selectedDate);
-                            diaAtual.setDate(diaAtual.getDate() + index * 7); // Adiciona 7 dias para cada semana
+                            // Converte "dd/MM/yyyy" para Date corretamente
+                            const [day, month, year] = (pacienteSelecionado.selectedDate || "").split("/");
+                            const baseDate = new Date(`${year}-${month}-${day}T00:00:00`);
+
+                            // Adiciona 7 dias para cada semana
+                            baseDate.setDate(baseDate.getDate() + index * 7);
+
+                            // Formata para dd/MM/yyyy
+                            const dataFormatada = baseDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
                             const novoAgendamento = {
-                            fkPaciente: {
-                                id: pacienteSelecionado.id,
-                                nome: pacienteSelecionado.nome,
-                                cpf: pacienteSelecionado.cpf || "000.000.000-00",
-                                email: pacienteSelecionado.email,
-                                status: "ATIVO",
-                                fkPlano: {
-                                    id: pacienteSelecionado.fkPlano?.id || 0,
-                                    categoria: pacienteSelecionado.fkPlano?.categoria || "Básico",
-                                    preco: pacienteSelecionado.fkPlano?.preco || 0,
-                                }
-                            },
-                            data: formatDateToBackend(pacienteSelecionado.selectedDate), // yyyy-MM-dd
-                            hora: formatHoraToBackend(pacienteSelecionado.horario || horario),
-                            tipo: pacienteSelecionado.tipo || "AVULSO",
-                            statusSessao: "PENDENTE",
-                            anotacao: "teste",
-                        };
+                                fkPaciente: {
+                                    id: pacienteSelecionado.id,
+                                    nome: pacienteSelecionado.nome,
+                                    cpf: pacienteSelecionado.cpf || "000.000.000-00",
+                                    email: pacienteSelecionado.email,
+                                    status: "ATIVO",
+                                    fkPlano: {
+                                        id: pacienteSelecionado.fkPlano?.id || 0,
+                                        categoria: pacienteSelecionado.fkPlano?.categoria || "Básico",
+                                        preco: pacienteSelecionado.fkPlano?.preco || 0,
+                                    }
+                                },
+                                data: formatDateToBackend(dataFormatada), // Usa a data correta de cada semana
+                                hora: formatHoraToBackend(pacienteSelecionado.horario || horario),
+                                tipo: pacienteSelecionado.tipo || "AVULSO",
+                                statusSessao: "PENDENTE",
+                                anotacao: "teste",
+                            };
 
                             console.log("Agendamento (Plano Mensal):", novoAgendamento);
                             return postAgendamento(novoAgendamento);
@@ -321,7 +331,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                     console.error("Erro ao cadastrar agendamento:", error);
                     errorMessage("Erro ao cadastrar agendamento.", "small");
                 }finally{
-                    responseMessage("Agendamento confirmado com sucesso!", "small");
+                    responseMessage("Agendamentos cadastrados com sucesso!", "small");
                     setTimeout(() => {
                         window.location = '/dashboard/agendamentos';
                     }, 1200);
