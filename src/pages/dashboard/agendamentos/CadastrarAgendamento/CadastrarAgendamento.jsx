@@ -23,7 +23,7 @@ const CadastrarAgendamento = ({ paciente }) => {
     const [showSuggestions, setShowSuggestions] = React.useState(false);
     const [statusPlanoMensal, setStatusPlanoMensal] = React.useState(false);
     const [proximosDias, setProximosDias] = React.useState([]);
-    const [horario, setHorario] = React.useState('10:00');
+    const [horario, setHorario] = React.useState();
     const [preferencias, setPreferencias] = React.useState([]);
     const [diaSemana, setDiaSemana] = React.useState('');
     const [diasDoMes, setDiasDoMes] = React.useState([]);
