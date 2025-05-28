@@ -17,15 +17,9 @@ const EditarAgendamento = () => {
   const [diasDoMes, setDiasDoMes] = useState({});
   const [agendamento, setAgendamento] = useState({});
   const [diaSemana, setDiaSemana] = useState(0);
+  const [novoHorario, setNovoHorario] = useState(''); // novo estado para o select
 
-  const { id } = useParams(); // Obtém o ID do paciente da URL
-
-
-
-  // const pacienteResponse = ([
-  //   { id: 1, nome: "Usuario da Silva", horario: "14:00", diaSemana: 2, data: "22/04/2025", status: "Pendente" },
-  // ]);
-
+  const { id } = useParams();
 
 
   useEffect(() => {
@@ -36,6 +30,18 @@ const EditarAgendamento = () => {
 
         if (response && response.id) {
           setAgendamento(response);
+          let horaPadronizada = response.hora;
+          // Garante formato HH:00
+          if (horaPadronizada && horaPadronizada.length === 8 && horaPadronizada.split(':').length === 3) {
+            // Exemplo: "11:00:00" => "11:00"
+            const [h, m] = horaPadronizada.split(':');
+            horaPadronizada = h.padStart(2, '0') + ':' + m.padStart(2, '0');
+          } else if (horaPadronizada && !horaPadronizada.includes(':')) {
+            horaPadronizada = horaPadronizada.padStart(2, '0') + ':00';
+          } else if (horaPadronizada && horaPadronizada.match(/^\d{1,2}:\d{1,2}$/)) {
+            const [h, m] = horaPadronizada.split(':');
+            horaPadronizada = h.padStart(2, '0') + ':' + m.padStart(2, '0');
+          }
           setPaciente({
             id: response.fkPaciente.id,
             nome: response.fkPaciente.nome,
@@ -43,12 +49,13 @@ const EditarAgendamento = () => {
             email: response.fkPaciente.email,
             status: response.fkPaciente.status,
             fkPlano: response.fkPaciente.fkPlano,
-            data: response.data, // Certifique-se de que está no formato YYYY-MM-DD
-            horario: response.hora,
+            data: response.data,
+            horario: horaPadronizada,
             diaSemana: new Date(response.data).getDay(),
             statusSessao: response.statusSessao,
           });
-        } else {
+          setNovoHorario(horaPadronizada); // <-- garante que o select também recebe o valor correto
+        } else {  
           console.error("Nenhum agendamento encontrado para o ID:", id);
         }
       } catch (error) {
@@ -93,7 +100,7 @@ const EditarAgendamento = () => {
   const formatDateToBackend = (date) => {
     if (!date || typeof date !== 'string') {
       console.error("Data inválida para formatDateToBackend:", date);
-      return "0000-00-00"; // Retorna um valor padrão inválido para evitar erros
+      return "0000-00-00";
     }
 
     const [day, month, year] = date.split('/');
@@ -102,12 +109,12 @@ const EditarAgendamento = () => {
       return "0000-00-00";
     }
 
-    return `${year}-${month}-${day}`; // Converte para o formato YYYY-MM-DD
+    return `${year}-${month}-${day}`;
   };
 
   function formatDateToFrontend(date) {
     if (!date || typeof date !== 'string') return '';
-    if (date.includes('/')) return date; // já está no formato certo
+    if (date.includes('/')) return date;
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
   }
@@ -115,7 +122,7 @@ const EditarAgendamento = () => {
   const handleAtualizarAgendamento = async (e) => {
     e.preventDefault();
 
-    if (!paciente.data || !paciente.horario || paciente.diaSemana === undefined) {
+    if (!paciente.data || !novoHorario || paciente.diaSemana === undefined) {
       errorMessage("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
@@ -138,7 +145,7 @@ const EditarAgendamento = () => {
         data: typeof paciente.data === 'string' && paciente.data.includes('/')
           ? formatDateToBackend(paciente.data)
           : paciente.data,
-        hora: paciente.horario,
+        hora: novoHorario, // <-- usa o novoHorario aqui!
         tipo: agendamento.tipo,
         statusSessao: paciente.statusSessao, // <-- valor do checkbox!
         anotacao: agendamento.anotacao,
@@ -182,6 +189,15 @@ const EditarAgendamento = () => {
     console.log("Paciente Data:", paciente.data);
     console.log("Dia da Semana Calculado:", diaSemana);
   }, [paciente, diaSemana]);
+
+  // Sempre que paciente.horario mudar, atualiza o novoHorario
+  useEffect(() => {
+    if (paciente && paciente.horario) {
+      setNovoHorario(paciente.horario);
+    }
+  }, [paciente.horario]);
+
+  console.log("Horário selecionado:", paciente.horario);
 
   return (
     <>
@@ -247,11 +263,11 @@ const EditarAgendamento = () => {
                     onChange={handleDiaSemanaChange}
                   >
                     <option value="" disabled>Selecione um dia da semana</option>
-                    {Array.from({ length: 7 }, (_, i) => (
-                      <option key={i} value={i}>
-                        {getNomeDiaSemana(i)}
-                      </option>
-                    ))}
+                    <option value={1}>Segunda-feira</option>
+                    <option value={2}>Terça-feira</option>
+                    <option value={3}>Quarta-feira</option>
+                    <option value={4}>Quinta-feira</option>
+                    <option value={5}>Sexta-feira</option>
                   </select>
                 </div>
                 <div className="select-container w-full">
@@ -282,15 +298,13 @@ const EditarAgendamento = () => {
                     name="horario"
                     required
                     className="select-field w-full"
-                    value={paciente ? paciente.horario : ''}
-                    onChange={e => setPaciente({
-                      ...paciente,
-                      horario: e.target.value,
-                    })}
+                    value={novoHorario}
+                    onChange={e => setNovoHorario(e.target.value)}
                   >
                     <option value="" disabled>Selecione um horário</option>
                     {Array.from({ length: 9 }, (_, i) => {
                       const hour = (8 + i).toString().padStart(2, '0');
+                      if (hour === "12") return null;
                       return (
                         <option key={hour} value={`${hour}:00`}>
                           {`${hour}:00`}
