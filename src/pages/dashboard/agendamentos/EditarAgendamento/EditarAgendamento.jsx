@@ -170,9 +170,9 @@ const EditarAgendamento = () => {
       errorMessage("Erro ao atualizar agendamento.");
     } finally {
       responseMessage("Agendamento atualizado com sucesso!", "small");
-      // setTimeout(() => {
-      //   window.location = '/dashboard/agendamentos';
-      // }, 1200);
+      setTimeout(() => {
+        window.location = '/dashboard/agendamentos';
+      }, 1200);
     }
   };
 
