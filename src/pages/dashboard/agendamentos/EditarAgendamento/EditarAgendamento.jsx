@@ -7,7 +7,7 @@ import { FaDeleteLeft, FaTrashCan } from 'react-icons/fa6'
 import { FaRegSave, FaSave } from 'react-icons/fa'
 import { errorMessage, responseMessage } from '../../../../utils/alert.js'
 import { useParams } from 'react-router-dom'
-import { getAgendamentosPorId } from '../../../../provider/api/agendamentos/fetchs-agendamentos.js'
+import { cancelAgendamento, getAgendamentosPorId } from '../../../../provider/api/agendamentos/fetchs-agendamentos.js'
 import { putAgendamento } from '../../../../provider/api/agendamentos/fetchs-agendamentos.js';
 
 const EditarAgendamento = () => {
@@ -197,6 +197,23 @@ const EditarAgendamento = () => {
     }
   }, [paciente.horario]);
 
+  
+  const cancelarAgendamento = async (id) => {
+    if (window.confirm("Você tem certeza que deseja cancelar este agendamento?")) {
+      // precisa colocar o modal pra confirmar pelo modal
+      try {
+        await cancelAgendamento(id, { statusSessao: 'CANCELADA' });
+        responseMessage("Agendamento cancelado com sucesso!");
+        setTimeout(() => {
+          window.location.href = '/dashboard/agendamentos';
+        }, 1200);
+      } catch (error) {
+        console.error("Erro ao cancelar agendamento:", error);
+        errorMessage("Erro ao cancelar agendamento.");
+      }
+    }
+  }
+
   console.log("Horário selecionado:", paciente.horario);
 
   return (
@@ -212,10 +229,7 @@ const EditarAgendamento = () => {
             <button
               className='btn_agendamento rounded-full flex gap-2 m-0'
               type="button"
-              onClick={() => setPaciente({
-                ...paciente,
-                data: paciente.selectedDate
-              })}
+              onClick={() => cancelarAgendamento(agendamento.id)}
             >
               <FaTrashCan className='' size={20} />
               Cancelar Agendamento
