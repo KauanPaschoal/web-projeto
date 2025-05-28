@@ -32,7 +32,8 @@
 ::-webkit-scrollbar-thumb {
   background: var(--LightBlueFy); /* Cor do thumb */
   border-radius: 10px; /* Bordas arredondadas */
-  border: 2px solid var(--WhiteFy); /* Espaço entre o thumb e o track */
+  border: 2px solid var(--LightGrayFy); /* Espaço entre o thumb e o track */
+  padding: 1px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -41,7 +42,7 @@
 
 * {
   font-family: "Montserrat", sans-serif;
-  padding: 0;
+
   scroll-behavior: smooth;
 }
 
@@ -59,6 +60,7 @@ button {
   font-size: small;
   align-items: center;
   gap: 1em;
+  border-radius: 1em;
 }
 
 .btn_secundario {

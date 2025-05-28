@@ -5,16 +5,23 @@ import { FaPen, FaPlus, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import MainComponent from '../components/MainComponent/MainComponent';
 import { getPacientes } from '../../../provider/api/pacientes/fetchs-pacientes';
+import CardPaciente from './components/CardPaciente/CardPaciente';
+import Loading from '../components/Loading/Loading';
 
 
 
 const Pacientes = () => {
   const [pacientes, setPacientes] = React.useState([]);
-  const [pacientesLista, setPacientesLista] = React.useState([]);
+
+  const [pacientesLista, setPacientesLista] = React.useState(pacientes);
   const [pesquisar, setPesquisar] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
 
+
+
   React.useEffect(() => {
+    setLoading(true);
     const fetchPacientes = async () => {
       try {
         const pacientes = await getPacientes();
@@ -28,6 +35,7 @@ const Pacientes = () => {
       } catch (error) {
         console.error("Erro ao encontrar pacientes:", error);
       }
+      setTimeout(() => setLoading(false), 500);
     };
 
     fetchPacientes();
@@ -48,77 +56,64 @@ const Pacientes = () => {
     setPacientesLista(filteredPacientes);
   }
 
-    const redirectToEditarPaciente = (id) => {
-      navigate(`/dashboard/pacientes/editar/${id}`); 
-    };
-
-    const redirectToCadastrarAgendamento = (id) => {
-      navigate(`/dashboard/agendamentos/cadastrar/${id}`)
-    };
-
-    return (
-      <div className='div-pacientes flex'>
-        <MenuLateralComponent></MenuLateralComponent>
-        <MainComponent
-          title="Meus Pacientes"
-          headerContent={
-            <>
-              <div className="search-container flex">
-                <FaSearch className="search-icon" />
-                <input
-                  type="text"
-                  placeholder="Pesquisar pacientes..."
-                  className="input-pesquisa"
-                  value={pesquisar}
-                  onChange={handleSearch}
-                />
-              </div>
-
-              <button
-                className='btn_agendamento flex rounded-full'
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate(`/dashboard/pacientes/adicionar`);
-                }}
-              >
-                <FaPlus className='icon' />
-                Adicionar Paciente
-              </button>
-            </>
-          }
-        >
-          <div className='pacientes-container'>
-            {pacientesLista.map((paciente) => (
-              <div key={paciente.id} className='paciente-card'>
-                <div className='flex gap-2'>
-                  <h3>
-                    <b>Nome: </b>
-                    {paciente.nome}
-                  </h3>
-                  <p>
-                    <b>Telefone:</b> {paciente.telefone}
-                  </p>
-                </div>
-                <div className='flex gap-2'>
-                  <button className='btn_secundario flex rounded-full'
-                    onClick={() => redirectToEditarPaciente(paciente.id)}
-                  >
-                    <FaPen />
-                    Editar
-                  </button>
-                  <button className='btn_primario flex rounded-full'
-                    onClick={() => redirectToCadastrarAgendamento(paciente.id)}
-                  >
-                    <FaPlus className='icon' />
-                    Agendar
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </MainComponent>
-      </div>
-    );
+  const redirectToEditarPaciente = (id) => {
+    navigate(`/dashboard/pacientes/editar/${id}`);
   };
 
-  export default Pacientes;
+  const redirectToCadastrarAgendamento = (id) => {
+    navigate(`/dashboard/agendamentos/cadastrar/${id}`)
+  };
+
+  return (
+    
+    <div className='div-pacientes flex'>
+      <MenuLateralComponent></MenuLateralComponent>
+      {loading && <Loading />}
+      <MainComponent
+        title="Meus Pacientes"
+        headerContent={
+          <>
+            <div className="search-container flex">
+              <FaSearch className="search-icon" />
+              <input
+                type="text"
+                placeholder="Pesquisar pacientes..."
+                className="input-pesquisa"
+                value={pesquisar}
+                onChange={handleSearch}
+              />
+            </div>
+
+            <button
+              className='btn_agendamento flex rounded-full'
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(`/dashboard/pacientes/adicionar`);
+              }}
+            >
+              <FaPlus className='icon' />
+              Adicionar Paciente
+            </button>
+          </>
+        }
+      >
+        
+          <div className='pacientes-background'>
+            <div className='pacientes-container'>
+              {pacientesLista.map((paciente) => (
+                <CardPaciente
+                  key={paciente.id}
+                  paciente={paciente}
+                  onEditar={redirectToEditarPaciente}
+                  onAgendar={redirectToCadastrarAgendamento}
+                />
+              ))}
+            </div>
+          </div>
+        
+      </MainComponent>
+    </div>
+  );
+};
+
+export default Pacientes;

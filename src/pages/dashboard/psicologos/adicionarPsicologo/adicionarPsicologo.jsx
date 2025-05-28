@@ -53,6 +53,7 @@ const AdicionarPsicologo = () => {
             <MenuPsicologo />
             <MainComponent
                 title="Adicionar Psicólogo"
+                mostrarIconeNotificacao={false}
                 headerContent={
                     <button
                         className="btn_agendamento"

@@ -134,8 +134,7 @@ const Administracao = () => {
       <MainComponent
         title="Configurações de Conta"
         headerContent={
-          <div className="flex w-full gap-2 items-center justify-between">
-            <button className="btn_agendamento">Voltar</button>
+          <div className="flex w-full gap-2 items-center justify-end">
             <button className="btn_agendamento" onClick={() => popupMessage()}>
               Preferências
             </button>
@@ -158,33 +157,41 @@ const Administracao = () => {
                   />
                 </h2>
                 <div className="card-inputs">
-                  <InputField
-                    labelTitle="Nome"
-                    value={nome}
-                    disabled={!isEditingGeneral}
-                    onChange={(e) => setNome(e.target.value)}
-                  />
-                  <InputField
-                    labelTitle="E-mail"
-                    value={email}
-                    type="email"
-                    disabled={!isEditingGeneral}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <InputField
-                    labelTitle="Telefone"
-                    value={telefone}
-                    disabled={!isEditingGeneral}
-                    onChange={(e) =>
-                      setTelefone(formatTelefone(removeMask(e.target.value)))
-                    }
-                  />
-                  <InputField
-                    labelTitle="CRP"
-                    value={crp}
-                    disabled={true}
-                    width={"w-full"}
-                  />
+                  <div className="flex gap-2 w-full justify-center">
+                    <InputField
+                      labelTitle="Nome"
+                      value={nome}
+                      width={"w-full"}
+                      disabled={!isEditingGeneral}
+                      onChange={(e) => setNome(e.target.value)}
+                    />
+                    <InputField
+                      labelTitle="E-mail"
+                      value={email}
+                      width={"w-full"}
+                      type="email"
+                      disabled={!isEditingGeneral}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex gap-2 w-full justify-center">
+                    <InputField
+                      labelTitle="Telefone"
+                      value={telefone}
+                      width={"w-full"}
+                      disabled={!isEditingGeneral}
+                      onChange={(e) =>
+                        setTelefone(formatTelefone(removeMask(e.target.value)))
+                      }
+                    />
+                    <InputField
+                      labelTitle="CRP"
+                      value={crp}
+                      disabled={true}
+                      width={"w-full"}
+                    />
+                  </div>
+
                 </div>
                 <div className="inputs-button">
                   <SaveButton
@@ -198,7 +205,7 @@ const Administracao = () => {
 
               {/* Card: Alterar Senha */}
               <form
-                className="editar-conta"
+                className="editar-conta "
                 onSubmit={(e) => e.preventDefault()}
               >
                 <h2 className="flex items-center justify-between">
@@ -209,28 +216,35 @@ const Administracao = () => {
                   />
                 </h2>
                 <div className="card-inputs">
-                  <InputField
-                    labelTitle="Senha Atual"
-                    value={senha}
-                    disabled={!isEditingPassword}
-                    width={"w-full"}
-                    onChange={(e) => setSenha(e.target.value)}
-                    type="password"
-                  />
-                  <InputField
-                    labelTitle="Nova senha"
-                    value={novaSenha}
-                    disabled={!isEditingPassword}
-                    onChange={(e) => setNovaSenha(e.target.value)}
-                    type="password"
-                  />
-                  <InputField
-                    labelTitle="Confirmar senha"
-                    value={confirmarSenha}
-                    disabled={!isEditingPassword}
-                    onChange={(e) => setConfirmarSenha(e.target.value)}
-                    type="password"
-                  />
+                  <div className="flex flex-col gap-2 w-full items-center">
+                    <InputField
+                      labelTitle="Senha Atual"
+                      value={senha}
+                      disabled={!isEditingPassword}
+                      width={"w-full"}
+                      onChange={(e) => setSenha(e.target.value)}
+                      type="password"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2 w-full items-center">
+                    <InputField
+                      labelTitle="Nova senha"
+                      value={novaSenha}
+                      width={"w-full"}
+                      disabled={!isEditingPassword}
+                      onChange={(e) => setNovaSenha(e.target.value)}
+                      type="password"
+                    />
+                    <InputField
+                      labelTitle="Confirmar senha"
+                      value={confirmarSenha}
+                      width={"w-full"}
+                      disabled={!isEditingPassword}
+                      onChange={(e) => setConfirmarSenha(e.target.value)}
+                      type="password"
+                    />
+                  </div>
                 </div>
                 <div className="inputs-button">
                   <SaveButton

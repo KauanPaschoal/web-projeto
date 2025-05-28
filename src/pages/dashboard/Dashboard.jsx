@@ -9,7 +9,8 @@ import MainComponent from './components/MainComponent/MainComponent'
 
 const Dashboard = () => {
 
-  
+  const [loading, setLoading] = React.useState(true);
+  const [agendamentos, setAgendamentos] = React.useState([]);
 
 
 const valores = [

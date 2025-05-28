@@ -5,54 +5,54 @@ import MainComponent from '../components/MainComponent/MainComponent';
 import { FaPlus } from 'react-icons/fa';
 import CalendarCard from './components/CalendarCard/CalendarCard';
 import { getAgendamentos, getAgendamentosPorPaciente } from '../../../provider/api/agendamentos/fetchs-agendamentos';
+import Loading from '../components/Loading/Loading';
 
 const Agendamentos = () => {
   const [agendamentos, setAgendamentos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [offsetSemana, setOffsetSemana] = useState(0);
 
   const redirectToCadastrarAgendamento = () => {
     window.location.href = './agendamentos/cadastrar';
   };
 
-  const getCurrentWeekDays = () => {
+  const getCurrentWeekDays = (offset = 0) => {
     const today = new Date();
-    const currentDay = today.getDay(); // 0 (Domingo) a 6 (Sábado)
+    const currentDay = today.getDay();
     const daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
     const weekDays = [];
 
-    // Se for sábado ou domingo, avança para a próxima segunda-feira
+    // Avança para a próxima segunda-feira se for sábado ou domingo
     if (currentDay === 6) {
-        today.setDate(today.getDate() + 2); // Avança para segunda-feira
+      today.setDate(today.getDate() + 2);
     } else if (currentDay === 0) {
-        today.setDate(today.getDate() + 1); // Avança para segunda-feira
+      today.setDate(today.getDate() + 1);
+    } else {
+      // Se for segunda a sexta, volta para a segunda-feira da semana atual
+      today.setDate(today.getDate() - (currentDay - 1));
     }
+
+    // Aplica o offset de semanas
+    today.setDate(today.getDate() + offset * 7);
 
     // Gera os próximos 5 dias úteis (segunda a sexta)
     for (let i = 0; i < 5; i++) {
-        const day = new Date(today);
-        day.setDate(today.getDate() + i);
+      const day = new Date(today);
+      day.setDate(today.getDate() + i);
+      const dayOfMonth = day.getDate().toString().padStart(2, '0');
+      const month = (day.getMonth() + 1).toString().padStart(2, '0');
+      const year = day.getFullYear();
 
-        // Pula sábados e domingos
-        if (day.getDay() === 6 || day.getDay() === 0) {
-            i--; // Não conta sábados e domingos como dias úteis
-            today.setDate(today.getDate() + 1);
-            continue;
-        }
-
-        const dayOfMonth = day.getDate().toString().padStart(2, '0'); // Formata o dia com dois dígitos
-        const month = (day.getMonth() + 1).toString().padStart(2, '0'); // Formata o mês com dois dígitos
-        const year = day.getFullYear(); // Obtém o ano completo
-
-        weekDays.push({
-            dayName: daysOfWeek[day.getDay()], // Nome do dia da semana
-            date: `${dayOfMonth}/${month}/${year}`, // Formata a data como DD/MM/YYYY
-        });
+      weekDays.push({
+        dayName: daysOfWeek[day.getDay()],
+        date: `${dayOfMonth}/${month}/${year}`,
+      });
     }
 
     return weekDays;
   };
 
-  const weekDays = getCurrentWeekDays();
+  const weekDays = getCurrentWeekDays(offsetSemana);
 
   const timeSlots = [
     '08:00 - 09:00',
@@ -65,26 +65,6 @@ const Agendamentos = () => {
     '16:00 - 17:00',
   ];
 
-  // Simula o fetch para buscar os agendamentos
-  // useEffect(() => {
-  //   const fetchAgendamentos = async () => {
-  //     try{
-  //       setLoading(true);
-  //         const agendamentos = await getAgendamentosPorPaciente();
-  //         if (Array.isArray(agendamentos)) {
-  //           setAgendamentos(agendamentos);
-  //           console.log("Agendamentos:", agendamentos);
-  //         } else {
-  //           console.error("A resposta da API não é um array:", agendamentos);
-  //         }
-  //       } catch (error) {
-  //         console.error("Erro ao encontrar agendamentos:", error);
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
-  //   },[]);
-
   useEffect(() => {
     const fetchAgendamentos = async () => {
         try {
@@ -92,14 +72,13 @@ const Agendamentos = () => {
             const response = await getAgendamentos();
 
             if (Array.isArray(response)) {
-                // Transforma os dados para garantir que `data` e `hora` estejam no formato correto
                 const agendamentosTransformados = response.map((agendamento) => ({
                     ...agendamento,
                     timeSlot: agendamento.hora
-                        ? agendamento.hora.substring(0, 5) // Extrai HH:MM de `hora`
+                        ? agendamento.hora.substring(0, 5) 
                         : '00:00',
-                    patientName: agendamento.fkPaciente?.nome || 'Desconhecido', // Nome do paciente
-                    status: agendamento.statusSessao || 'Indefinido', // Status da sessão
+                    patientName: agendamento.fkPaciente?.nome || 'Desconhecido', 
+                    status: agendamento.statusSessao || 'Indefinido', 
                 }));
 
                 setAgendamentos(agendamentosTransformados);
@@ -110,46 +89,13 @@ const Agendamentos = () => {
         } catch (error) {
             console.error("Erro ao encontrar agendamentos:", error);
         } finally {
-            setLoading(false);
+            setTimeout(() => setLoading(false), 500);
         }
     };
 
     fetchAgendamentos();
 }, []);
     
-
-
-  // useEffect(() => {
-  //   const fetchAgendamentos = async () => {
-  //     try {
-  //       setLoading(true);
-  //       // Simulação de um fetch para a API
-  //       const response = await new Promise((resolve) =>
-  //         setTimeout(() => {
-  //           resolve([
-  //             { date: '23/04/2025', timeSlot: '08:00 - 09:00', status: 'Confirmado', patientName: 'Lucas Pereira' },
-  //             { date: '24/04/2025', timeSlot: '09:00 - 10:00', status: 'Pendente', patientName: 'Fernanda Lima' },
-  //             { date: '21/04/2025', timeSlot: '10:00 - 11:00', status: 'Cancelado', patientName: 'Rafael Almeida' },
-  //             { date: '22/04/2025', timeSlot: '11:00 - 12:00', status: 'Confirmado', patientName: 'Beatriz Santos' },
-  //             { date: '23/04/2025', timeSlot: '13:00 - 14:00', status: 'Confirmado', patientName: 'Gabriel Costa' },
-  //             { date: '24/04/2025', timeSlot: '14:00 - 15:00', status: 'Cancelado', patientName: 'Juliana Rocha' },
-  //             { date: '25/04/2025', timeSlot: '15:00 - 16:00', status: 'Confirmado', patientName: 'Thiago Martins' },
-  //             { date: '23/04/2025', timeSlot: '16:00 - 17:00', status: 'Pendente', patientName: 'Mariana Oliveira' },
-  //           ]);
-  //         }, 1000)
-  //       );
-  //       setAgendamentos(response);
-  //     } catch (error) {
-  //       console.error('Erro ao buscar agendamentos:', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchAgendamentos();
-  // }, []);
-
-
   const capitalizeFirstLetter = (text) => {
     if (!text) return '';
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
@@ -171,15 +117,29 @@ const Agendamentos = () => {
       <MainComponent
         title="Agendamentos"
         headerContent={
-          <button className='btn_agendamento flex rounded-full' onClick={redirectToCadastrarAgendamento}>
-            <FaPlus className='icon' />
-            Agendar
-          </button>
+          <div className="flex gap-2">
+            <button
+              className="btn_agendamento"
+              onClick={() => setOffsetSemana((prev) => prev - 1)}
+            >
+              {"< Semana Anterior"}
+            </button>
+            <button
+              className="btn_agendamento"
+              onClick={() => setOffsetSemana((prev) => prev + 1)}
+            >
+              {"Próxima Semana >"}
+            </button>
+            <button className='btn_agendamento flex rounded-full' onClick={redirectToCadastrarAgendamento}>
+              <FaPlus className='icon' />
+              Agendar
+            </button>
+          </div>
         }
       >
         <section className='calendario-container'>
           {loading ? (
-            <p>Carregando agendamentos...</p>
+            <Loading />
           ) : (
             <>
               <table className='calendario-table flex flex-col w-full'>

@@ -1,25 +1,73 @@
 import React from "react";
+import Cleave from "cleave.js/react";
 import "./inputField.css";
 
-const InputField = ({ labelTitle, type = "text", placeholder, id, name, onChange, onBlur, list, required, className, value, icon, width, disabled}) => {
+const InputField = ({
+  labelTitle,
+  type = "text",
+  placeholder,
+  id,
+  name,
+  onChange,
+  onBlur,
+  list,
+  required,
+  className,
+  value,
+  icon,
+  width,
+  disabled,
+  maxLength,
+  maskType, // 'cpf', 'telefone', 'cep', 'hora', etc
+  ...rest
+}) => {
+  // Configurações de máscara
+  const maskOptions = {
+    cpf: { delimiters: ['.', '.', '-'], blocks: [3, 3, 3, 2], numericOnly: true },
+    telefone: { delimiters: ['(', ') ', '-'], blocks: [0, 2, 5, 4], numericOnly: true },
+    cep: { delimiters: ['-'], blocks: [5, 3], numericOnly: true },
+    hora: { delimiters: [':' ], blocks: [2, 2], numericOnly: true },
+  };
+
   return (
     <div className={`inputContainer ${width || "w-[45%]"}`}>
       <label>{labelTitle}:</label>
-      <div className="flex">
+      <div className="flex items-center gap-2">
         {icon && <span className="input-icon">{icon}</span>}
-        <input
-          type={type}
-          id={id}
-          name={name}
-          placeholder={placeholder}
-          onChange={onChange}
-          onBlur={onBlur}
-          list={list}
-          required={required}
-          value={value}
-          className={`inputField ${className}`}
-          disabled={disabled}
-        />
+        {maskType ? (
+          <Cleave
+            type={type}
+            id={id}
+            name={name}
+            placeholder={placeholder}
+            onChange={onChange}
+            onBlur={onBlur}
+            options={maskOptions[maskType]}
+            list={list}
+            required={required}
+            value={value}
+            disabled={disabled}
+            maxLength={maxLength}
+            className={`inputField ${width || "w-[100%]"} ${className || ""}`}
+            {...rest}
+          />
+        ) : (
+          <input
+            type={type}
+            id={id}
+            name={name}
+            placeholder={placeholder}
+            onChange={onChange}
+            onBlur={onBlur}
+            list={list}
+            required={required}
+            value={value}
+            disabled={disabled}
+            maxLength={maxLength}
+            className={`inputField ${width || "w-[100%]"} ${className || ""}`}
+            {...rest}
+          />
+        )}
       </div>
     </div>
   );
