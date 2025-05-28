@@ -9,6 +9,7 @@ import { errorMessage, responseMessage } from '../../../../utils/alert.js'
 import { useParams } from 'react-router-dom'
 import { cancelAgendamento, getAgendamentosPorId } from '../../../../provider/api/agendamentos/fetchs-agendamentos.js'
 import { putAgendamento } from '../../../../provider/api/agendamentos/fetchs-agendamentos.js';
+import UserSearch from '../../components/UserSearch/UserSearch';
 
 const EditarAgendamento = () => {
 
@@ -18,6 +19,8 @@ const EditarAgendamento = () => {
   const [agendamento, setAgendamento] = useState({});
   const [diaSemana, setDiaSemana] = useState(0);
   const [novoHorario, setNovoHorario] = useState(''); // novo estado para o select
+  // Novo estado para controlar se houve troca de paciente
+  const [novoPacienteSelecionado, setNovoPacienteSelecionado] = useState(null);
 
   const { id } = useParams();
 
@@ -122,49 +125,56 @@ const EditarAgendamento = () => {
   const handleAtualizarAgendamento = async (e) => {
     e.preventDefault();
 
-    if (!paciente.data || !novoHorario || paciente.diaSemana === undefined) {
-      errorMessage("Por favor, preencha todos os campos obrigatórios.");
+    // Se o agendamento está cancelado, exige novo paciente
+    if (agendamento.statusSessao === 'CANCELADA' && !novoPacienteSelecionado) {
+      errorMessage("Selecione um novo paciente para reativar o agendamento.");
       return;
     }
 
-    try {
-      const requestBody = {
-        id: agendamento.id,
-        fkPaciente: {
-          id: paciente.id,
-          nome: paciente.nome,
-          cpf: paciente.cpf,
-          email: paciente.email,
-          status: paciente.status,
-          fkPlano: {
-            id: paciente.fkPlano?.id,
-            categoria: paciente.fkPlano?.categoria,
-            preco: paciente.fkPlano?.preco,
-          },
+    // Usa o novo paciente se selecionado, senão mantém o atual
+    const pacienteParaSalvar = agendamento.statusSessao === 'CANCELADA' && novoPacienteSelecionado
+      ? novoPacienteSelecionado
+      : paciente;
+
+    const dataParaSalvar = paciente.data; // sempre pega do state do formulário
+    const diaSemanaParaSalvar = paciente.diaSemana; // idem
+
+    const requestBody = {
+      id: agendamento.id,
+      fkPaciente: {
+        id: pacienteParaSalvar.id,
+        nome: pacienteParaSalvar.nome,
+        cpf: pacienteParaSalvar.cpf,
+        email: pacienteParaSalvar.email,
+        status: pacienteParaSalvar.status,
+        fkPlano: {
+          id: pacienteParaSalvar.fkPlano?.id,
+          categoria: pacienteParaSalvar.fkPlano?.categoria,
+          preco: pacienteParaSalvar.fkPlano?.preco,
         },
-        data: typeof paciente.data === 'string' && paciente.data.includes('/')
-          ? formatDateToBackend(paciente.data)
-          : paciente.data,
-        hora: novoHorario, // <-- usa o novoHorario aqui!
-        tipo: agendamento.tipo,
-        statusSessao: paciente.statusSessao, // <-- valor do checkbox!
-        anotacao: agendamento.anotacao,
-        createdAt: agendamento.createdAt,
-      };
+      },
+      data: typeof dataParaSalvar === 'string' && dataParaSalvar.includes('/')
+        ? formatDateToBackend(dataParaSalvar)
+        : dataParaSalvar,
+      hora: novoHorario,
+      tipo: agendamento.tipo,
+      statusSessao: agendamento.statusSessao === 'CANCELADA' ? 'PENDENTE' : pacienteParaSalvar.statusSessao,
+      anotacao: agendamento.anotacao,
+      createdAt: agendamento.createdAt,
+    };
 
-      console.log("Request Body para Atualizar:", requestBody);
-
+    try {
       await putAgendamento(agendamento.id, requestBody);
       responseMessage("Agendamento atualizado com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar agendamento:", error);
       errorMessage("Erro ao atualizar agendamento.");
-    }finally {
-        responseMessage("Agendamento atualizado com sucesso!", "small");
-        setTimeout(() => {
-          window.location = '/dashboard/agendamentos';
-        }, 1200);
-      }
+    } finally {
+      responseMessage("Agendamento atualizado com sucesso!", "small");
+      // setTimeout(() => {
+      //   window.location = '/dashboard/agendamentos';
+      // }, 1200);
+    }
   };
 
   const handleDiaSemanaChange = (e) => {
@@ -226,6 +236,8 @@ const EditarAgendamento = () => {
             <button className="btn_agendamento" onClick={() => window.location.href = '/dashboard/agendamentos'}>
               {"< Voltar"}
             </button>
+            {
+              agendamento.statusSessao !== 'Cancelada' &&
             <button
               className='btn_agendamento rounded-full flex gap-2 m-0'
               type="button"
@@ -234,21 +246,35 @@ const EditarAgendamento = () => {
               <FaTrashCan className='' size={20} />
               Cancelar Agendamento
             </button>
+            }
           </div>
         }
       >
-
+        
+          
         <form className='form-editar-agendamento'
 
-          noValidates
-          onSubmit={handleAtualizarAgendamento}>
-          <section className='container-editar-agendamento'>
+          noValidate
+          onSubmit={handleAtualizarAgendamento}>          
+          
+            
 
+          <section className='container-editar-agendamento'>
+              
             {paciente && (
               <div className="paciente-info-editar">
-                <p><strong>Paciente Selecionado:</strong> {paciente.nome}</p>
+                {agendamento.statusSessao === 'CANCELADA' && (
+                  <div className="w-full justify-center flex flex-col" >
+                    <UserSearch
+                      onUserSelect={setNovoPacienteSelecionado}
+                      useIcon={false}
+                      labelTitle='Novo Paciente'
+                    />
+                  </div>
+                )}
+                <p><strong>Paciente Selecionado:</strong> {novoPacienteSelecionado ? novoPacienteSelecionado.nome : paciente.nome}</p>
                 <p><strong>Horário Marcado:</strong> {paciente.horario}</p>
-                <p><strong>Data Marcada:</strong> {agendamento.data}</p>
+                <p><strong>Data Marcada:</strong> {formatDateToFrontend(agendamento.data)}</p>
                 <div className="pendente-container">
                   <span className={`status ${
                     agendamento.statusSessao === 'PENDENTE' ? 'status-sessao-pendente' :
@@ -259,13 +285,13 @@ const EditarAgendamento = () => {
                     {agendamento.statusSessao}
                   </span>
                 </div>
-
               </div>
             )}
 
-
             <div className='container-sessao-editar'>
               <div className='container-inputs-editar flex gap-2'>
+                
+          
                 <div className="select-container w-full">
                   <label htmlFor="diaSemana" className="input-label">Novo Dia da Semana:</label>
                   <select
@@ -327,6 +353,10 @@ const EditarAgendamento = () => {
                     })}
                   </select>
                 </div>
+
+                {
+                  !agendamento.statusSessao === 'Cancelada' &&
+                  
                 <div className="checkbox-container">
                   <input
                     name="confirmar_checkbox"
@@ -340,8 +370,8 @@ const EditarAgendamento = () => {
                   <label htmlFor="confirmar_checkbox">
                     Confirmar Agendamento
                   </label>
-
                 </div>
+                }
               </div>
             </div>
           </section>

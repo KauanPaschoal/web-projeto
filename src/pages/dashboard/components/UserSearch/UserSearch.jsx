@@ -11,6 +11,7 @@ const UserSearch = ({
     placeholder = "Nome do Paciente",
     width = "w-[100%]",
     className = "styled-input",
+    useIcon = true,
     ...rest
 }) => {
     const [todosPacientes, setTodosPacientes] = useState([]);
@@ -83,7 +84,7 @@ const UserSearch = ({
                 required
                 className="styled-input"
                 width={"w-[100%]"}
-                icon={<FaUser />}
+                icon={useIcon && <FaUser />}
             />
             {showSuggestions && pacientes.length > 0 && (
                 <ul className="suggestions-list">
