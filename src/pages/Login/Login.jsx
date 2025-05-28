@@ -38,7 +38,6 @@ const LoginPage = () => {
         const nomeFormatado = toCapitalize(nome);
 
         if (token) {
-          // Armazena o token no localStorage
           localStorage.setItem("authToken", token);
 
           localStorage.setItem("nomeUsuario", nomeFormatado);
