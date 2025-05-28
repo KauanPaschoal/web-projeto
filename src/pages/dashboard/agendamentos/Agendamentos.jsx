@@ -171,8 +171,8 @@ const Agendamentos = () => {
                           <td key={colIndex} className='div-calendario-card'>
                             {agendamento ? (
                               <CalendarCard
-                                timeSlot={agendamento.timeSlot}
-                                status={capitalizeFirstLetter(agendamento.status)} // Formata o texto do status
+                                timeSlot={agendamento.timeSlot.split(' - ')[0]}
+                                status={capitalizeFirstLetter(agendamento.status)}
                                 patientName={agendamento.patientName}
                                 buttonText="Ver Detalhes"
                                 day={day.date}
@@ -180,7 +180,7 @@ const Agendamentos = () => {
                               />
                             ) : (
                               <CalendarCard
-                                timeSlot={timeSlot}
+                                timeSlot={timeSlot.split(' - ')[0]}
                                 status="Disponível"
                                 patientName=""
                                 buttonText="+ Agendar"

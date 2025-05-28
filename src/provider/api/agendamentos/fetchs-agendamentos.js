@@ -89,3 +89,17 @@ export const getAgendamentosPorStatus = async (status) => {
         throw error;
     }
 };
+
+export const cancelAgendamento = async (id) => {
+    try {
+        const response = await axios.put(`/sessoes/cancelar/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao deletar agendamento:', error);
+        throw error;
+    }
+}

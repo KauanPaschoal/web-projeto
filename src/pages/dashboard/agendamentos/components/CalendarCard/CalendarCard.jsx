@@ -9,14 +9,14 @@ const CalendarCard = ({ timeSlot, status, patientName, buttonText, day, id }) =>
     Pendente: 'orange',
     Confirmada: 'green',
     Concluida: 'blue',
-    Cancelado: 'red',
+    Cancelada: 'red',
     Disponível: 'gray',
   }[status] || 'gray';
 
   const backgroundColor = {
     Pendente: 'rgba(255, 165, 0, 0.1)',
     Confirmada: 'rgba(0, 128, 0, 0.1)',
-    Cancelado: 'rgba(255, 0, 0, 0.1)',
+    Cancelada: 'rgba(255, 0, 0, 0.1)',
     Disponível: 'rgba(128, 128, 128, 0.1)',
   }[status] || 'rgba(128, 128, 128, 0.1)';
 
