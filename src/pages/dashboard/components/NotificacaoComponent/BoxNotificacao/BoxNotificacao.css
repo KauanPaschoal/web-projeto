@@ -3,3 +3,7 @@
     font-size: 1em;
     font-weight: 700;
 }
+
+.box-notificacao:hover{
+    background-color: var(--LightGrayFy);
+}

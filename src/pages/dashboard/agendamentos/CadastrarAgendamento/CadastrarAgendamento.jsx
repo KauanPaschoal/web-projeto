@@ -135,7 +135,19 @@ const CadastrarAgendamento = ({ paciente }) => {
                 }));
             }, [statusPlanoMensal]);
 
-
+            function montarPacienteComPadrao(paciente) {
+                const diasCalculados = getProximosDias(paciente.diaSemana || 1); // padrão segunda-feira se não houver
+                return {
+                    ...paciente,
+                    diaSemana: paciente.diaSemana || 1,
+                    diaMes: diasCalculados,
+                    horario: "08:00",
+                    selectedDate: diasCalculados[0] || "",
+                    planoMensal: paciente.planoMensal || false,
+                    statusAgendamento: paciente.statusAgendamento || "Pendente",
+                    tipo: "AVULSO",
+                };
+            }
 
             const formatDateToBackend = (date) => {
                 const [day, month, year] = date.split('/');
@@ -267,7 +279,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                 setPacienteSelecionado(prev => ({
                     ...prev,
                     diaSemana: selected,
-                    selectedDate: dias[0]
+                    selectedDate: dias[0] // sempre seleciona o primeiro disponível
                 }));
             };
 
@@ -302,7 +314,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                             noValidate
                         >
                             <div className='w-[80%] div-escolher-paciente'>
-                                <UserSearch onUserSelect={setPacienteSelecionado} />
+                                <UserSearch onUserSelect={p => setPacienteSelecionado(p ? montarPacienteComPadrao(p) : undefined)} />
                             
                                 {!pacienteSelecionado || !pacienteSelecionado.id ? (
                                     <p className="mensagem-escolha-paciente">Selecione um paciente para continuar.</p>

@@ -165,7 +165,6 @@ const EditarAgendamento = () => {
 
     try {
       await putAgendamento(agendamento.id, requestBody);
-      responseMessage("Agendamento atualizado com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar agendamento:", error);
       errorMessage("Erro ao atualizar agendamento.");
@@ -237,7 +236,7 @@ const EditarAgendamento = () => {
               {"< Voltar"}
             </button>
             {
-              agendamento.statusSessao !== 'Cancelada' &&
+              agendamento.statusSessao !== 'CANCELADA' &&
             <button
               className='btn_agendamento rounded-full flex gap-2 m-0'
               type="button"
@@ -250,28 +249,14 @@ const EditarAgendamento = () => {
           </div>
         }
       >
-        
-          
         <form className='form-editar-agendamento'
-
           noValidate
           onSubmit={handleAtualizarAgendamento}>          
           
-            
-
           <section className='container-editar-agendamento'>
               
             {paciente && (
               <div className="paciente-info-editar">
-                {agendamento.statusSessao === 'CANCELADA' && (
-                  <div className="w-full justify-center flex flex-col" >
-                    <UserSearch
-                      onUserSelect={setNovoPacienteSelecionado}
-                      useIcon={false}
-                      labelTitle='Novo Paciente'
-                    />
-                  </div>
-                )}
                 <p><strong>Paciente Selecionado:</strong> {novoPacienteSelecionado ? novoPacienteSelecionado.nome : paciente.nome}</p>
                 <p><strong>Horário Marcado:</strong> {paciente.horario}</p>
                 <p><strong>Data Marcada:</strong> {formatDateToFrontend(agendamento.data)}</p>
@@ -290,7 +275,15 @@ const EditarAgendamento = () => {
 
             <div className='container-sessao-editar'>
               <div className='container-inputs-editar flex gap-2'>
-                
+                {agendamento.statusSessao === 'CANCELADA' && (
+                  <div className="w-full justify-center flex flex-col" >
+                    <UserSearch
+                      onUserSelect={setNovoPacienteSelecionado}
+                      useIcon={false}
+                      labelTitle='Novo Paciente'
+                    />
+                  </div>
+                )}
           
                 <div className="select-container w-full">
                   <label htmlFor="diaSemana" className="input-label">Novo Dia da Semana:</label>
@@ -355,7 +348,7 @@ const EditarAgendamento = () => {
                 </div>
 
                 {
-                  !agendamento.statusSessao === 'Cancelada' &&
+                  agendamento.statusSessao !== 'CANCELADA' &&
                   
                 <div className="checkbox-container">
                   <input

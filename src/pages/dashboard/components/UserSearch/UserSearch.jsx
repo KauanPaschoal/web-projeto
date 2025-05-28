@@ -87,7 +87,7 @@ const UserSearch = ({
                 icon={useIcon && <FaUser />}
             />
             {showSuggestions && pacientes.length > 0 && (
-                <ul className="suggestions-list">
+                <ul className="suggestions-list w-full">
                     {pacientes.map((paciente, index) => (
                         <li
                             key={index}
