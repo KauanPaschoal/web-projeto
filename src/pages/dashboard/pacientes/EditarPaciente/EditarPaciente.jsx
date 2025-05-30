@@ -12,6 +12,7 @@ import {
   putDesativarPaciente,
   putPaciente,
   putEndereco,
+  buscarTelefonePorIdPaciente
 } from "../../../../provider/api/pacientes/fetchs-pacientes";
 import Swal from "sweetalert2";
 import {
@@ -39,6 +40,7 @@ const EditarPaciente = () => {
   const [preferencias, setPreferencias] = useState([]); // Estado para armazenar as preferências do paciente
   const [erro, setErro] = useState(''); // Estado para armazenar erros
   const [loading, setLoading] = useState(true); // Estado para controle de loading
+  const [telefone, setTelefone] = useState({});
 
   const diasSemana = [
     "Segunda-feira",
@@ -65,7 +67,7 @@ const EditarPaciente = () => {
       try {
         const [pacienteResponse, preferenciasResponse] = await Promise.all([
           fetch(`/pacientes/${id}`).then((res) => res.json()),
-          getPreferenciasPorId(id),
+          getPreferenciasPorId(id)
         ]);
 
         setPaciente({
@@ -97,6 +99,40 @@ const EditarPaciente = () => {
     }
     setIsEditingGeneral(!isEditingGeneral);
   };
+
+  const buscarTelefone = async () => {
+    try {
+      const telefoneResponse = await buscarTelefonePorIdPaciente(id);
+      if (telefoneResponse && telefoneResponse.length > 0) {
+        setTelefone((prev) => ({
+          ...prev,
+          // Telefone principal do usuário
+          telefone: telefoneResponse[0].numero || "",
+          ddd: telefoneResponse[0].ddd || "",
+          // Contato de emergência
+          telefoneContato: telefoneResponse[1].numero || "",
+          dddContato: telefoneResponse[1].ddd || "",
+          nomeContato: telefoneResponse[1].nomeContato || "",
+        }));
+      } else {
+        // Limpa os campos caso não haja telefone
+        setPaciente((prev) => ({
+          ...prev,
+          telefone: "",
+          ddd: "",
+          telefoneContato: "",
+          nomeContato: "",
+        }));
+        console.warn("Nenhum telefone encontrado para o paciente.");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar telefone:", error);
+      errorMessage("Erro ao buscar telefone do paciente.");
+    }
+  };
+  useEffect(() => {
+    buscarTelefone();
+  }, [id]);
 
   function limparCamposEndereco() {
     setPaciente((prev) => ({
@@ -273,7 +309,7 @@ const EditarPaciente = () => {
                     type={"tel"}
                     placeholder={'Telefone do paciente'}
                     labelTitle={"Telefone"}
-                    value={paciente.telefone || ""}
+                    value={(telefone.ddd || "") + (telefone.telefone || "")}
                     onChange={(e) =>
                       setPaciente((prev) => ({
                         ...prev,
@@ -349,7 +385,7 @@ const EditarPaciente = () => {
                     disabled={!isEditingGeneral}
                     labelTitle={"Contato de Emergência"}
                     placeholder={'Nome do contato de emergência'}
-                    value={paciente.nomeContato || ""}
+                    value={telefone.nomeContato || ""}
                     onChange={(e) =>
                       setPaciente((prev) => ({
                         ...prev,
@@ -362,13 +398,14 @@ const EditarPaciente = () => {
                     type={"tel"}
                     labelTitle={"Telefone de Emergência"}
                     placeholder={'Telefone do contato de emergência'}
-                    value={paciente.telefoneContato || ""}
+                    value={(telefone.telefoneContato || "") + (telefone.dddContato || "")}
                     onChange={(e) =>
                       setPaciente((prev) => ({
                         ...prev,
                         telefoneContato: e.target.value,
                       }))
                     }
+                    maskType="telefone"
                   />
                 </div>
 
@@ -376,9 +413,10 @@ const EditarPaciente = () => {
                 <div className="inputArea">
                   <div>
                     <InputField
-                      disabled={!isEditingGeneral}
+                      disabled={true}
                       type={"text"}
                       labelTitle={"CEP"}
+                      
                       placeholder={'CEP do paciente'}
                       value={paciente.fkEndereco?.cep || ""} // Usa o operador ?. para evitar erros
                       maxLength={9}
@@ -397,7 +435,7 @@ const EditarPaciente = () => {
                     {erro && <p className="text-xs text-red-500">{erro}</p>}
                   </div>
                   <InputField
-                    disabled={!isEditingGeneral}
+                    disabled={true}
                     type={"text"}
                     labelTitle={"Cidade"}
                     placeholder={'Cidade do paciente'}
@@ -413,7 +451,7 @@ const EditarPaciente = () => {
                     }
                   />
                   <InputField
-                    disabled={!isEditingGeneral}
+                    disabled={true}
                     type={"text"}
                     labelTitle={"Bairro"}
                     placeholder={'Bairro do paciente'}
@@ -429,7 +467,7 @@ const EditarPaciente = () => {
                     }
                   />
                   <InputField
-                    disabled={!isEditingGeneral}
+                    disabled={true}
                     type={"text"}
                     labelTitle={"Número"}
                     placeholder={'Número do endereço'}
@@ -445,7 +483,7 @@ const EditarPaciente = () => {
                     }
                   />
                   <InputField
-                    disabled={!isEditingGeneral}
+                    disabled={true}
                     type={"text"}
                     labelTitle={"Logradouro"}
                     width={"w-full"}
@@ -462,12 +500,10 @@ const EditarPaciente = () => {
                     }
                   />
                   <div className="flex flex-col gap-2">
-                    <label className="w-fit text-sm font-bold text-gray-800">
-                      Estado:
-                    </label>
-                    <select
+                    
+                    <InputField
                       className="border-b border-gray-300 text-sm px-0 py-2 caret-blue-500 outline-none"
-                      disabled={!isEditingGeneral}
+                      disabled={true}
                       type={"text"}
                       labelTitle={"Estado"}
                       value={paciente.fkEndereco?.uf || ""}
@@ -480,36 +516,8 @@ const EditarPaciente = () => {
                           },
                         }))
                       }
-                    >
-                      <option value="">Selecione o estado</option>
-                      <option value="AC">AC</option>
-                      <option value="AL">AL</option>
-                      <option value="AP">AP</option>
-                      <option value="AM">AM</option>
-                      <option value="BA">BA</option>
-                      <option value="CE">CE</option>
-                      <option value="DF">DF</option>
-                      <option value="ES">ES</option>
-                      <option value="GO">GO</option>
-                      <option value="MA">MA</option>
-                      <option value="MT">MT</option>
-                      <option value="MS">MS</option>
-                      <option value="MG">MG</option>
-                      <option value="PA">PA</option>
-                      <option value="PB">PB</option>
-                      <option value="PR">PR</option>
-                      <option value="PE">PE</option>
-                      <option value="PI">PI</option>
-                      <option value="RJ">RJ</option>
-                      <option value="RN">RN</option>
-                      <option value="RS">RS</option>
-                      <option value="RO">RO</option>
-                      <option value="RR">RR</option>
-                      <option value="SC">SC</option>
-                      <option value="SP">SP</option>
-                      <option value="SE">SE</option>
-                      <option value="TO">TO</option>
-                    </select>
+                    />
+                      
                   </div>
                   <CheckBox
                     CheckboxValue={"ativo"}
