@@ -45,9 +45,9 @@ export async function popupMessage(planoId) {
       title: '<span style="color: #1B66A4;">Editar Valores do Plano</span>',
       html: `
         <label for="semana" style="display: block; text-align: left; margin-top: 10px; color: #000000;">Semanal:</label>
-        <input id="semana" class="swal2-input" placeholder="R$ 0,00" value="${semanal}">
+        <input id="semana" class="swal2-input input-app" placeholder="R$ 0,00" value="${semanal}">
         <label for="mensal" style="display: block; text-align: left; margin-top: 10px; color: #000000;">Mensal:</label>
-        <input id="mensal" class="swal2-input" placeholder="R$ 0,00" value="${mensal}">
+        <input id="mensal" class="swal2-input input-app" placeholder="R$ 0,00" value="${mensal}">
       `,
       background: "#FFFFFF", // TrueWhiteFy
       focusConfirm: false,

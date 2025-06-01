@@ -127,8 +127,34 @@ button {
   padding: 30px;
 }
 
+/* Estilo para inputs do SweetAlert2 igual aos inputs da aplicação */
+.input-app {
+  text-align: left;
+  padding: 1rem;
+  border: none;
+  border-bottom: 2px solid var(--LightGrayFy);
+  font-size: 1rem;
+  color: var(--DarkBlueFy);
+  background: var(--WhiteFy);
+  margin:auto;
+  margin-top: 16px;
+  padding-left: 0;
+  width: 100%;
+  display: flex;
+  align-items: start;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+  border-radius: 0;
+  outline: none;
+  transition: border-bottom-color 0.2s;
+}
 
-
+.input-app:focus {
+  box-shadow: none;
+  border: none;
+  border-bottom: 2px solid var(--LightBlueFy);
+  outline: none;
+}
 
 footer {
   background-color: var(--DarkestBlueFy);

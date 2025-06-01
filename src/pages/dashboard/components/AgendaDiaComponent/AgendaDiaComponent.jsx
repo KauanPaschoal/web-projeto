@@ -5,11 +5,11 @@ const AgendaDiaComponent = ({ nome, horario, status = 'Default' }) => {
 
       const getStatusClasse = () => {
         switch (status) {
-          case 'Confirmado':
+          case 'CONFIRMADA':
             return 'status-confirmado';
-          case 'Pendente':
+          case 'PENDENTE':
             return 'status-pendente';
-          case 'Cancelado':
+          case 'CANCELADO':
             return 'status-cancelado';
           default:
             return 'status-default';
