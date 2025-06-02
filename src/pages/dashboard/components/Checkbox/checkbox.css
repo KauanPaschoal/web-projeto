@@ -4,29 +4,84 @@
     --light-blue: #1B66A4;
 }
 
-/* Esconde o checkbox padrão */
 .checkbox-container {
   display: flex;
   align-items: center;
-  gap: 8px;
+  width: fit-content;
+  gap: 1em;
 }
 
 .checkbox-disabled {
-  opacity: 0.5; /* Torna o checkbox e o texto mais claros */
-  pointer-events: none; /* Impede interações */
+  opacity: 0.5; 
+  pointer-events: none; 
 }
 
 input[type="checkbox"]:disabled {
-  cursor: not-allowed; /* Mostra o cursor de "não permitido" */
-  background-color: #d3d3d3; /* Cor de fundo cinza para o checkbox */
-  border-color: #a9a9a9; /* Cor da borda cinza */
+  cursor: not-allowed;
+  background-color: #d3d3d3; 
+  border-color: #a9a9a9; 
 }
 
 .checkboxLabel {
-  font-size: 14px;
+  font-size: 1em;
+  width: fit-content;
+  text-wrap: nowrap;
   color: #333;
 }
 
-.checkbox-disabled .checkboxLabel {
-  color: #a9a9a9; /* Torna o texto cinza quando desativado */
+.checkbox-disabled   {
+  color: #a9a9a9; 
+}
+
+.switch {
+  font-size: 1em;
+  position: relative;
+  display: inline-block;
+  width: 3.5em;
+  height: 2em;
+}
+
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(182, 182, 182);
+  transition: .4s;
+  border-radius: 10px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1.4em;
+  width: 1.4em;
+  border-radius: 8px;
+  left: 0.3em;
+  bottom: 0.3em;
+  transform: rotate(270deg);
+  background-color: rgb(255, 255, 255);
+  transition: .4s;
+}
+
+.switch input:checked + .slider {
+  background-color: var(--LightBlueFy);
+}
+
+.switch input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(1.5em);
 }

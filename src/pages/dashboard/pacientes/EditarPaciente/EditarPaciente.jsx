@@ -7,7 +7,7 @@ import CheckBox from "../../components/Checkbox/Checkbox";
 import InputField from "../../components/InputField/InputField";
 import SaveButton from "../../components/SaveButton/SaveButton";
 import MainComponent from "../../components/MainComponent/MainComponent";
-import { FaUserEdit } from "react-icons/fa";
+import { FaUserEdit, FaUser } from "react-icons/fa";
 import {
   putDesativarPaciente,
   putPaciente,
@@ -273,266 +273,301 @@ const EditarPaciente = () => {
       >
         <form className="editPaciente">
           <section className="flex">
-            <figure>
-              <div></div>
-              <span>
-                <span>Upload</span> imagem
-              </span>
-            </figure>
+
+            <div className="flex flex-col gap-4">
+              <figure>
+                <div style={{ width: 120, height: 120, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {paciente.imagemUrl && paciente.imagemUrl.trim() !== "" ? (
+                    <img
+                      src={paciente.imagemUrl}
+                      alt="Foto do paciente"
+                      style={{ width: 120, height: 120, borderRadius: "50%", objectFit: "cover" }}
+                    />
+                  ) : (
+                    <FaUser size={80} color="#bdbdbd" />
+                  )}
+                </div>
+                <span>
+                  <span>Upload</span> imagem
+                </span>
+              </figure>
+              <CheckBox
+                CheckboxValue={"ativo"}
+                labelTitle={"Plano Mensal?"}
+                checked={isPlanoAtivo}
+                disabled={!isEditingGeneral}
+                onChange={(e) => setIsPlanoAtivo(e.target.checked)}
+              />
+              <CheckBox
+                CheckboxValue={"ativo"}
+                labelTitle={"Paciente Ativo?"}
+                checked={isAtivo}
+                disabled={!isEditingGeneral}
+                onChange={(e) => setIsAtivo(e.target.checked)}
+              />
+            </div>
 
             <section className="fields">
+
               <section>
-                <h2>Dados do Paciente:</h2>
-                <div className="inputArea">
-                  <InputField
-                    disabled={!isEditingGeneral}
-                    labelTitle={"Nome"}
-                    placeholder={'Nome do paciente'}
-                    value={paciente.nome || ""}
-                    onChange={(e) =>
-                      setPaciente((prev) => ({
-                        ...prev,
-                        nome: e.target.value,
-                      }))
-                    }
-                  />
-                  <InputField
-                    labelTitle="CPF"
-                    placeholder="CPF do paciente"
-                    maxLength={14}
-                    disabled={true}
-                    value={paciente.cpf || ""}
-                    maskType="cpf"
-                  />
-                  <InputField
-                    disabled={!isEditingGeneral}
-                    type={"tel"}
-                    placeholder={'Telefone do paciente'}
-                    labelTitle={"Telefone"}
-                    value={(telefone.ddd || "") + (telefone.telefone || "")}
-                    onChange={(e) =>
-                      setPaciente((prev) => ({
-                        ...prev,
-                        telefone: e.target.value,
-                      }))
-                    }
-                    maskType="telefone"
-                  />
-                  <InputField
-                    disabled={!isEditingGeneral}
-                    type={"email"}
-                    placeholder={'E-mail do paciente'}
-                    labelTitle={"E-mail"}
-                    value={paciente.email || ""}
-                    onChange={(e) =>
-                      setPaciente((prev) => ({
-                        ...prev,
-                        email: e.target.value,
-                      }))
-                    }
-                  />
-                  <div className="flex flex-col gap-2">
-                  <label className="w-fit text-sm font-bold text-gray-800">Dia de Consultas:</label>
-                  <select
-                    className="border-b border-gray-300 text-sm px-0 py-2 caret-blue-500 outline-none"
-                    disabled={!isEditingGeneral}
-                    value={
-                      diasSemanaBackend.some(d => d.value === paciente.diaConsulta)
-                        ? paciente.diaConsulta
-                        : ""
-                    }
-                    onChange={e =>
-                      setPaciente(prev => ({
-                        ...prev,
-                        diaConsulta: e.target.value,
-                      }))
-                    }
-                  >
-                    <option value="">Selecione o dia</option>
-                    {diasSemanaBackend.map(dia => (
-                      <option key={dia.value} value={dia.value}>{dia.label}</option>
-                    ))}
-                  </select>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="w-fit text-sm font-bold text-gray-800">
-                      Horário de Consultas:</label>
-                    <select
-                      className="border-b border-gray-300 text-sm px-0 py-2 caret-blue-500 outline-none"
 
+                <div className="inputArea">
+
+                  <div className="input-card flex flex-col gap-2">
+                    <h2>Dados do Paciente:</h2>
+                    <InputField
                       disabled={!isEditingGeneral}
-                      value={paciente.horaConsulta || ""}
-                      onChange={e =>
-                        setPaciente(prev => ({
+                      labelTitle={"Nome"}
+                      placeholder={'Nome do paciente'}
+                      containerWidth={"w-full"}
+                      value={paciente.nome || ""}
+                      onChange={(e) =>
+                        setPaciente((prev) => ({
                           ...prev,
-                          horaConsulta: e.target.value,
+                          nome: e.target.value,
                         }))
                       }
-                    >
-                      <option value="">Selecione o horário</option>
-                      <option value="08:00">08:00</option>
-                      <option value="09:00">09:00</option>
-                      <option value="10:00">10:00</option>
-                      <option value="11:00">11:00</option>
-                      <option value="12:00">12:00</option>
-                      <option value="13:00">13:00</option>
-                      <option value="14:00">14:00</option>
-                      <option value="15:00">15:00</option>
-                      <option value="16:00">16:00</option>
-                    </select>
+                    />
+                    <InputField
+                      labelTitle="CPF"
+                      placeholder="CPF do paciente"
+                      containerWidth={"w-full"}
+                      maxLength={14}
+                      disabled={true}
+                      value={paciente.cpf || ""}
+                      maskType="cpf"
+                    />
+                    <InputField
+                      disabled={!isEditingGeneral}
+                      type={"tel"}
+                      placeholder={'Telefone do paciente'}
+                      labelTitle={"Telefone"}
+                      containerWidth={"w-full"}
+                      value={(telefone.ddd || "") + (telefone.telefone || "")}
+                      onChange={(e) =>
+                        setPaciente((prev) => ({
+                          ...prev,
+                          telefone: e.target.value,
+                        }))
+                      }
+                      maskType="telefone"
+                    />
+                    <InputField
+                      disabled={!isEditingGeneral}
+                      type={"email"}
+                      placeholder={'E-mail do paciente'}
+                      labelTitle={"E-mail"}
+                      containerWidth={"w-full"}
+                      value={paciente.email || ""}
+                      onChange={(e) =>
+                        setPaciente((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
+                      }
+                    />
                   </div>
-                  <InputField
-                    disabled={!isEditingGeneral}
-                    labelTitle={"Contato de Emergência"}
-                    placeholder={'Nome do contato de emergência'}
-                    value={telefone.nomeContato || ""}
-                    onChange={(e) =>
-                      setPaciente((prev) => ({
-                        ...prev,
-                        nomeContato: e.target.value,
-                      }))
-                    }
-                  />
-                  <InputField
-                    disabled={!isEditingGeneral}
-                    type={"tel"}
-                    labelTitle={"Telefone de Emergência"}
-                    placeholder={'Telefone do contato de emergência'}
-                    value={(telefone.telefoneContato || "") + (telefone.dddContato || "")}
-                    onChange={(e) =>
-                      setPaciente((prev) => ({
-                        ...prev,
-                        telefoneContato: e.target.value,
-                      }))
-                    }
-                    maskType="telefone"
-                  />
-                </div>
 
-                <h2>Endereço:</h2>
-                <div className="inputArea">
-                  <div>
+                  <div className="input-card flex flex-col gap-2">
+                    <h2>Preferências do Paciente:</h2>
+                    <div className="flex flex-col gap-2">
+                      <label className="w-fit text-sm font-bold text-gray-800">Dia de Consultas:</label>
+                      <select
+                        className="border-b border-gray-300 text-sm px-2 py-2 caret-blue-500 outline-none"
+                        disabled={!isEditingGeneral}
+                        value={
+                          diasSemanaBackend.some(d => d.value === paciente.diaConsulta)
+                            ? paciente.diaConsulta
+                            : ""
+                        }
+                        onChange={e =>
+                          setPaciente(prev => ({
+                            ...prev,
+                            diaConsulta: e.target.value,
+                          }))
+                        }
+                      >
+                        <option value="" disabled>Selecione o dia</option>
+                        {diasSemanaBackend.map(dia => (
+                          <option key={dia.value} value={dia.value}>{dia.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="w-fit text-sm font-bold text-gray-800">
+                        Horário de Consultas:</label>
+                      <select
+                        className="border-b border-gray-300 text-sm px-2 py-2 caret-blue-500 outline-none"
+
+                        disabled={!isEditingGeneral}
+                        value={paciente.horaConsulta || ""}
+                        onChange={e =>
+                          setPaciente(prev => ({
+                            ...prev,
+                            horaConsulta: e.target.value,
+                          }))
+                        }
+                      >
+                        <option value="" disabled>Selecione o horário</option>
+                        <option value="08:00">08:00</option>
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                      </select>
+                    </div>
+
+                    <InputField
+                      disabled={!isEditingGeneral}
+                      labelTitle={"Contato de Emergência"}
+                      placeholder={'Nome do contato de emergência'}
+                      value={telefone.nomeContato || ""}
+                      containerWidth={"w-full"}
+                      onChange={(e) =>
+                        setPaciente((prev) => ({
+                          ...prev,
+                          nomeContato: e.target.value,
+                        }))
+                      }
+                    />
+                    <InputField
+                      disabled={!isEditingGeneral}
+                      type={"tel"}
+                      containerWidth={"w-full"}
+                      labelTitle={"Telefone de Emergência"}
+                      placeholder={'Telefone do contato de emergência'}
+                      value={(telefone.telefoneContato || "") + (telefone.dddContato || "")}
+                      onChange={(e) =>
+                        setPaciente((prev) => ({
+                          ...prev,
+                          telefoneContato: e.target.value,
+                        }))
+                      }
+                      maskType="telefone"
+                    />
+                  </div>
+
+                  <div className="input-card flex flex-col gap-2">
+                    <h2>Endereço do Paciente:</h2>
+                    <div>
+                      <InputField
+                        disabled={true}
+                        type={"text"}
+                        labelTitle={"CEP"}
+                        containerWidth={"w-full"}
+                        placeholder={'CEP do paciente'}
+                        value={paciente.fkEndereco?.cep || ""} // Usa o operador ?. para evitar erros
+                        maxLength={9}
+                        onChange={(e) =>
+                          setPaciente((prev) => ({
+                            ...prev,
+                            fkEndereco: {
+                              ...prev.fkEndereco,
+                              cep: e.target.value,
+                            },
+                          }))
+                        }
+                        onBlur={handleBuscarEndereco}
+                        maskType="cep"
+                      />
+                      {erro && <p className="text-xs text-red-500">{erro}</p>}
+                    </div>
                     <InputField
                       disabled={true}
                       type={"text"}
-                      labelTitle={"CEP"}
-                      
-                      placeholder={'CEP do paciente'}
-                      value={paciente.fkEndereco?.cep || ""} // Usa o operador ?. para evitar erros
-                      maxLength={9}
+                      labelTitle={"Cidade"}
+                      containerWidth={"w-full"}
+                      placeholder={'Cidade do paciente'}
+                      value={paciente.fkEndereco?.cidade || ""} // Usa o operador ?. para evitar erros
                       onChange={(e) =>
                         setPaciente((prev) => ({
                           ...prev,
                           fkEndereco: {
                             ...prev.fkEndereco,
-                            cep: e.target.value,
+                            cidade: e.target.value,
                           },
                         }))
                       }
-                      onBlur={handleBuscarEndereco}
-                      maskType="cep"
                     />
-                    {erro && <p className="text-xs text-red-500">{erro}</p>}
-                  </div>
-                  <InputField
-                    disabled={true}
-                    type={"text"}
-                    labelTitle={"Cidade"}
-                    placeholder={'Cidade do paciente'}
-                    value={paciente.fkEndereco?.cidade || ""} // Usa o operador ?. para evitar erros
-                    onChange={(e) =>
-                      setPaciente((prev) => ({
-                        ...prev,
-                        fkEndereco: {
-                          ...prev.fkEndereco,
-                          cidade: e.target.value,
-                        },
-                      }))
-                    }
-                  />
-                  <InputField
-                    disabled={true}
-                    type={"text"}
-                    labelTitle={"Bairro"}
-                    placeholder={'Bairro do paciente'}
-                    value={paciente.fkEndereco?.bairro || ""} // Usa o operador ?. para evitar erros
-                    onChange={(e) =>
-                      setPaciente((prev) => ({
-                        ...prev,
-                        fkEndereco: {
-                          ...prev.fkEndereco,
-                          bairro: e.target.value,
-                        },
-                      }))
-                    }
-                  />
-                  <InputField
-                    disabled={true}
-                    type={"text"}
-                    labelTitle={"Número"}
-                    placeholder={'Número do endereço'}
-                    value={paciente.fkEndereco?.numero || ""}
-                    onChange={(e) =>
-                      setPaciente((prev) => ({
-                        ...prev,
-                        fkEndereco: {
-                          ...prev.fkEndereco,
-                          numero: e.target.value,
-                        },
-                      }))
-                    }
-                  />
-                  <InputField
-                    disabled={true}
-                    type={"text"}
-                    labelTitle={"Logradouro"}
-                    width={"w-full"}
-                    placeholder={'Logradouro do paciente'}
-                    value={paciente.fkEndereco?.logradouro || ""}
-                    onChange={(e) =>
-                      setPaciente((prev) => ({
-                        ...prev,
-                        fkEndereco: {
-                          ...prev.fkEndereco,
-                          logradouro: e.target.value,
-                        },
-                      }))
-                    }
-                  />
-                  <div className="flex flex-col gap-2">
-                    
                     <InputField
-                      className="border-b border-gray-300 text-sm px-0 py-2 caret-blue-500 outline-none"
                       disabled={true}
                       type={"text"}
-                      labelTitle={"Estado"}
-                      value={paciente.fkEndereco?.uf || ""}
+                      labelTitle={"Bairro"}
+                      placeholder={'Bairro do paciente'}
+                      containerWidth={"w-full"}
+                      value={paciente.fkEndereco?.bairro || ""} // Usa o operador ?. para evitar erros
                       onChange={(e) =>
                         setPaciente((prev) => ({
                           ...prev,
                           fkEndereco: {
                             ...prev.fkEndereco,
-                            uf: e.target.value,
+                            bairro: e.target.value,
                           },
                         }))
                       }
                     />
-                      
+                    <InputField
+                      disabled={true}
+                      type={"text"}
+                      labelTitle={"Número"}
+                      placeholder={'Número do endereço'}
+                      containerWidth={"w-full"}
+                      value={paciente.fkEndereco?.numero || ""}
+                      onChange={(e) =>
+                        setPaciente((prev) => ({
+                          ...prev,
+                          fkEndereco: {
+                            ...prev.fkEndereco,
+                            numero: e.target.value,
+                          },
+                        }))
+                      }
+                    />
+                    <InputField
+                      disabled={true}
+                      type={"text"}
+                      labelTitle={"Logradouro"}
+                      placeholder={'Logradouro do paciente'}
+                      containerWidth={"w-full"}
+                      value={paciente.fkEndereco?.logradouro || ""}
+                      onChange={(e) =>
+                        setPaciente((prev) => ({
+                          ...prev,
+                          fkEndereco: {
+                            ...prev.fkEndereco,
+                            logradouro: e.target.value,
+                          },
+                        }))
+                      }
+                    />
+                    <div className="flex flex-col gap-2">
+
+                      <InputField
+                        className="border-b border-gray-300 text-sm px-0 py-2 caret-blue-500 outline-none"
+                        disabled={true}
+                        type={"text"}
+                        labelTitle={"Estado"}
+                        placeholder={'Estado do paciente'}
+                        containerWidth={"w-full"}
+                        value={paciente.fkEndereco?.uf || ""}
+                        onChange={(e) =>
+                          setPaciente((prev) => ({
+                            ...prev,
+                            fkEndereco: {
+                              ...prev.fkEndereco,
+                              uf: e.target.value,
+                            },
+                          }))
+                        }
+                      />
+
+                    </div>
                   </div>
-                  <CheckBox
-                    CheckboxValue={"ativo"}
-                    labelTitle={"Plano Mensal?"}
-                    checked={isPlanoAtivo}
-                    disabled={!isEditingGeneral}
-                    onChange={(e) => setIsPlanoAtivo(e.target.checked)}
-                  />
-                  <CheckBox
-                    CheckboxValue={"ativo"}
-                    labelTitle={"Paciente Ativo?"}
-                    checked={isAtivo}
-                    disabled={!isEditingGeneral}
-                    onChange={(e) => setIsAtivo(e.target.checked)}
-                  />
+
+
                 </div>
               </section>
             </section>
