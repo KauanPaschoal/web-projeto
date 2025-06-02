@@ -1,7 +1,10 @@
 import React from 'react'
 import './AgendaDiaComponent.css'
+import { useNavigate } from 'react-router-dom';
 
-const AgendaDiaComponent = ({ nome, horario, status = 'Default' }) => {
+const AgendaDiaComponent = ({ nome, horario, status = 'Default', id }) => {
+  const navigate = useNavigate();
+
 
       const getStatusClasse = () => {
         switch (status) {
@@ -15,6 +18,11 @@ const AgendaDiaComponent = ({ nome, horario, status = 'Default' }) => {
             return 'status-default';
         }
       };
+
+     const handleButtonClick = (e) => {
+      e.stopPropagation();
+      navigate(`/dashboard/agendamentos/editar/${id}`);
+     }
 
     return (
         <div className='agendaDiaComponent bg-gray-200'>
@@ -30,7 +38,7 @@ const AgendaDiaComponent = ({ nome, horario, status = 'Default' }) => {
                 </div>
                 
             </div>
-            <button className='btn_primario rounded-full'>Ver Detalhes</button>
+            <button className='btn_primario rounded-full'onClick={handleButtonClick}>Ver Detalhes</button>
         </div>
     )
 }

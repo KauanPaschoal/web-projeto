@@ -150,7 +150,7 @@ export async function popupMessage(planoId) {
   }
 }
 
-export function confirmCancelEdit(titulo, message, size) {
+export function confirmCancelEdit(titulo, message, size = "small") {
   return Swal.fire({
     title: titulo,
     text: message,
@@ -158,12 +158,10 @@ export function confirmCancelEdit(titulo, message, size) {
     showCancelButton: true,
     confirmButtonText: "Sim, cancelar",
     cancelButtonText: "Continuar editando",
-    cancelButtonColor: "#1B66A4",
-    confirmButtonColor: "#d33",
     customClass: {
-      popup: "swal-small",
-      // confirmButton: "",
-      // cancelButton: "",
+      popup: `swal-${size}`,
+      confirmButton: "btn_primario",
+      cancelButton: "btn_secundario",
     },
     backdrop: false,
   });

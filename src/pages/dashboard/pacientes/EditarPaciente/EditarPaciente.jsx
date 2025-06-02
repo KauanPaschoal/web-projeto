@@ -25,6 +25,7 @@ import {
 } from "../../../../provider/api/preferencias/fetchs-preferencias";
 import { getEnderecoPorCep } from "../../../../provider/api/pacientes/fetchs-pacientes";
 import Loading from "../../components/Loading/Loading";
+import EditButton from "../../components/EditButton/EditButton";
 
 const EditarPaciente = () => {
   const { id } = useParams();
@@ -225,12 +226,11 @@ const EditarPaciente = () => {
               >
                 {"< Voltar"}
               </button>
-              <button
-                className="btn_agendamento flex rounded-full"
+              <EditButton
+                className="bg-white"
                 onClick={handleEditGeneral}
-              >
-                {isEditingGeneral ? "Cancelar" : "Editar"}
-              </button>
+                text={isEditingGeneral ? "Cancelar" : "Editar"}
+              />
             </div>
           </>
         }
@@ -296,27 +296,27 @@ const EditarPaciente = () => {
                     }
                   />
                   <div className="flex flex-col gap-2">
-                  <label className="w-fit text-sm font-bold text-gray-800">Dia de Consultas:</label>
-                  <select
-                    className="border-b border-gray-300 text-sm px-0 py-2 caret-blue-500 outline-none"
-                    disabled={!isEditingGeneral}
-                    value={
-                      diasSemanaBackend.some(d => d.value === paciente.diaConsulta)
-                        ? paciente.diaConsulta
-                        : ""
-                    }
-                    onChange={e =>
-                      setPaciente(prev => ({
-                        ...prev,
-                        diaConsulta: e.target.value,
-                      }))
-                    }
-                  >
-                    <option value="">Selecione o dia</option>
-                    {diasSemanaBackend.map(dia => (
-                      <option key={dia.value} value={dia.value}>{dia.label}</option>
-                    ))}
-                  </select>
+                    <label className="w-fit text-sm font-bold text-gray-800">Dia de Consultas:</label>
+                    <select
+                      className="border-b border-gray-300 text-sm px-0 py-2 caret-blue-500 outline-none"
+                      disabled={!isEditingGeneral}
+                      value={
+                        diasSemanaBackend.some(d => d.value === paciente.diaConsulta)
+                          ? paciente.diaConsulta
+                          : ""
+                      }
+                      onChange={e =>
+                        setPaciente(prev => ({
+                          ...prev,
+                          diaConsulta: e.target.value,
+                        }))
+                      }
+                    >
+                      <option value="">Selecione o dia</option>
+                      {diasSemanaBackend.map(dia => (
+                        <option key={dia.value} value={dia.value}>{dia.label}</option>
+                      ))}
+                    </select>
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="w-fit text-sm font-bold text-gray-800">

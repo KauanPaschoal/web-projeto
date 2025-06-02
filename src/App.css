@@ -19,6 +19,11 @@
   --BlueAlertFy: #78BEFF;
 }
 
+.swal2-icon.swal2-warning {
+  border-color: var(--LightBlueFy) !important;
+  color: var(--LightBlueFy) !important;
+}
+
 /* Estilização do Scrollbar */
 ::-webkit-scrollbar {
   width: 0.60em; /* Largura do scrollbar */

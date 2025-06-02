@@ -1,18 +1,33 @@
-.edit_button {
-    background-color: var(--LightBlueFy);
-    border: var(--LightBlueFy) 2px solid;
-    color: var(--WhiteFy);
+.edit_button,
+.edit_button.bg-white {
     transition: ease-in-out 0.3s;
     border-radius: 12em;
 }
 
-.edit_button:hover {
+.edit_button {
+    background-color: var(--LightBlueFy);
+    border: var(--LightBlueFy) 2px solid;
+    color: var(--WhiteFy);
+}
+
+.edit_button.bg-white {
+    background-color: #fff ;
+    color: var(--LightBlueFy);
+    border: 2px solid var(--LightBlueFy);
+}
+
+/* Hover para ambos */
+.edit_button:hover,
+.edit_button.bg-white:hover {
     cursor: pointer;
     background-color: var(--DarkestBlueFy);
     border: var(--DarkestBlueFy) 2px solid;
+    color: var(--WhiteFy);
 }
 
-.edit_button:disabled {
+/* Disabled para ambos */
+.edit_button:disabled,
+.edit_button.bg-white:disabled {
     background-color: var(--LightGrayFy);
     border: var(--LightGrayFy) 2px solid;
     color: var(--GrayFy);

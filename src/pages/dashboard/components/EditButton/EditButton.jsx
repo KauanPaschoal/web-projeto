@@ -1,15 +1,15 @@
 import React from "react";
-import { FaEdit } from "react-icons/fa";
+import { FaPen } from "react-icons/fa";
 import "./EditButton.css";
 
-const EditButton = ({ onClick, text = "Editar" }) => {
+const EditButton = ({ onClick, text = "Editar", className = "" }) => {
   return (
     <button
       type="button"
-      className="edit_button btn_primario flex items-center gap-2"
+      className={`edit_button btn_primario flex items-center gap-2 ${className}`}
       onClick={onClick}
     >
-      <FaEdit />
+      <FaPen />
       {text}
     </button>
   );

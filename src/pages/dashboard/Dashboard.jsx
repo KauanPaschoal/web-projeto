@@ -143,6 +143,7 @@ const Dashboard = () => {
                       nome={paciente.nome}
                       horario={paciente.horario}
                       status={paciente.status}
+                      id={paciente.id}
                     />
                   ))
                 )}
