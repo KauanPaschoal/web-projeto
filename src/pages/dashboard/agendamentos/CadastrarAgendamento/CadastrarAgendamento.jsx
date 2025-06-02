@@ -135,14 +135,14 @@ const CadastrarAgendamento = ({ paciente }) => {
                 }));
             }, [statusPlanoMensal]);
 
-            function montarPacienteComPadrao(paciente) {
-                const diasCalculados = getProximosDias(paciente.diaSemana || 1); // padrão segunda-feira se não houver
+            function montarPacienteComPadrao(paciente, valoresSelecionados = {}) {
+                const diasCalculados = getProximosDias(valoresSelecionados.diaSemana || paciente.diaSemana || 1);
                 return {
                     ...paciente,
-                    diaSemana: paciente.diaSemana || 1,
+                    diaSemana: valoresSelecionados.diaSemana || paciente.diaSemana || 1,
                     diaMes: diasCalculados,
-                    horario: "08:00",
-                    selectedDate: diasCalculados[0] || "",
+                    horario: valoresSelecionados.horario || paciente.horario || "08:00",
+                    selectedDate: valoresSelecionados.selectedDate || paciente.selectedDate || diasCalculados[0] || "",
                     planoMensal: paciente.planoMensal || false,
                     statusAgendamento: paciente.statusAgendamento || "Pendente",
                     tipo: "AVULSO",
@@ -297,6 +297,33 @@ const CadastrarAgendamento = ({ paciente }) => {
                 }
             }, [pacienteSelecionado]);
 
+            useEffect(() => {
+                // Só executa se vierem parâmetros na URL
+                const timeSlotParam = searchParams.get('timeSlot');
+                const dayParam = searchParams.get('day');
+
+                if (dayParam) {
+                    setDiaMesSelecionado(dayParam);
+
+                    // Corrige o cálculo do dia da semana
+                    const [dia, mes, ano] = dayParam.split('/');
+                    const data = new Date(Number(ano), Number(mes) - 1, Number(dia));
+                    const jsDiaSemana = data.getDay();
+                    const diaSemanaSelect = jsDiaSemana >= 1 && jsDiaSemana <= 5 ? jsDiaSemana : 1;
+
+                    setDiaSemana(diaSemanaSelect);
+                    setPacienteSelecionado(prev => prev ? {
+                        ...prev,
+                        selectedDate: dayParam,
+                        diaSemana: diaSemanaSelect
+                    } : prev);
+                }
+                if (timeSlotParam) {
+                    setHorario(timeSlotParam);
+                    setPacienteSelecionado(prev => prev ? { ...prev, horario: timeSlotParam } : prev);
+                }
+            }, [searchParams]);
+
             return (
                 <>
                     <MenuLateralComponent />
@@ -314,15 +341,27 @@ const CadastrarAgendamento = ({ paciente }) => {
                             noValidate
                         >
                             <div className='w-[80%] div-escolher-paciente'>
-                                <UserSearch onUserSelect={p => setPacienteSelecionado(p ? montarPacienteComPadrao(p) : undefined)} />
+                                <UserSearch
+                                    onUserSelect={p =>
+                                        setPacienteSelecionado(
+                                        p
+                                            ? montarPacienteComPadrao(p, {
+                                                horario: pacienteSelecionado?.horario || horario,
+                                                selectedDate: pacienteSelecionado?.selectedDate || diaMesSelecionado,
+                                                diaSemana: pacienteSelecionado?.diaSemana || diaSemana,
+                                            })
+                                            : undefined
+                                        )
+                                    }
+                                    />
                             
                                 {!pacienteSelecionado || !pacienteSelecionado.id ? (
                                     <p className="mensagem-escolha-paciente">Selecione um paciente para continuar.</p>
                                 ) : (
                                     <div className="paciente-info">
                                         <p><strong>Paciente:</strong> {pacienteSelecionado.nome}</p>
-                                        <p><strong>Horário para Consultas:</strong> { preferencias.horario || "Indefinido"}</p>
                                         <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(preferencias.diaSemana)}</p>
+                                        <p><strong>Horário para Consultas:</strong> { preferencias.horario || "Indefinido"}</p>
                                     </div>
                                 )}
                             </div>
