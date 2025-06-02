@@ -53,11 +53,7 @@ const UserSearch = ({
         setPacientes(filteredPacientes);
         setShowSuggestions(true);
 
-        if (filteredPacientes.length === 1) {
-            onUserSelect(filteredPacientes[0]);
-        } else {
-            onUserSelect(null);
-        }
+        onUserSelect(null); // <-- só seleciona ao clicar!
     };
 
     const handleSelectPaciente = (paciente) => {
@@ -83,6 +79,7 @@ const UserSearch = ({
                 onBlur={handleBlur}
                 required
                 className="styled-input"
+                containerWidth={"w-[100%]"}
                 width={"w-[100%]"}
                 icon={useIcon && <FaUser />}
             />
