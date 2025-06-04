@@ -19,8 +19,8 @@ const EditarAgendamento = () => {
   const [agendamento, setAgendamento] = useState({});
   const [diaSemana, setDiaSemana] = useState(0);
   const [novoHorario, setNovoHorario] = useState(''); // novo estado para o select
-  // Novo estado para controlar se houve troca de paciente
   const [novoPacienteSelecionado, setNovoPacienteSelecionado] = useState(null);
+
 
   const { id } = useParams();
 
@@ -236,7 +236,9 @@ const EditarAgendamento = () => {
               {"< Voltar"}
             </button>
             {
-              agendamento.statusSessao !== 'CANCELADA' &&
+              (agendamento.statusSessao !== 'CANCELADA' 
+              && agendamento.statusSessao !== 'CONCLUIDA')
+              &&
             <button
               className='btn_agendamento rounded-full flex gap-2 m-0'
               type="button"
@@ -265,6 +267,7 @@ const EditarAgendamento = () => {
                     agendamento.statusSessao === 'PENDENTE' ? 'status-sessao-pendente' :
                     agendamento.statusSessao === 'CONFIRMADA' ? 'status-sessao-ok' :
                     agendamento.statusSessao === 'CANCELADA' ? 'status-cancelado' :
+                    agendamento.statusSessao === 'CONCLUIDA' ? 'status-concluida' :
                     ''
                   }`}>
                     {agendamento.statusSessao}
@@ -291,6 +294,7 @@ const EditarAgendamento = () => {
                     id="diaSemana"
                     name="diaSemana"
                     required
+                    disabled={agendamento.statusSessao === 'CONCLUIDA'}
                     className="select-field w-full"
                     value={diaSemana}
                     onChange={handleDiaSemanaChange}
@@ -309,6 +313,7 @@ const EditarAgendamento = () => {
                     id="data"
                     name="data"
                     required
+                    disabled={agendamento.statusSessao === 'CONCLUIDA'}
                     className="select-field w-full"
                     value={paciente?.data ? formatDateToFrontend(paciente.data) : ''}
                     onChange={e => setPaciente({
@@ -330,6 +335,7 @@ const EditarAgendamento = () => {
                     id="horario"
                     name="horario"
                     required
+                    disabled={agendamento.statusSessao === 'CONCLUIDA'}
                     className="select-field w-full"
                     value={novoHorario}
                     onChange={e => setNovoHorario(e.target.value)}
@@ -348,12 +354,17 @@ const EditarAgendamento = () => {
                 </div>
 
                 {
-                  (agendamento.statusSessao !== 'CANCELADA' || agendamento.statusSessao === 'CONFIRMADA') &&
+                  (agendamento.statusSessao !== 'CANCELADA' 
+                  && agendamento.statusSessao !== 'CONFIRMADA'
+                  && agendamento.statusSessao !== 'CONCLUIDA'
+                
+                ) &&
                   
                 <div className="checkbox-container">
                   <input
                     name="confirmar_checkbox"
                     type="checkbox"
+                    disabled={agendamento.statusSessao === 'CONCLUIDA'}
                     checked={paciente.statusSessao === 'CONFIRMADA'}
                     onChange={e => setPaciente({
                       ...paciente,
@@ -365,17 +376,39 @@ const EditarAgendamento = () => {
                   </label>
                 </div>
                 }
+                {
+                  (agendamento.statusSessao === 'CONFIRMADA') &&
+
+                <div className="checkbox-container">
+                  <input
+                    name="confirmar_checkbox"
+                    type="checkbox"
+                    disabled={agendamento.statusSessao === 'CONCLUIDA'}
+                    checked={paciente.statusSessao === 'CONCLUIDA'}
+                    onChange={e => setPaciente({
+                      ...paciente,
+                      statusSessao: e.target.checked ? 'CONCLUIDA' : 'CONFIRMADA'
+                    })}
+                  />
+                  <label htmlFor="confirmar_checkbox">
+                    Concluir Agendamento
+                  </label>
+                </div>
+                }
               </div>
             </div>
           </section>
           <div className='flex gap-2'>
-            <button type='submit' className='btn_primario rounded-full flex gap-2'>
+            { agendamento.statusSessao !== 'CONCLUIDA' &&
+              
+              <button type='submit' className='btn_primario rounded-full flex gap-2'>
               <FaRegSave className='' size={20} />
-              Salvar Alterações</button>
+              Salvar Alterações
+            </button>}
             <button className='btn_secundario rounded-full'
               onClick={() => window.location.href = '/dashboard/agendamentos'}
               type="button">
-              Cancelar
+              {agendamento.statusSessao === 'CONCLUIDA' ? 'Voltar' : 'Cancelar'}
             </button>
           </div>
 
