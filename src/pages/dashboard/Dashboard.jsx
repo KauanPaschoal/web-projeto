@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MenuLateralComponent from './components/MenuLateral/MenuLateralComponent'
 
 import KPIsComponent from './components/KPIsComponent/KPIsComponent'
@@ -6,24 +6,45 @@ import AgendaDiaComponent from './components/AgendaDiaComponent/AgendaDiaCompone
 import './dashboard.css'
 import GraficoComponent from './components/GraficoComponent/GraficoComponent'
 import MainComponent from './components/MainComponent/MainComponent'
+import { getKpiQtdSessaoCanceladas, getKpiPorcentPacienteInativos } from '../../provider/api/dashboard/fetchs-dashboard'
 import { getSessoesSemana, getSessoesDia } from '../../provider/api/dashboard/axios-dashboard'
 
 const Dashboard = () => {
 
-  const [loadingKpi, setLoadingKpi] = React.useState(true);
-  const [loadingDia, setLoadingDia] = React.useState(true);
-  const [kpiData, setKpiData] = React.useState([]);
-  const [showPacientes, setShowPacientes] = React.useState(true);
-  const [pacientes, setPacientes] = React.useState([]);
+  const [loadingKpi, setLoadingKpi] = useState(true);
+  const [loadingDia, setLoadingDia] = useState(true);
+  const [kpiData, setKpiData] = useState([]);
+  const [showPacientes, setShowPacientes] = useState(true);
+  const [pacientes, setPacientes] = useState([]);
+  const [qtdSessaoCancelada, setQtdSessaoCancelada] = useState({});
+  const [qtdPacientesInativos, setQtdPacientesInativos] = useState({});
+  const [error, setError] = useState(null);
 
-  const valores = [
-    {
-      id: 2, valor: 10, texto: 'Desistências e/ou Reagendamentos na Semana'
-    },
-    {
-      id: 3, valor: 10, texto: 'Pacientes sem agendamento por mais de duas semanas'
-    }
-  ];
+  // KPIs extras
+  useEffect(() => {
+    const fetchDadosKpis = async () => {
+      try {
+        const [
+          qtdSessaoCanceladaData,
+          qtdPacientesInativosData,
+        ] = await Promise.all([
+          getKpiQtdSessaoCanceladas(),
+          getKpiPorcentPacienteInativos(),
+        ]);
+
+        setQtdSessaoCancelada(qtdSessaoCanceladaData.qtdCancelada);
+        setQtdPacientesInativos(qtdPacientesInativosData.porcentPacienteInativo);
+
+        console.log('KPI SESSAO CANCELADA:', qtdSessaoCanceladaData);
+        console.log('KPI PACIENTE INATIVO:', qtdPacientesInativosData);
+
+      } catch (err) {
+        setError(err.message || 'Erro ao buscar dados das KPIs');
+      }
+    };
+
+    fetchDadosKpis();
+  }, []);
 
   const ultimaAtualizacao = new Date().toLocaleDateString('pt-BR', {
     year: 'numeric',
@@ -36,7 +57,7 @@ const Dashboard = () => {
   });
 
   // Buscar KPIs da semana
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchKpi = async () => {
       setLoadingKpi(true);
       const getAnoSemana = (date) => {
@@ -50,16 +71,18 @@ const Dashboard = () => {
       try {
         const data = await getSessoesSemana([semanaAtual, semanaAnterior]);
         setKpiData(data);
+      // eslint-disable-next-line no-unused-vars
       } catch (e) {
         setKpiData([]);
       }
       setLoadingKpi(false);
     };
+
     fetchKpi();
   }, []);
 
   // Buscar pacientes do dia
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchPacientesDia = async () => {
       setLoadingDia(true);
       try {
@@ -72,6 +95,7 @@ const Dashboard = () => {
           status: sessao.status 
         }));
         setPacientes(pacientesFormatados);
+      // eslint-disable-next-line no-unused-vars
       } catch (e) {
         setPacientes([]);
       }
@@ -79,6 +103,16 @@ const Dashboard = () => {
     };
     fetchPacientesDia();
   }, []);
+
+  // KPIs mockadas/extras
+  const valores = [
+    {
+      id: 2, valor: `${qtdSessaoCancelada}%`, texto: 'Cancelamentos na Semana'
+    },
+    {
+      id: 3, valor: `${qtdPacientesInativos}%`, texto: 'Pacientes Inativos'
+    }
+  ];
 
   return (
     <div className='dashboard flex'>
@@ -93,15 +127,6 @@ const Dashboard = () => {
           <div className='flex w-full justify-between gap-2'>
             {/* KPI dinâmica - Pacientes Agendados na Semana */}
             <div className="flex flex-col items-center">
-              {/* 
-              <button
-                className="px-4 py-2 mb-2 rounded bg-blue-500 text-white"
-                onClick={() => setShowPacientes(v => !v)}
-                disabled={loadingKpi}
-              >
-                {showPacientes ? 'Mostrar Total de Sessões' : 'Mostrar Pacientes Agendados'}
-              </button>
-              */}
               {loadingKpi ? (
                 <KPIsComponent valor="..." texto="Pacientes Agendados na Semana" />
               ) : (
@@ -117,14 +142,12 @@ const Dashboard = () => {
                 )
               )}
             </div>
-            {/* Demais KPIs mockadas */}
-            {valores.map((valor) => {
-              return (
-                <div key={valor.id} className="flex-1 flex flex-col items-center">
-                  <KPIsComponent valor={valor.valor} texto={valor.texto}></KPIsComponent>
-                </div>
-              );
-            })}
+            {/* KPIs mockadas/extras */}
+            {valores.map((valor) => (
+              <div key={valor.id} className="flex-1 flex flex-col items-center">
+                <KPIsComponent valor={valor.valor} texto={valor.texto}></KPIsComponent>
+              </div>
+            ))}
           </div>
           <div className='second-section flex gap-2'>
             <div className='agendas-section w-1/2 flex flex-col items-center'>

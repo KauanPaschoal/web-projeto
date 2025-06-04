@@ -11,16 +11,14 @@ import Checkbox from '../../components/Checkbox/Checkbox.jsx'
 import { getPacientesPorId, getPacientes } from '../../../../provider/api/pacientes/fetchs-pacientes.js'
 import { getAgendamentosPorPaciente, postAgendamento } from '../../../../provider/api/agendamentos/fetchs-agendamentos'; // Importa a função de adicionar agendamento
 import { getPreferenciasPorId } from '../../../../provider/api/preferencias/fetchs-preferencias.js'
+import UserSearch from '../../components/UserSearch/UserSearch.jsx'
 
 const CadastrarAgendamento = ({ paciente }) => {
     const { id } = useParams();
     const [searchParams] = useSearchParams();
-    const [todosPacientes, setTodosPacientes] = React.useState([]);
-    const [pacientes, setPacientes] = React.useState([]);
     const [agendamentos, setAgendamentos] = React.useState([]);
     const [pacienteSelecionado, setPacienteSelecionado] = React.useState();
     const [query, setQuery] = React.useState(paciente ? paciente.nome : '');
-    const [showSuggestions, setShowSuggestions] = React.useState(false);
     const [statusPlanoMensal, setStatusPlanoMensal] = React.useState(false);
     const [proximosDias, setProximosDias] = React.useState([]);
     const [horario, setHorario] = React.useState();
@@ -46,25 +44,7 @@ const CadastrarAgendamento = ({ paciente }) => {
         };
 
         fetchPreferencias();
-    }, [pacienteSelecionado]); // Executa apenas quando o pacienteSelecionado mudar
-
-    useEffect(() => {
-        const queryTimeSlot = searchParams.get('timeSlot');
-        const queryDay = searchParams.get('day');
-
-        // Atualiza apenas se os valores forem diferentes
-        if (queryTimeSlot && queryTimeSlot !== horario) {
-            setHorario(queryTimeSlot);
-        }
-
-        if (queryDay && pacienteSelecionado?.selectedDate !== queryDay) {
-            setPacienteSelecionado((prev) => ({
-                ...prev,
-                selectedDate: queryDay,
-            }));
-        }
-    }, [searchParams]); // Removido pacienteSelecionado para evitar loops
-
+    }, [pacienteSelecionado]);
 
     useEffect(() => {
         if (id) {
@@ -92,10 +72,6 @@ const CadastrarAgendamento = ({ paciente }) => {
             fetchPaciente();
         }
     }, [id]);
-
-
-            
-
 
             const getProximosDias = (diaSemana) => {
                 const hoje = new Date();
@@ -143,70 +119,6 @@ const CadastrarAgendamento = ({ paciente }) => {
                 fetchAgendamentosPorPaciente();
             }, [pacienteSelecionado]);
 
-            useEffect(() => {
-                const fetchPacientes = async () => {
-                    try {
-                        const data = await getPacientes(); // Chama a função de busca de pacientes
-                        setTodosPacientes(data);
-                        setPacientes(data); // Atualiza o estado com os pacientes retornados
-                    } catch (error) {
-                        console.error("Erro ao buscar usuários:", error);
-                    }
-                };
-
-                fetchPacientes();
-            }, []);
-
-            const handlePacienteSearch = (query) => {
-                setQuery(query);
-                console.log("Query:", query);
-
-                if (!query.trim()) {
-                    setPacientes(todosPacientes); // Restaura todos
-                    setPacienteSelecionado(null);
-                    setAgendamentos([]);
-                    setShowSuggestions(false);
-                    return;
-                }
-
-                const filteredPacientes = todosPacientes.filter(paciente =>
-                    paciente.nome.toLowerCase().includes(query.toLowerCase())
-                );
-
-                if (filteredPacientes.length === 1) {
-                    const selectedPaciente = filteredPacientes[0];
-                    setPacienteSelecionado(prev => ({
-                        ...selectedPaciente,
-                        diaMes: getProximosDias(selectedPaciente.diaSemana),
-                        selectedDate: prev?.selectedDate || selectedPaciente.selectedDate || '',
-                        horario: prev?.horario || selectedPaciente.horario || horario,
-                        anotacao: prev?.anotacao || selectedPaciente.anotacao || 'mensagem',
-                        tipo: selectedPaciente.tipo || "AVULSO",
-                    }));
-
-                    const filteredAgendamentos = agendamentos.filter(
-                        agendamento => agendamento.idPaciente === selectedPaciente.id
-                    );
-                    setAgendamentos(filteredAgendamentos);
-                } else {
-                    setPacienteSelecionado(null);
-                    setAgendamentos([]);
-                }
-
-                setPacientes(filteredPacientes);
-                setShowSuggestions(true);
-            };
-
-            const handleSelectPaciente = (paciente) => {
-                setQuery(paciente);
-                handlePacienteSearch(paciente);
-                setShowSuggestions(false);
-            };
-
-            const handleBlur = () => {
-                setTimeout(() => setShowSuggestions(false), 200);
-            };
-
             const handlePlanoMensal = (e) => {
                 const isChecked = e.target.checked;
                 setStatusPlanoMensal(isChecked);
@@ -223,7 +135,19 @@ const CadastrarAgendamento = ({ paciente }) => {
                 }));
             }, [statusPlanoMensal]);
 
-
+            function montarPacienteComPadrao(paciente, valoresSelecionados = {}) {
+                const diasCalculados = getProximosDias(valoresSelecionados.diaSemana || paciente.diaSemana || 1);
+                return {
+                    ...paciente,
+                    diaSemana: valoresSelecionados.diaSemana || paciente.diaSemana || 1,
+                    diaMes: diasCalculados,
+                    horario: valoresSelecionados.horario || paciente.horario || "08:00",
+                    selectedDate: valoresSelecionados.selectedDate || paciente.selectedDate || diasCalculados[0] || "",
+                    planoMensal: paciente.planoMensal || false,
+                    statusAgendamento: paciente.statusAgendamento || "Pendente",
+                    tipo: "AVULSO",
+                };
+            }
 
             const formatDateToBackend = (date) => {
                 const [day, month, year] = date.split('/');
@@ -345,20 +269,6 @@ const CadastrarAgendamento = ({ paciente }) => {
                 }
             }, [paciente]);
 
-            React.useEffect(() => {
-                const fetchPacientes = async () => {
-                    try {
-                        const response = await axios.get('/api/pacientes');
-                        setPacientes(response.data);
-                    } catch (error) {
-                        console.error("Erro ao buscar pacientes:", error);
-                        errorMessage("Erro ao carregar a lista de pacientes.", "small");
-                    }
-                };
-
-                fetchPacientes();
-            }, []);
-
 
             const handleDiaSemanaChange = (e) => {
                 const selected = parseInt(e.target.value, 10);
@@ -369,7 +279,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                 setPacienteSelecionado(prev => ({
                     ...prev,
                     diaSemana: selected,
-                    selectedDate: dias[0]
+                    selectedDate: dias[0] // sempre seleciona o primeiro disponível
                 }));
             };
 
@@ -387,6 +297,33 @@ const CadastrarAgendamento = ({ paciente }) => {
                 }
             }, [pacienteSelecionado]);
 
+            useEffect(() => {
+                // Só executa se vierem parâmetros na URL
+                const timeSlotParam = searchParams.get('timeSlot');
+                const dayParam = searchParams.get('day');
+
+                if (dayParam) {
+                    setDiaMesSelecionado(dayParam);
+
+                    // Corrige o cálculo do dia da semana
+                    const [dia, mes, ano] = dayParam.split('/');
+                    const data = new Date(Number(ano), Number(mes) - 1, Number(dia));
+                    const jsDiaSemana = data.getDay();
+                    const diaSemanaSelect = jsDiaSemana >= 1 && jsDiaSemana <= 5 ? jsDiaSemana : 1;
+
+                    setDiaSemana(diaSemanaSelect);
+                    setPacienteSelecionado(prev => prev ? {
+                        ...prev,
+                        selectedDate: dayParam,
+                        diaSemana: diaSemanaSelect
+                    } : prev);
+                }
+                if (timeSlotParam) {
+                    setHorario(timeSlotParam);
+                    setPacienteSelecionado(prev => prev ? { ...prev, horario: timeSlotParam } : prev);
+                }
+            }, [searchParams]);
+
             return (
                 <>
                     <MenuLateralComponent />
@@ -403,50 +340,34 @@ const CadastrarAgendamento = ({ paciente }) => {
                             onSubmit={handleSubmit}
                             noValidate
                         >
-                            <div className='w-[80%]'>
-                                <InputField
-                                    type="text"
-                                    id="paciente"
-                                    name="paciente"
-                                    placeholder="Nome do Paciente"
-                                    labelTitle="Escolha o Paciente"
-                                    onChange={(e) => handlePacienteSearch(e.target.value)}
-                                    value={query}
-                                    onBlur={handleBlur}
-                                    required
-                                    className="styled-input"
-                                    width={"w-[100%]"}
-                                    icon={<FaUser />}
-                                />
-                                {showSuggestions && pacientes.length > 0 && (
-                                    <ul className="suggestions-list">
-                                        {pacientes.map((paciente, index) => (
-                                            <li
-                                                key={index}
-                                                onMouseDown={() => handleSelectPaciente(paciente.nome)}
-                                                className="suggestion-item"
-                                            >
-                                                {paciente.nome}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </div>
-
-                            <div className='div-escolher-paciente'>
-                                {!pacienteSelecionado || query === '' || pacienteSelecionado.nome !== query ? (
+                            <div className='w-[80%] div-escolher-paciente'>
+                                <UserSearch
+                                    onUserSelect={p =>
+                                        setPacienteSelecionado(
+                                        p
+                                            ? montarPacienteComPadrao(p, {
+                                                horario: pacienteSelecionado?.horario || horario,
+                                                selectedDate: pacienteSelecionado?.selectedDate || diaMesSelecionado,
+                                                diaSemana: pacienteSelecionado?.diaSemana || diaSemana,
+                                            })
+                                            : undefined
+                                        )
+                                    }
+                                    />
+                            
+                                {!pacienteSelecionado || !pacienteSelecionado.id ? (
                                     <p className="mensagem-escolha-paciente">Selecione um paciente para continuar.</p>
                                 ) : (
                                     <div className="paciente-info">
                                         <p><strong>Paciente:</strong> {pacienteSelecionado.nome}</p>
-                                        <p><strong>Horário para Consultas:</strong> { preferencias.horario || "Indefinido"}</p>
                                         <p><strong>Dia para Consultas:</strong> {getNomeDiaSemana(preferencias.diaSemana)}</p>
+                                        <p><strong>Horário para Consultas:</strong> { preferencias.horario || "Indefinido"}</p>
                                     </div>
                                 )}
                             </div>
 
                             <div className='container-sessao'>
-                                {(!pacienteSelecionado || query === '' || pacienteSelecionado.nome !== query) ? (
+                                {(!pacienteSelecionado || !pacienteSelecionado.id) ? (
                                     <p className="mensagem-escolha-paciente">Nenhum paciente selecionado. Por favor, escolha um paciente para continuar.</p>
                                 ) : (
                                     <>

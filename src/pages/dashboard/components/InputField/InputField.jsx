@@ -16,6 +16,7 @@ const InputField = ({
   value,
   icon,
   width,
+  containerWidth,
   disabled,
   maxLength,
   maskType, // 'cpf', 'telefone', 'cep', 'hora', etc
@@ -30,7 +31,7 @@ const InputField = ({
   };
 
   return (
-    <div className={`inputContainer ${width || "w-[45%]"}`}>
+    <div className={`inputContainer ${containerWidth || "w-[45%]"}`}>
       <label>{labelTitle}:</label>
       <div className="flex items-center gap-2">
         {icon && <span className="input-icon">{icon}</span>}

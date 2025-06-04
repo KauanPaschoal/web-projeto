@@ -28,10 +28,17 @@ const BoxNotificacao = (props) => {
         }
     };
 
+    function formatarDataPtBr(dataIso) {
+    if (!dataIso) return '';
+    const [year, month, day] = dataIso.split('-');
+    if (!year || !month || !day) return dataIso;
+    return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+}
+
     return (
         <div className='box-notificacao px-4 gap-2'>
             <h1 className='titulo-notificacao'>{props.titulo}</h1>
-            <h2 className='agendamento-info'>{props.data}-{props.horario} | {props.paciente.nome}</h2>
+            <h2 className='agendamento-info'>{formatarDataPtBr(props.data)} - {props.horario} | {props.paciente.nome}</h2>
             <p className='conteudo-notificacao'>{props.conteudo}</p>
             <div className='flex justify-between w-full'>
                 <Link to={`/dashboard/agendamentos/editar/${props.agendamentoId}`}>

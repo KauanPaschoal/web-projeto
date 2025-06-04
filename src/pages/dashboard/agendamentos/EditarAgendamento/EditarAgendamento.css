@@ -42,6 +42,34 @@
     }
 }
 
+.paciente-info-alterar{
+    display: flex;
+    height: fit-content;
+    min-height: 10vh;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 50%;
+    gap: 2em;
+    border-radius: 2em;
+    padding: 2em;
+    background-color: var(--WhiteFy);
+    p{
+        display: flex;
+        flex-direction: row;
+        gap:1em;
+        align-items: center;
+    }
+
+    strong{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-align: center;
+    }
+}
+
 .pendente-container{
     display: flex;
     flex-direction: column;

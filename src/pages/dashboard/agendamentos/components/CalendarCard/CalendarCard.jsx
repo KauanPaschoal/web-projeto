@@ -9,15 +9,16 @@ const CalendarCard = ({ timeSlot, status, patientName, buttonText, day, id }) =>
     Pendente: 'orange',
     Confirmada: 'green',
     Concluida: 'blue',
-    Cancelado: 'red',
+    Cancelada: 'red',
     Disponível: 'gray',
   }[status] || 'gray';
 
   const backgroundColor = {
     Pendente: 'rgba(255, 165, 0, 0.1)',
     Confirmada: 'rgba(0, 128, 0, 0.1)',
-    Cancelado: 'rgba(255, 0, 0, 0.1)',
+    Cancelada: 'rgba(255, 0, 0, 0.1)',
     Disponível: 'rgba(128, 128, 128, 0.1)',
+    Concluida: 'rgba(0, 0, 255, 0.1)',
   }[status] || 'rgba(128, 128, 128, 0.1)';
 
   const handleButtonClick = (e) => {
@@ -38,10 +39,12 @@ const CalendarCard = ({ timeSlot, status, patientName, buttonText, day, id }) =>
   return (
     <div className="calendario-card flex flex-col justify-between" style={{ borderLeft: `4px solid ${borderColor}`, backgroundColor }}>
       <div className="card-header-calendario">
-        <span>{timeSlot}</span>
+        <span>
+          {timeSlot}
+          {patientName && ` - ${patientName}`}
+        </span>
       </div>
       <div className="agendamento-info">
-        <b>{patientName}</b>
         <p>Status: {status}</p>
       </div>
       <div className="flex gap-2 w-full">
