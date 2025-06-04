@@ -1,8 +1,8 @@
 import React from 'react';
-import { FaPen, FaPlus } from 'react-icons/fa';
+import { FaPen, FaPlus, FaAddressCard } from 'react-icons/fa';
 import './CardPaciente.css'; // Opcional: Adicione estilos específicos para o card
 
-const CardPaciente = ({ paciente, onEditar, onAgendar }) => {
+const CardPaciente = ({ paciente, onVisualizar, onAgendar }) => {
     const imgSrc = paciente?.img ? paciente.img : "https://placehold.co/100";
     return (
         <div className="paciente-card">
@@ -19,10 +19,10 @@ const CardPaciente = ({ paciente, onEditar, onAgendar }) => {
             <div className="div-buttons flex gap-2">
                 <button
                     className="btn_secundario flex rounded-full"
-                    onClick={() => onEditar(paciente.id)}
+                    onClick={() => onVisualizar(paciente.id)}
                 >
-                    <FaPen />
-                    Editar
+                    <FaAddressCard />
+                    Visualizar
                 </button>
                 <button
                     className="btn_primario flex rounded-full"

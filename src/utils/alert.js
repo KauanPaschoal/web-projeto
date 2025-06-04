@@ -45,9 +45,9 @@ export async function popupMessage(planoId) {
       title: '<span style="color: #1B66A4;">Editar Valores do Plano</span>',
       html: `
         <label for="semana" style="display: block; text-align: left; margin-top: 10px; color: #000000;">Semanal:</label>
-        <input id="semana" class="swal2-input" placeholder="R$ 0,00" value="${semanal}">
+        <input id="semana" class="swal2-input input-app" placeholder="R$ 0,00" value="${semanal}">
         <label for="mensal" style="display: block; text-align: left; margin-top: 10px; color: #000000;">Mensal:</label>
-        <input id="mensal" class="swal2-input" placeholder="R$ 0,00" value="${mensal}">
+        <input id="mensal" class="swal2-input input-app" placeholder="R$ 0,00" value="${mensal}">
       `,
       background: "#FFFFFF", // TrueWhiteFy
       focusConfirm: false,
@@ -61,25 +61,38 @@ export async function popupMessage(planoId) {
         cancelButton: "btn_secundario",
       },
       didOpen: () => {
-        new Cleave("#semana", {
+        const semanaInput = document.getElementById("semana");
+        const mensalInput = document.getElementById("mensal");
+
+        new Cleave(semanaInput, {
           numeral: true,
           numeralThousandsGroupStyle: "thousand",
           prefix: "R$ ",
-          noImmediatePrefix: false,
-          rawValueTrimPrefix: true,
+          noImmediatePrefix: true,
+          rawValueTrimPrefix: false,
           numeralDecimalMark: ",",
           delimiter: ".",
         });
 
-        new Cleave("#mensal", {
+        new Cleave(mensalInput, {
           numeral: true,
           numeralThousandsGroupStyle: "thousand",
           prefix: "R$ ",
-          noImmediatePrefix: false,
-          rawValueTrimPrefix: true,
+          noImmediatePrefix: true,
+          rawValueTrimPrefix: false,
           numeralDecimalMark: ",",
           delimiter: ".",
         });
+
+        // Coloca o cursor no final do valor
+        if (semanaInput) {
+          const len = semanaInput.value.length;
+          semanaInput.setSelectionRange(len, len);
+        }
+        if (mensalInput) {
+          const len = mensalInput.value.length;
+          mensalInput.setSelectionRange(len, len);
+        }
       },
       preConfirm: () => {
         const semana = document
@@ -150,7 +163,7 @@ export async function popupMessage(planoId) {
   }
 }
 
-export function confirmCancelEdit(titulo, message, size) {
+export function confirmCancelEdit(titulo, message, size = "small") {
   return Swal.fire({
     title: titulo,
     text: message,
@@ -158,12 +171,10 @@ export function confirmCancelEdit(titulo, message, size) {
     showCancelButton: true,
     confirmButtonText: "Sim, cancelar",
     cancelButtonText: "Continuar editando",
-    cancelButtonColor: "#1B66A4",
-    confirmButtonColor: "#d33",
     customClass: {
-      popup: "swal-small",
-      // confirmButton: "",
-      // cancelButton: "",
+      popup: `swal-${size}`,
+      confirmButton: "btn_primario",
+      cancelButton: "btn_secundario",
     },
     backdrop: false,
   });

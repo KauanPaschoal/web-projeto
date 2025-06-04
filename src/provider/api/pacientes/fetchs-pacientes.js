@@ -136,7 +136,7 @@ export const buscarTelefonePorIdPaciente = async (idPaciente) => {
     const response = await axios.get(`/telefones/pacientes/${idPaciente}`)
     return response.data
   } catch (error) {
-    console.error("Erro ao buscar telefone por ID do paciente:". error.message)
+    console.error("Erro ao buscar telefone por ID do paciente:", error?.message, error?.response)
     throw error
   }
 }
