@@ -61,25 +61,38 @@ export async function popupMessage(planoId) {
         cancelButton: "btn_secundario",
       },
       didOpen: () => {
-        new Cleave("#semana", {
+        const semanaInput = document.getElementById("semana");
+        const mensalInput = document.getElementById("mensal");
+
+        new Cleave(semanaInput, {
           numeral: true,
           numeralThousandsGroupStyle: "thousand",
           prefix: "R$ ",
-          noImmediatePrefix: false,
-          rawValueTrimPrefix: true,
+          noImmediatePrefix: true,
+          rawValueTrimPrefix: false,
           numeralDecimalMark: ",",
           delimiter: ".",
         });
 
-        new Cleave("#mensal", {
+        new Cleave(mensalInput, {
           numeral: true,
           numeralThousandsGroupStyle: "thousand",
           prefix: "R$ ",
-          noImmediatePrefix: false,
-          rawValueTrimPrefix: true,
+          noImmediatePrefix: true,
+          rawValueTrimPrefix: false,
           numeralDecimalMark: ",",
           delimiter: ".",
         });
+
+        // Coloca o cursor no final do valor
+        if (semanaInput) {
+          const len = semanaInput.value.length;
+          semanaInput.setSelectionRange(len, len);
+        }
+        if (mensalInput) {
+          const len = mensalInput.value.length;
+          mensalInput.setSelectionRange(len, len);
+        }
       },
       preConfirm: () => {
         const semana = document

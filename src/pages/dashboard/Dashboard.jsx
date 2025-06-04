@@ -71,7 +71,7 @@ const Dashboard = () => {
       try {
         const data = await getSessoesSemana([semanaAtual, semanaAnterior]);
         setKpiData(data);
-      // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
       } catch (e) {
         setKpiData([]);
       }
@@ -91,11 +91,11 @@ const Dashboard = () => {
         const pacientesFormatados = data.map(sessao => ({
           id: sessao.idSessao,
           nome: sessao.nomePaciente,
-          horario: sessao.hora?.slice(0,5), // "10:00:00" -> "10:00"
-          status: sessao.status 
+          horario: sessao.hora?.slice(0, 5), // "10:00:00" -> "10:00"
+          status: sessao.status
         }));
         setPacientes(pacientesFormatados);
-      // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
       } catch (e) {
         setPacientes([]);
       }
@@ -113,6 +113,12 @@ const Dashboard = () => {
       id: 3, valor: `${qtdPacientesInativos}%`, texto: 'Pacientes Inativos'
     }
   ];
+
+  // Função utilitária para formatar anoSemana
+  function formatAnoSemana(anoSemana) {
+    if (!anoSemana || anoSemana.length < 6) return anoSemana;
+    return `${anoSemana.slice(0, 4)}/${anoSemana.slice(4)}`;
+  }
 
   return (
     <div className='dashboard flex'>
@@ -135,8 +141,8 @@ const Dashboard = () => {
                     valor={showPacientes ? kpiData[0].pacientesAgendados : kpiData[0].totalSessoes}
                     texto={
                       showPacientes
-                        ? `Pacientes Agendados na Semana (${kpiData[0].anoSemana})`
-                        : `Total de Sessões na Semana (${kpiData[0].anoSemana})`
+                        ? `Pacientes Agendados na Semana (${formatAnoSemana(kpiData[0].anoSemana)})`
+                        : `Total de Sessões na Semana (${formatAnoSemana(kpiData[0].anoSemana)})`
                     }
                   />
                 )
