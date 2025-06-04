@@ -348,7 +348,7 @@ const EditarAgendamento = () => {
                 </div>
 
                 {
-                  agendamento.statusSessao !== 'CANCELADA' &&
+                  (agendamento.statusSessao !== 'CANCELADA' || agendamento.statusSessao === 'CONFIRMADA') &&
                   
                 <div className="checkbox-container">
                   <input
