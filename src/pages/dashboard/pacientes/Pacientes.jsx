@@ -56,7 +56,7 @@ const Pacientes = () => {
     setPacientesLista(filteredPacientes);
   }
 
-  const redirectToEditarPaciente = (id) => {
+  const redirectToVisualizarPaciente = (id) => {
     navigate(`/dashboard/pacientes/editar/${id}`);
   };
 
@@ -104,7 +104,7 @@ const Pacientes = () => {
                 <CardPaciente
                   key={paciente.id}
                   paciente={paciente}
-                  onEditar={redirectToEditarPaciente}
+                  onVisualizar={redirectToVisualizarPaciente}
                   onAgendar={redirectToCadastrarAgendamento}
                 />
               ))}
