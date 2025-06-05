@@ -26,6 +26,7 @@ import {
 } from "../../../../provider/api/preferencias/fetchs-preferencias";
 import { getEnderecoPorCep } from "../../../../provider/api/pacientes/fetchs-pacientes";
 import Loading from "../../components/Loading/Loading";
+import EditButton from "../../components/EditButton/EditButton";
 
 const EditarPaciente = () => {
   const { id } = useParams();
@@ -106,30 +107,39 @@ const EditarPaciente = () => {
       if (telefoneResponse && telefoneResponse.length > 0) {
         setTelefone((prev) => ({
           ...prev,
-          // Telefone principal do usuário
           telefone: telefoneResponse[0].numero || "",
           ddd: telefoneResponse[0].ddd || "",
-          // Contato de emergência
-          telefoneContato: telefoneResponse[1].numero || "",
-          dddContato: telefoneResponse[1].ddd || "",
-          nomeContato: telefoneResponse[1].nomeContato || "",
+          telefoneContato: telefoneResponse[1]?.numero || "",
+          dddContato: telefoneResponse[1]?.ddd || "",
+          nomeContato: telefoneResponse[1]?.nomeContato || "",
         }));
       } else {
-        // Limpa os campos caso não haja telefone
-        setPaciente((prev) => ({
+        setTelefone((prev) => ({
           ...prev,
           telefone: "",
           ddd: "",
           telefoneContato: "",
+          dddContato: "",
           nomeContato: "",
         }));
-        console.warn("Nenhum telefone encontrado para o paciente.");
       }
     } catch (error) {
-      console.error("Erro ao buscar telefone:", error);
-      errorMessage("Erro ao buscar telefone do paciente.");
+      if (error.response && error.response.status === 404) {
+        setTelefone({
+          telefone: "",
+          ddd: "",
+          telefoneContato: "",
+          dddContato: "",
+          nomeContato: "",
+        });
+        return;
+      } else {
+        console.error("Erro ao buscar telefone:", error?.message, error?.response);
+        errorMessage("Erro ao buscar telefone do paciente.");
+      }
     }
   };
+
   useEffect(() => {
     buscarTelefone();
   }, [id]);
@@ -255,18 +265,14 @@ const EditarPaciente = () => {
         headerContent={
           <>
             <div className="flex w-full justify-between">
-              <button
-                className="btn_agendamento"
-                onClick={() => (window.location.href = "/dashboard/pacientes")}
-              >
+              <button className="btn_agendamento rounded-full" onClick={() => window.location.href = '/dashboard/pacientes'}>
                 {"< Voltar"}
               </button>
-              <button
-                className="btn_agendamento flex rounded-full"
+              <EditButton
+                className="bg-white"
                 onClick={handleEditGeneral}
-              >
-                {isEditingGeneral ? "Cancelar" : "Editar"}
-              </button>
+                text={isEditingGeneral ? "Cancelar" : "Editar"}
+              />
             </div>
           </>
         }

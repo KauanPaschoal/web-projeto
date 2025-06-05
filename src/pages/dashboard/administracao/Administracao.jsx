@@ -65,7 +65,7 @@ const Administracao = () => {
       const result = await confirmCancelEdit(
         "Cancelar edição?",
         "Tem certeza que deseja cancelar a edição?",
-        "small"
+        "medium"
       );
       if (!result.isConfirmed) return;
     }

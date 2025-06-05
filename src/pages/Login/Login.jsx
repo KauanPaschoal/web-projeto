@@ -1,58 +1,55 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Certifique-se de importar o Link corretamente
-import logo from "../../assets/images/LogoTipo Branco 1.svg"; // Atualize o caminho para o logo
+import { Link } from "react-router-dom";
+import logo from "../../assets/images/LogoTipo Branco 1.svg";
 import { errorMessage, responseMessage } from "../../utils/alert.js";
-// import { autenticateUser } from "../../utils/auth.js";
 import "./style/login.css";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
+import axios from "axios";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    fetch("/psicologos/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        senha: password,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erro ao autenticar usuário");
+    try {
+      const response = await axios.post(
+        "/psicologos/login",
+        {
+          email: email,
+          senha: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-        return response.json();
-      })
-      .then((data) => {
-        const { id, nome, email, token } = data;
+      );
 
-        const toCapitalize = (str) => {
-          return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-        };
-        const nomeFormatado = toCapitalize(nome);
+      const { id, nome, token } = response.data;
 
-        if (token) {
-          localStorage.setItem("authToken", token);
+      const toCapitalize = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+      };
+      const nomeFormatado = toCapitalize(nome);
 
-          localStorage.setItem("nomeUsuario", nomeFormatado);
+      if (token) {
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("nomeUsuario", nomeFormatado);
+        localStorage.setItem("idUsuario", id);
 
-          localStorage.setItem("idUsuario", id);
-
-          responseMessage(`Bem vindo, ${nomeFormatado}!`);
-          setTimeout(() => {
-            window.location.href = "/dashboard";
-          }, 2300);
-        } else {
-          errorMessage("Usuário ou senha inválidos");
-        }
-      })
-      .catch((error) => console.error("Erro ao autenticar usuário:", error));
+        responseMessage(`Bem vindo, ${nomeFormatado}!`);
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 2300);
+      } else {
+        errorMessage("Usuário ou senha inválidos");
+      }
+    } catch (error) {
+      errorMessage("Usuário ou senha inválidos");
+      console.error("Erro ao autenticar usuário:", error);
+    }
   };
 
   return (
@@ -60,7 +57,7 @@ const LoginPage = () => {
       <div className="card">
         <div className="login-container">
           <Link to="/" className="flex items-center mb-4 gap-2">
-            <FaArrowAltCircleLeft/>
+            <FaArrowAltCircleLeft />
             Voltar
           </Link>
           <h1 className="text-2xl font-semibold">Que bom te ver de novo!</h1>
