@@ -16,38 +16,57 @@ const Agendamentos = () => {
     window.location.href = './agendamentos/cadastrar';
   };
 
-  const getCurrentWeekDays = (offset = 0) => {
-    const today = new Date();
-    const currentDay = today.getDay();
-    const daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-    const weekDays = [];
+  // Função para retornar o range de datas (segunda a sexta) da semana baseada no offset
+const getWeekRange = (offset = 0) => {
+  const today = new Date();
+  const currentDay = today.getDay();
 
-    if (currentDay === 6) {
-      today.setDate(today.getDate() + 2);
-    } else if (currentDay === 0) {
-      today.setDate(today.getDate() + 1);
-    } else {
-      
-      today.setDate(today.getDate() - (currentDay - 1));
-    }
+  // Vai para segunda-feira da semana atual
+  if (currentDay === 6) today.setDate(today.getDate() + 2);
+  else if (currentDay === 0) today.setDate(today.getDate() + 1);
+  else today.setDate(today.getDate() - (currentDay - 1));
 
-    today.setDate(today.getDate() + offset * 7);
+  // Aplica o offset de semanas
+  today.setDate(today.getDate() + offset * 7);
 
-    for (let i = 0; i < 5; i++) {
-      const day = new Date(today);
-      day.setDate(today.getDate() + i);
-      const dayOfMonth = day.getDate().toString().padStart(2, '0');
-      const month = (day.getMonth() + 1).toString().padStart(2, '0');
-      const year = day.getFullYear();
+  const start = new Date(today);
+  const end = new Date(today);
+  end.setDate(start.getDate() + 4);
 
-      weekDays.push({
-        dayName: daysOfWeek[day.getDay()],
-        date: `${dayOfMonth}/${month}/${year}`,
-      });
-    }
+  const format = (d) =>
+    d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-    return weekDays;
-  };
+  return `${format(start)} - ${format(end)}`;
+};
+
+const getCurrentWeekDays = (offset = 0) => {
+  const daysOfWeek = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+  const today = new Date();
+  const currentDay = today.getDay();
+
+  // Vai para segunda-feira da semana atual
+  if (currentDay === 6) today.setDate(today.getDate() + 2);
+  else if (currentDay === 0) today.setDate(today.getDate() + 1);
+  else today.setDate(today.getDate() - (currentDay - 1));
+
+  // Aplica o offset de semanas
+  today.setDate(today.getDate() + offset * 7);
+
+  // Gera os próximos 5 dias úteis (segunda a sexta)
+  const weekDays = [];
+  for (let i = 0; i < 5; i++) {
+    const day = new Date(today);
+    day.setDate(today.getDate() + i);
+    const dayOfMonth = day.getDate().toString().padStart(2, '0');
+    const month = (day.getMonth() + 1).toString().padStart(2, '0');
+    const year = day.getFullYear();
+    weekDays.push({
+      dayName: daysOfWeek[day.getDay()],
+      date: `${dayOfMonth}/${month}/${year}`,
+    });
+  }
+  return weekDays;
+};
 
   const weekDays = getCurrentWeekDays(offsetSemana);
 
@@ -61,6 +80,8 @@ const Agendamentos = () => {
     '15:00 - 16:00',
     '16:00 - 17:00',
   ];
+
+  
 
   useEffect(() => {
     const fetchAgendamentos = async () => {
@@ -114,13 +135,13 @@ const Agendamentos = () => {
               className="btn_agendamento"
               onClick={() => setOffsetSemana((prev) => prev - 1)}
             >
-              {"< Semana Anterior"}
+              {`< ${getWeekRange(offsetSemana - 1)}`}
             </button>
             <button
               className="btn_agendamento"
               onClick={() => setOffsetSemana((prev) => prev + 1)}
             >
-              {"Próxima Semana >"}
+              {`${getWeekRange(offsetSemana + 1)} >`}
             </button>
             <button className='btn_agendamento flex rounded-full' onClick={redirectToCadastrarAgendamento}>
               <FaPlus className='icon' />
