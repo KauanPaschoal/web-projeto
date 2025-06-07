@@ -64,18 +64,19 @@ const AdicionarPsicologo = () => {
                 }
             >
                 <div className="container-psicologo">
-                    <h2>Dados do Psicólogo: </h2>
+
                     <form
-                        className="flex flex-col gap-5 w-full"
+                        className="form-adicionar-psicologo"
                         onSubmit={handleSubmit}
                     >
-                        <div className="flex gap-3">
+                        <h2>Dados do Psicólogo: </h2>
+                        <div className="flex flex-col gap-4 w-full items-center">
                             <InputField
                                 type="text"
                                 name="nome"
                                 labelTitle="Nome Completo"
                                 placeholder="Informe o nome completo"
-                                width="w-[50%]"
+                                containerWidth={"w-full"}
                                 required
                                 value={formData.nome}
                                 onChange={handleChange}
@@ -85,20 +86,18 @@ const AdicionarPsicologo = () => {
                                 name="crp"
                                 labelTitle="CRP"
                                 placeholder="Informe o CRP"
-                                width="w-[50%]"
+                                containerWidth={"w-full"}
                                 required
                                 value={formData.crp}
                                 onChange={handleChange}
                             />
-                        </div>
 
-                        <div className="flex gap-3">
                             <InputField
                                 type="email"
                                 name="email"
                                 labelTitle="Endereço de Email"
                                 placeholder="Informe seu Email"
-                                width="w-[50%]"
+                                containerWidth={"w-full"}
                                 required
                                 value={formData.email}
                                 onChange={handleChange}
@@ -108,12 +107,15 @@ const AdicionarPsicologo = () => {
                                 name="telefone"
                                 labelTitle="Telefone"
                                 placeholder="(11) 98877-6655"
-                                width="w-[50%]"
+                                maskType="telefone"
+                                containerWidth={"w-full"}
                                 required
                                 value={formData.telefone}
                                 onChange={handleChange}
                             />
                         </div>
+
+
                         <div className="flex gap-3 justify-end mt-5">
                             <button
                                 type="submit"

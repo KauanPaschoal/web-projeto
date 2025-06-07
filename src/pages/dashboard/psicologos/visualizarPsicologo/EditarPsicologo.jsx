@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import MenuPsicologo from '../components/menuPsicologo/menuPsicologo'
 import MainComponent from '../../components/MainComponent/MainComponent'
 import InputField from '../../components/InputField/InputField'
 import { useParams } from 'react-router-dom';
 import { getPsicologosPorId, putPsicologo } from '../../../../provider/api/psicologos/fetchs-psicologos';
-import { confirmCancelEdit } from "../../../../utils/alert"; // certifique-se de importar
+import { confirmCancelEdit } from "../../../../utils/alert";
+import './EditarPsicologo.css'
+import { FaUser } from 'react-icons/fa';
+import EditButton from '../../components/EditButton/EditButton';
 
 const EditarPsicologo = () => {
     const { id } = useParams();
@@ -95,12 +98,11 @@ const EditarPsicologo = () => {
                         >
                             {"< Voltar"}
                         </button>
-                        <button
-                            className="btn_agendamento flex rounded-full"
+                        <EditButton
+                            className="bg-white"
                             onClick={handleEditGeneral}
-                        >
-                            {isEditing ? "Cancelar" : "Editar"}
-                        </button>
+                            text={isEditing ? "Cancelar" : "Editar"}
+                        />
                     </div>
                 }
             >
@@ -109,63 +111,91 @@ const EditarPsicologo = () => {
                 ) : error ? (
                     <p>{error}</p>
                 ) : (
-                    <form className="flex w-full align-center justify-center" onSubmit={handleSave}>
-                        <div className="items-center align-center flex flex-col gap-2 w-full max-w-[500px]">
-                            <img src={psicologo.img || "https://placehold.co/100"} alt="" />
-                            <div className="flex justify-center gap-2 w-[100%]">
-                                <InputField
-                                    labelTitle="Nome"
-                                    name="nome"
-                                    value={psicologo.nome}
-                                    onChange={handleChange}
-                                    disabled={!isEditing}
-                                />
-                                <InputField
-                                    labelTitle="CRP"
-                                    name="crp"
-                                    value={psicologo.crp}
-                                    onChange={handleChange}
-                                    disabled={!isEditing}
-                                />
-                            </div>
-                            <div className="flex justify-center gap-2 w-[100%]">
-                                <InputField
-                                    labelTitle="Email"
-                                    name="email"
-                                    type="email"
-                                    value={psicologo.email}
-                                    onChange={handleChange}
-                                    disabled={!isEditing}
-                                />
-                                <InputField
-                                    labelTitle="Telefone"
-                                    name="telefone"
-                                    type="tel"
-                                    value={psicologo.telefone}
-                                    onChange={handleChange}
-                                    disabled={!isEditing}
-                                />
-                            </div>
-                            <div className="inputContainer w-[100%]">
-                                <label>Status:</label>
-                                <select
-                                    name="status"
-                                    value={psicologo.status ? "ATIVO" : "INATIVO"}
-                                    onChange={handleStatusChange}
-                                    disabled={!isEditing}
-                                    className="inputField w-[100%]"
+                    <div className="pacientes-background">
+                        <form className="flex w-full align-center justify-center h-full" onSubmit={handleSave}>
+                            <div className="form-psicologo">
+                                <figure>
+                                    <div style={{ width: 120, height: 120, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                        {psicologo.imagemUrl && psicologo.imagemUrl.trim() !== "" ? (
+                                            <img
+                                                src={psicologo.imagemUrl}
+                                                alt="Foto do paciente"
+                                                style={{ width: 120, height: 120, borderRadius: "1em", objectFit: "cover" }}
+                                            />
+                                        ) : (
+                                            <FaUser size={80} color="#bdbdbd" />
+                                        )}
+                                    </div>
+                                </figure>
+                                <div className="flex flex-col items-center justify-center gap-2 w-[50%]">
+                                    <InputField
+                                        labelTitle="Nome"
+                                        name="nome"
+                                        containerWidth={"w-[100%]"}
+                                        value={psicologo.nome}
+                                        onChange={handleChange}
+                                        disabled={!isEditing}
+                                    />
+                                    <InputField
+                                        labelTitle="CRP"
+                                        name="crp"
+                                        containerWidth={"w-[100%]"}
+                                        value={psicologo.crp}
+                                        onChange={handleChange}
+                                        disabled={!isEditing}
+                                    />
+                                    <InputField
+                                        labelTitle="Email"
+                                        name="email"
+                                        type="email"
+                                        containerWidth={"w-[100%]"}
+                                        value={psicologo.email}
+                                        onChange={handleChange}
+                                        disabled={!isEditing}
+                                    />
+                                    <InputField
+                                        labelTitle="Telefone"
+                                        name="telefone"
+                                        type="tel"
+                                        containerWidth={"w-[100%]"}
+                                        value={psicologo.telefone}
+                                        onChange={handleChange}
+                                        disabled={!isEditing}
+                                    />
+                                    <div className="inputContainer w-[100%]">
+                                        <label>Status:</label>
+                                        <select
+                                            name="status"
+                                            value={psicologo.status ? "ATIVO" : "INATIVO"}
+                                            onChange={handleStatusChange}
+                                            disabled={!isEditing}
+                                            className="inputField w-[100%]"
+                                        >
+                                            <option value="ATIVO">Ativo</option>
+                                            <option value="INATIVO">Inativo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                {isEditing ? (
+                                <button
+                                    type="submit"
+                                    form="form-psicologo"
+                                    className="btn_primario rounded-full"
                                 >
-                                    <option value="ATIVO">Ativo</option>
-                                    <option value="INATIVO">Inativo</option>
-                                </select>
-                            </div>
-                            {isEditing && (
-                                <button type="submit" className="btn_primario rounded-full mt-4">
                                     Salvar Alterações
                                 </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className="btn_secundario rounded-full"
+                                    onClick={() => window.location.href = "/dashboard/psicologos"}
+                                >
+                                    Voltar
+                                </button>
                             )}
-                        </div>
-                    </form>
+                            </div>
+                        </form>
+                    </div>
                 )}
             </MainComponent>
         </div>
