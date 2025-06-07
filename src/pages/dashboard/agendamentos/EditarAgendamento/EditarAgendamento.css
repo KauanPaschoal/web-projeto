@@ -5,7 +5,9 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    width: 100%;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
     height: 100%;
     padding: 1em;
     gap: 0.2em;
@@ -17,13 +19,14 @@
 .paciente-info-editar{
     display: flex;
     height: fit-content;
-    min-height: 32vh;
+    min-height: 24vh;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: start;
     flex-wrap: wrap;
-    min-width: 40%;
-    gap: 2em;
+    min-width: 24vw;
+    width: fit-content;
+    gap: 1em;
     border-radius: 2em;
     padding: 2em;
     background-color: var(--WhiteFy);
@@ -139,4 +142,11 @@
   color: #fff;
   padding: 0.2em 0.7em;
   border-radius: 1em;
+}
+
+.status-concluida{
+    background: #2563eb; /* azul */
+    color: #fff;
+    padding: 0.2em 0.7em;
+    border-radius: 1em;
 }

@@ -157,7 +157,7 @@ const Administracao = () => {
                   />
                 </h2>
                 <div className="card-inputs">
-                  <div className="flex gap-2 w-full justify-center">
+                  
                     <InputField
                       labelTitle="Nome"
                       value={nome}
@@ -173,8 +173,6 @@ const Administracao = () => {
                       disabled={!isEditingGeneral}
                       onChange={(e) => setEmail(e.target.value)}
                     />
-                  </div>
-                  <div className="flex gap-2 w-full justify-center">
                     <InputField
                       labelTitle="Telefone"
                       value={telefone}
@@ -190,7 +188,7 @@ const Administracao = () => {
                       disabled={true}
                       width={"w-full"}
                     />
-                  </div>
+                 
 
                 </div>
                 <div className="inputs-button">

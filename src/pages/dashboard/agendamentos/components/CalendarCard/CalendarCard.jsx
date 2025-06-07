@@ -1,4 +1,3 @@
-import React from 'react';
 import './CalendarCard.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,17 +21,14 @@ const CalendarCard = ({ timeSlot, status, patientName, buttonText, day, id }) =>
   }[status] || 'rgba(128, 128, 128, 0.1)';
 
   const handleButtonClick = (e) => {
-    const startTime = timeSlot.split(' - ')[0]; // Pega apenas o horário inicial
+    const startTime = timeSlot.split(' - ')[0];
 
     if (status === 'Disponível') {
       e.stopPropagation();
-      // Redireciona para cadastrar agendamento com os parâmetros startTime e day na query string
       navigate(`/dashboard/agendamentos/cadastrar?timeSlot=${encodeURIComponent(startTime)}&day=${encodeURIComponent(day)}`);
     } else {
       e.stopPropagation();
-      // Redireciona para uma página de detalhes ou então faz outra lógica
       navigate(`/dashboard/agendamentos/editar/${id}`);
-      // Ex.: navigate(`/dashboard/agendamentos/detalhes?timeSlot=${encodeURIComponent(startTime)}&day=${encodeURIComponent(day)}`);
     }
   }
 
