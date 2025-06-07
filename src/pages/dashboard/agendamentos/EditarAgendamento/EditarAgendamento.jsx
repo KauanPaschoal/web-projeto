@@ -9,6 +9,10 @@ import { useParams } from 'react-router-dom'
 import { cancelAgendamento, getAgendamentosPorId } from '../../../../provider/api/agendamentos/fetchs-agendamentos.js'
 import { putAgendamento } from '../../../../provider/api/agendamentos/fetchs-agendamentos.js';
 import UserSearch from '../../components/UserSearch/UserSearch';
+import {
+  formatDateToBackend,
+  formatDateToFrontend
+} from '../../../../utils/agendamentoUtils';
 
 const EditarAgendamento = () => {
 
@@ -17,25 +21,23 @@ const EditarAgendamento = () => {
   const [diasDoMes, setDiasDoMes] = useState({});
   const [agendamento, setAgendamento] = useState({});
   const [diaSemana, setDiaSemana] = useState(0);
-  const [novoHorario, setNovoHorario] = useState(''); 
+  const [novoHorario, setNovoHorario] = useState('');
   const [novoPacienteSelecionado, setNovoPacienteSelecionado] = useState(null);
 
-
   const { id } = useParams();
-
 
   useEffect(() => {
     const fetchAgendamento = async () => {
       try {
-        const response = await getAgendamentosPorId(id); 
+        const response = await getAgendamentosPorId(id);
         console.log("Agendamento carregado:", response);
 
         if (response && response.id) {
           setAgendamento(response);
           let horaPadronizada = response.hora;
-          
+
           if (horaPadronizada && horaPadronizada.length === 8 && horaPadronizada.split(':').length === 3) {
-            
+
             const [h, m] = horaPadronizada.split(':');
             horaPadronizada = h.padStart(2, '0') + ':' + m.padStart(2, '0');
           } else if (horaPadronizada && !horaPadronizada.includes(':')) {
@@ -56,13 +58,13 @@ const EditarAgendamento = () => {
             diaSemana: new Date(response.data).getDay(),
             statusSessao: response.statusSessao,
           });
-          setNovoHorario(horaPadronizada); 
-        } else {  
+          setNovoHorario(horaPadronizada);
+        } else {
           console.error("Nenhum agendamento encontrado para o ID:", id);
         }
       } catch (error) {
         console.error("Erro ao carregar agendamento:", error);
-      } 
+      }
     };
 
     fetchAgendamento();
@@ -87,44 +89,17 @@ const EditarAgendamento = () => {
     }
   }, [paciente]);
 
-  const formatDateToBackend = (date) => {
-    if (!date || typeof date !== 'string') {
-      console.error("Data inválida para formatDateToBackend:", date);
-      return "0000-00-00";
-    }
-
-    const [day, month, year] = date.split('/');
-    if (!day || !month || !year) {
-      console.error("Formato de data inválido para formatDateToBackend:", date);
-      return "0000-00-00";
-    }
-
-    return `${year}-${month}-${day}`;
-  };
-
-  function formatDateToFrontend(date) {
-    if (!date || typeof date !== 'string') return '';
-    if (date.includes('/')) return date;
-    const [year, month, day] = date.split('-');
-    return `${day}/${month}/${year}`;
-  }
-
   const handleAtualizarAgendamento = async (e) => {
     e.preventDefault();
-
-    
     if (agendamento.statusSessao === 'CANCELADA' && !novoPacienteSelecionado) {
       errorMessage("Selecione um novo paciente para reativar o agendamento.");
       return;
     }
-
-   
     const pacienteParaSalvar = agendamento.statusSessao === 'CANCELADA' && novoPacienteSelecionado
       ? novoPacienteSelecionado
       : paciente;
-
-    const dataParaSalvar = paciente.data; 
-    const diaSemanaParaSalvar = paciente.diaSemana; 
+    const dataParaSalvar = paciente.data;
+    const diaSemanaParaSalvar = paciente.diaSemana;
 
     const requestBody = {
       id: agendamento.id,
@@ -193,13 +168,13 @@ const EditarAgendamento = () => {
     }
   }, [paciente.horario]);
 
-  
+
   const cancelarAgendamento = async (id) => {
     const result = await confirmCancelEdit(
-            "Cancelar edição?",
-            "Tem certeza que deseja cancelar a sessão?",
-            "medium"
-          );
+      "Cancelar edição?",
+      "Tem certeza que deseja cancelar a sessão?",
+      "medium"
+    );
     if (result.isConfirmed) {
       try {
         await cancelAgendamento(id, { statusSessao: 'CANCELADA' });
@@ -227,40 +202,39 @@ const EditarAgendamento = () => {
               {"< Voltar"}
             </button>
             {
-              (agendamento.statusSessao !== 'CANCELADA' 
-              && agendamento.statusSessao !== 'CONCLUIDA')
+              (agendamento.statusSessao !== 'CANCELADA'
+                && agendamento.statusSessao !== 'CONCLUIDA')
               &&
-            <button
-              className='btn_agendamento rounded-full flex gap-2 m-0'
-              type="button"
-              onClick={() => cancelarAgendamento(agendamento.id)}
-            >
-              <FaTrashCan className='' size={20} />
-              Cancelar Agendamento
-            </button>
+              <button
+                className='btn_agendamento rounded-full flex gap-2 m-0'
+                type="button"
+                onClick={() => cancelarAgendamento(agendamento.id)}
+              >
+                <FaTrashCan className='' size={20} />
+                Cancelar Agendamento
+              </button>
             }
           </div>
         }
       >
         <form className='form-editar-agendamento'
           noValidate
-          onSubmit={handleAtualizarAgendamento}>          
-          
+          onSubmit={handleAtualizarAgendamento}>
+
           <section className='container-editar-agendamento'>
-              
+
             {paciente && (
               <div className="paciente-info-editar">
                 <p><strong>Paciente Selecionado:</strong> {novoPacienteSelecionado ? novoPacienteSelecionado.nome : paciente.nome}</p>
                 <p><strong>Horário Marcado:</strong> {paciente.horario}</p>
                 <p><strong>Data Marcada:</strong> {formatDateToFrontend(agendamento.data)}</p>
                 <div className="pendente-container">
-                  <span className={`status ${
-                    agendamento.statusSessao === 'PENDENTE' ? 'status-sessao-pendente' :
-                    agendamento.statusSessao === 'CONFIRMADA' ? 'status-sessao-ok' :
-                    agendamento.statusSessao === 'CANCELADA' ? 'status-cancelado' :
-                    agendamento.statusSessao === 'CONCLUIDA' ? 'status-concluida' :
-                    ''
-                  }`}>
+                  <span className={`status ${agendamento.statusSessao === 'PENDENTE' ? 'status-sessao-pendente' :
+                      agendamento.statusSessao === 'CONFIRMADA' ? 'status-sessao-ok' :
+                        agendamento.statusSessao === 'CANCELADA' ? 'status-cancelado' :
+                          agendamento.statusSessao === 'CONCLUIDA' ? 'status-concluida' :
+                            ''
+                    }`}>
                     {agendamento.statusSessao}
                   </span>
                 </div>
@@ -278,7 +252,7 @@ const EditarAgendamento = () => {
                     />
                   </div>
                 )}
-          
+
                 <div className="select-container w-full">
                   <label htmlFor="diaSemana" className="input-label">Novo Dia da Semana:</label>
                   <select
@@ -345,57 +319,57 @@ const EditarAgendamento = () => {
                 </div>
 
                 {
-                  (agendamento.statusSessao !== 'CANCELADA' 
-                  && agendamento.statusSessao !== 'CONFIRMADA'
-                  && agendamento.statusSessao !== 'CONCLUIDA'
-                
-                ) &&
-                  
-                <div className="checkbox-container">
-                  <input
-                    name="confirmar_checkbox"
-                    type="checkbox"
-                    disabled={agendamento.statusSessao === 'CONCLUIDA'}
-                    checked={paciente.statusSessao === 'CONFIRMADA'}
-                    onChange={e => setPaciente({
-                      ...paciente,
-                      statusSessao: e.target.checked ? 'CONFIRMADA' : 'PENDENTE'
-                    })}
-                  />
-                  <label htmlFor="confirmar_checkbox">
-                    Confirmar Agendamento
-                  </label>
-                </div>
+                  (agendamento.statusSessao !== 'CANCELADA'
+                    && agendamento.statusSessao !== 'CONFIRMADA'
+                    && agendamento.statusSessao !== 'CONCLUIDA'
+
+                  ) &&
+
+                  <div className="checkbox-container">
+                    <input
+                      name="confirmar_checkbox"
+                      type="checkbox"
+                      disabled={agendamento.statusSessao === 'CONCLUIDA'}
+                      checked={paciente.statusSessao === 'CONFIRMADA'}
+                      onChange={e => setPaciente({
+                        ...paciente,
+                        statusSessao: e.target.checked ? 'CONFIRMADA' : 'PENDENTE'
+                      })}
+                    />
+                    <label htmlFor="confirmar_checkbox">
+                      Confirmar Agendamento
+                    </label>
+                  </div>
                 }
                 {
                   (agendamento.statusSessao === 'CONFIRMADA') &&
 
-                <div className="checkbox-container">
-                  <input
-                    name="confirmar_checkbox"
-                    type="checkbox"
-                    disabled={agendamento.statusSessao === 'CONCLUIDA'}
-                    checked={paciente.statusSessao === 'CONCLUIDA'}
-                    onChange={e => setPaciente({
-                      ...paciente,
-                      statusSessao: e.target.checked ? 'CONCLUIDA' : 'CONFIRMADA'
-                    })}
-                  />
-                  <label htmlFor="confirmar_checkbox">
-                    Concluir Agendamento
-                  </label>
-                </div>
+                  <div className="checkbox-container">
+                    <input
+                      name="confirmar_checkbox"
+                      type="checkbox"
+                      disabled={agendamento.statusSessao === 'CONCLUIDA'}
+                      checked={paciente.statusSessao === 'CONCLUIDA'}
+                      onChange={e => setPaciente({
+                        ...paciente,
+                        statusSessao: e.target.checked ? 'CONCLUIDA' : 'CONFIRMADA'
+                      })}
+                    />
+                    <label htmlFor="confirmar_checkbox">
+                      Concluir Agendamento
+                    </label>
+                  </div>
                 }
               </div>
             </div>
           </section>
           <div className='flex gap-2'>
-            { agendamento.statusSessao !== 'CONCLUIDA' &&
-              
+            {agendamento.statusSessao !== 'CONCLUIDA' &&
+
               <button type='submit' className='btn_primario rounded-full flex gap-2'>
-              <FaRegSave className='' size={20} />
-              Salvar Alterações
-            </button>}
+                <FaRegSave className='' size={20} />
+                Salvar Alterações
+              </button>}
             <button className='btn_secundario rounded-full'
               onClick={() => window.location.href = '/dashboard/agendamentos'}
               type="button">
