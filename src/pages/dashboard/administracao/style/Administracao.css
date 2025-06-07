@@ -62,7 +62,7 @@
     background-color: var(--TrueWhiteFy);
     border-radius: 1em;
     padding: 1em;
-    width: 40%;
+    width: 30vw;
     height: 100%;
 }
 
@@ -89,7 +89,6 @@
 }
 
 .card-forms {
-    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
