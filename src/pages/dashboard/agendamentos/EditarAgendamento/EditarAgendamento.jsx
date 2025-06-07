@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import MainComponent from '../../components/MainComponent/MainComponent'
 import MenuLateralComponent from '../../components/MenuLateral/MenuLateralComponent'
 import './EditarAgendamento.css'
-import InputField from '../../components/InputField/InputField'
-import { FaDeleteLeft, FaTrashCan } from 'react-icons/fa6'
+import { FaTrashCan } from 'react-icons/fa6'
 import { FaRegSave, FaSave } from 'react-icons/fa'
-import { errorMessage, responseMessage } from '../../../../utils/alert.js'
+import { confirmCancelEdit, errorMessage, responseMessage } from '../../../../utils/alert.js'
 import { useParams } from 'react-router-dom'
 import { cancelAgendamento, getAgendamentosPorId } from '../../../../provider/api/agendamentos/fetchs-agendamentos.js'
 import { putAgendamento } from '../../../../provider/api/agendamentos/fetchs-agendamentos.js';
@@ -18,7 +17,7 @@ const EditarAgendamento = () => {
   const [diasDoMes, setDiasDoMes] = useState({});
   const [agendamento, setAgendamento] = useState({});
   const [diaSemana, setDiaSemana] = useState(0);
-  const [novoHorario, setNovoHorario] = useState(''); // novo estado para o select
+  const [novoHorario, setNovoHorario] = useState(''); 
   const [novoPacienteSelecionado, setNovoPacienteSelecionado] = useState(null);
 
 
@@ -28,15 +27,15 @@ const EditarAgendamento = () => {
   useEffect(() => {
     const fetchAgendamento = async () => {
       try {
-        const response = await getAgendamentosPorId(id); // Busca o agendamento pelo ID
+        const response = await getAgendamentosPorId(id); 
         console.log("Agendamento carregado:", response);
 
         if (response && response.id) {
           setAgendamento(response);
           let horaPadronizada = response.hora;
-          // Garante formato HH:00
+          
           if (horaPadronizada && horaPadronizada.length === 8 && horaPadronizada.split(':').length === 3) {
-            // Exemplo: "11:00:00" => "11:00"
+            
             const [h, m] = horaPadronizada.split(':');
             horaPadronizada = h.padStart(2, '0') + ':' + m.padStart(2, '0');
           } else if (horaPadronizada && !horaPadronizada.includes(':')) {
@@ -57,7 +56,7 @@ const EditarAgendamento = () => {
             diaSemana: new Date(response.data).getDay(),
             statusSessao: response.statusSessao,
           });
-          setNovoHorario(horaPadronizada); // <-- garante que o select também recebe o valor correto
+          setNovoHorario(horaPadronizada); 
         } else {  
           console.error("Nenhum agendamento encontrado para o ID:", id);
         }
@@ -88,18 +87,6 @@ const EditarAgendamento = () => {
     }
   }, [paciente]);
 
-  const getNomeDiaSemana = (diaSemana) => {
-    const dias = [
-      "Segunda-feira",
-      "Terça-feira",
-      "Quarta-feira",
-      "Quinta-feira",
-      "Sexta-feira",
-    ];
-
-    return dias[diaSemana] || "Desconhecido";
-  };
-
   const formatDateToBackend = (date) => {
     if (!date || typeof date !== 'string') {
       console.error("Data inválida para formatDateToBackend:", date);
@@ -125,19 +112,19 @@ const EditarAgendamento = () => {
   const handleAtualizarAgendamento = async (e) => {
     e.preventDefault();
 
-    // Se o agendamento está cancelado, exige novo paciente
+    
     if (agendamento.statusSessao === 'CANCELADA' && !novoPacienteSelecionado) {
       errorMessage("Selecione um novo paciente para reativar o agendamento.");
       return;
     }
 
-    // Usa o novo paciente se selecionado, senão mantém o atual
+   
     const pacienteParaSalvar = agendamento.statusSessao === 'CANCELADA' && novoPacienteSelecionado
       ? novoPacienteSelecionado
       : paciente;
 
-    const dataParaSalvar = paciente.data; // sempre pega do state do formulário
-    const diaSemanaParaSalvar = paciente.diaSemana; // idem
+    const dataParaSalvar = paciente.data; 
+    const diaSemanaParaSalvar = paciente.diaSemana; 
 
     const requestBody = {
       id: agendamento.id,
@@ -190,7 +177,7 @@ const EditarAgendamento = () => {
     setPaciente({
       ...paciente,
       diaSemana: selectedDiaSemana,
-      data: formatDateToBackend(diasDoMesAtualizados[0]), // Salva no formato yyyy-MM-dd
+      data: formatDateToBackend(diasDoMesAtualizados[0]),
     });
   }
 
@@ -199,7 +186,7 @@ const EditarAgendamento = () => {
     console.log("Dia da Semana Calculado:", diaSemana);
   }, [paciente, diaSemana]);
 
-  // Sempre que paciente.horario mudar, atualiza o novoHorario
+
   useEffect(() => {
     if (paciente && paciente.horario) {
       setNovoHorario(paciente.horario);
@@ -208,8 +195,12 @@ const EditarAgendamento = () => {
 
   
   const cancelarAgendamento = async (id) => {
-    if (window.confirm("Você tem certeza que deseja cancelar este agendamento?")) {
-      // precisa colocar o modal pra confirmar pelo modal
+    const result = await confirmCancelEdit(
+            "Cancelar edição?",
+            "Tem certeza que deseja cancelar a sessão?",
+            "medium"
+          );
+    if (result.isConfirmed) {
       try {
         await cancelAgendamento(id, { statusSessao: 'CANCELADA' });
         responseMessage("Agendamento cancelado com sucesso!");

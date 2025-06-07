@@ -14,7 +14,6 @@ import {
   putEndereco,
   buscarTelefonePorIdPaciente
 } from "../../../../provider/api/pacientes/fetchs-pacientes";
-import Swal from "sweetalert2";
 import {
   confirmCancelEdit,
   errorMessage,
@@ -35,12 +34,12 @@ const EditarPaciente = () => {
     diaConsulta: "",
     horaConsulta: "",
   });
-  const [isEditingGeneral, setIsEditingGeneral] = useState(false); // Controle do modo de edição
-  const [isAtivo, setIsAtivo] = useState(false); // Controle do checkbox "Paciente Ativo"
-  const [isPlanoAtivo, setIsPlanoAtivo] = useState(true); // Controle do checkbox "Plano Mensal"
-  const [preferencias, setPreferencias] = useState([]); // Estado para armazenar as preferências do paciente
-  const [erro, setErro] = useState(''); // Estado para armazenar erros
-  const [loading, setLoading] = useState(true); // Estado para controle de loading
+  const [isEditingGeneral, setIsEditingGeneral] = useState(false);
+  const [isAtivo, setIsAtivo] = useState(false);
+  const [isPlanoAtivo, setIsPlanoAtivo] = useState(true);
+  const [preferencias, setPreferencias] = useState([]);
+  const [erro, setErro] = useState('');
+  const [loading, setLoading] = useState(true); 
   const [telefone, setTelefone] = useState({});
 
   const diasSemana = [
@@ -53,7 +52,6 @@ const EditarPaciente = () => {
     "Domingo"
   ];
 
-  // Mapeamento dos valores do backend para exibição amigável
   const diasSemanaBackend = [
     { value: "SEGUNDA", label: "Segunda-feira" },
     { value: "TERCA", label: "Terça-feira" },
@@ -187,8 +185,6 @@ const EditarPaciente = () => {
 
   const handleAtualizarPaciente = async () => {
     try {
-      // const cpfFormatado = paciente.cpf?.trim();
-
       const pacienteAtualizado = {
         nome: paciente.nome,
         email: paciente.email,
@@ -315,9 +311,9 @@ const EditarPaciente = () => {
 
             <section className="fields">
 
-              <section>
+              <section className="inputArea">
 
-                <div className="inputArea">
+                
 
                   <div className="input-card flex flex-col gap-2">
                     <h2>Dados do Paciente:</h2>
@@ -465,7 +461,7 @@ const EditarPaciente = () => {
                         labelTitle={"CEP"}
                         containerWidth={"w-full"}
                         placeholder={'CEP do paciente'}
-                        value={paciente.fkEndereco?.cep || ""} // Usa o operador ?. para evitar erros
+                        value={paciente.fkEndereco?.cep || ""} 
                         maxLength={9}
                         onChange={(e) =>
                           setPaciente((prev) => ({
@@ -487,7 +483,7 @@ const EditarPaciente = () => {
                       labelTitle={"Cidade"}
                       containerWidth={"w-full"}
                       placeholder={'Cidade do paciente'}
-                      value={paciente.fkEndereco?.cidade || ""} // Usa o operador ?. para evitar erros
+                      value={paciente.fkEndereco?.cidade || ""} 
                       onChange={(e) =>
                         setPaciente((prev) => ({
                           ...prev,
@@ -504,7 +500,7 @@ const EditarPaciente = () => {
                       labelTitle={"Bairro"}
                       placeholder={'Bairro do paciente'}
                       containerWidth={"w-full"}
-                      value={paciente.fkEndereco?.bairro || ""} // Usa o operador ?. para evitar erros
+                      value={paciente.fkEndereco?.bairro || ""} 
                       onChange={(e) =>
                         setPaciente((prev) => ({
                           ...prev,
@@ -572,9 +568,6 @@ const EditarPaciente = () => {
 
                     </div>
                   </div>
-
-
-                </div>
               </section>
             </section>
           </section>

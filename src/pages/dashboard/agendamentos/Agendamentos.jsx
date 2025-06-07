@@ -1,10 +1,10 @@
-import React, { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Agendamentos.css';
 import MenuLateralComponent from '../components/MenuLateral/MenuLateralComponent';
 import MainComponent from '../components/MainComponent/MainComponent';
 import { FaPlus } from 'react-icons/fa';
 import CalendarCard from './components/CalendarCard/CalendarCard';
-import { getAgendamentos, getAgendamentosPorPaciente } from '../../../provider/api/agendamentos/fetchs-agendamentos';
+import { getAgendamentos } from '../../../provider/api/agendamentos/fetchs-agendamentos';
 import Loading from '../components/Loading/Loading';
 
 const Agendamentos = () => {
@@ -22,20 +22,17 @@ const Agendamentos = () => {
     const daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
     const weekDays = [];
 
-    // Avança para a próxima segunda-feira se for sábado ou domingo
     if (currentDay === 6) {
       today.setDate(today.getDate() + 2);
     } else if (currentDay === 0) {
       today.setDate(today.getDate() + 1);
     } else {
-      // Se for segunda a sexta, volta para a segunda-feira da semana atual
+      
       today.setDate(today.getDate() - (currentDay - 1));
     }
 
-    // Aplica o offset de semanas
     today.setDate(today.getDate() + offset * 7);
 
-    // Gera os próximos 5 dias úteis (segunda a sexta)
     for (let i = 0; i < 5; i++) {
       const day = new Date(today);
       day.setDate(today.getDate() + i);
@@ -101,14 +98,9 @@ const Agendamentos = () => {
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   };
 
-  const formatDateToDisplay = (date) => {
-    const [year, month, day] = date.split('-');
-    return `${day}/${month}/${year}`; // Converte para o formato DD/MM/YYYY
-  };
-
   const formatDateToBackend = (date) => {
     const [day, month, year] = date.split('/');
-    return `${year}-${month}-${day}`; // Converte para o formato YYYY-MM-DD
+    return `${year}-${month}-${day}`; 
 };
 
   return (
@@ -148,7 +140,7 @@ const Agendamentos = () => {
                     {weekDays.map((day, index) => (
                       <th key={index} className='calendario-card-header'>
                         <span>{day.dayName}</span>
-                        <span>{day.date}</span> {/* Exibe a data no formato DD/MM */}
+                        <span>{day.date}</span> 
                       </th>
                     ))}
                   </tr>
@@ -159,7 +151,7 @@ const Agendamentos = () => {
                       {weekDays.map((day, colIndex) => {
                         const formatDateToDisplay = (date) => {
                           const [year, month, day] = date.split('-');
-                          return `${day}/${month}/${year}`; // Converte para o formato DD/MM/YYYY
+                          return `${day}/${month}/${year}`;
                         };
 
                         const agendamento = agendamentos.find(

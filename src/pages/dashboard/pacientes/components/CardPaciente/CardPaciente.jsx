@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaPen, FaPlus, FaAddressCard } from 'react-icons/fa';
-import './CardPaciente.css'; // Opcional: Adicione estilos específicos para o card
+import './CardPaciente.css';
 
 const CardPaciente = ({ paciente, onVisualizar, onAgendar }) => {
     const imgSrc = paciente?.img ? paciente.img : "https://placehold.co/100";

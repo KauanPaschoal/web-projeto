@@ -1,14 +1,11 @@
-import React, { use, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import './CadastrarAgendamento.css'
 import { useParams, useSearchParams } from 'react-router-dom'
 import MenuLateralComponent from '../../components/MenuLateral/MenuLateralComponent'
-import InputField from '../../components/InputField/InputField'
-import { FaSearch, FaUser } from 'react-icons/fa'
 import { errorMessage, responseMessage } from '../../../../utils/alert.js'
-import axios from 'axios';
 import MainComponent from '../../components/MainComponent/MainComponent.jsx'
 import Checkbox from '../../components/Checkbox/Checkbox.jsx'
-import { getPacientesPorId, getPacientes } from '../../../../provider/api/pacientes/fetchs-pacientes.js'
+import { getPacientesPorId } from '../../../../provider/api/pacientes/fetchs-pacientes.js'
 import { getAgendamentosPorPaciente, postAgendamento } from '../../../../provider/api/agendamentos/fetchs-agendamentos'; // Importa a função de adicionar agendamento
 import { getPreferenciasPorId } from '../../../../provider/api/preferencias/fetchs-preferencias.js'
 import UserSearch from '../../components/UserSearch/UserSearch.jsx'
@@ -32,9 +29,9 @@ const CadastrarAgendamento = ({ paciente }) => {
     useEffect(() => {
         const fetchPreferencias = async () => {
             try {
-                if (pacienteSelecionado && pacienteSelecionado.id) { // Verifica se há um paciente selecionado
-                    const response = await getPreferenciasPorId(pacienteSelecionado.id); // Chama a função do provider
-                    setPreferencias(response); // Atualiza o estado com as preferências
+                if (pacienteSelecionado && pacienteSelecionado.id) {
+                    const response = await getPreferenciasPorId(pacienteSelecionado.id); 
+                    setPreferencias(response); 
                     console.log("Preferências carregadas:", response);
                 }
             } catch (err) {
@@ -59,7 +56,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                         selectedDate: pacienteResponse.selectedDate || "00/00",
                         planoMensal: pacienteResponse.planoMensal || false,
                         statusAgendamento: pacienteResponse.statusAgendamento || "Pendente",
-                        tipo: pacienteResponse.tipo || "AVULSO", // Define um valor padrão para o tipo
+                        tipo: pacienteResponse.tipo || "AVULSO",
                     };
                     setPacienteSelecionado(updatedPaciente);
                     setQuery(pacienteResponse.nome);
@@ -77,7 +74,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                 const hoje = new Date();
                 const dias = [];
                 diaSemana = diaSemana || hoje.getDay();
-                const inicio = 7; // Começa a contar a partir de uma semana a partir de hoje
+                const inicio = 7;
                 const qtdDias = 4;
 
                 for (let i = 0; i < qtdDias; i++) {
@@ -99,7 +96,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                     "SEXTA": "Sexta-feira",
                 };
 
-                return dias[diaSemana] || "Indefinido"; // Retorna "Indefinido" se o valor não for encontrado
+                return dias[diaSemana] || "Indefinido";
             };
 
             useEffect(() => {
@@ -107,7 +104,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                     try {
                         if (pacienteSelecionado && pacienteSelecionado.id) {
                             const response = await getAgendamentosPorPaciente(pacienteSelecionado.id);
-                            setAgendamentos(response); // Atualiza o estado com os agendamentos
+                            setAgendamentos(response);
                             console.log("Agendamentos carregados:", response);
                         }
                     } catch (error) {
@@ -151,7 +148,7 @@ const CadastrarAgendamento = ({ paciente }) => {
 
             const formatDateToBackend = (date) => {
                 const [day, month, year] = date.split('/');
-                return `${year}-${month}-${day}`; // Converte para o formato yyyy-MM-dd
+                return `${year}-${month}-${day}`;
             };
 
             function formatHoraToBackend(hora) {
@@ -189,16 +186,10 @@ const CadastrarAgendamento = ({ paciente }) => {
                 try {
                     if (statusPlanoMensal) {
                         const promises = Array.from({ length: 4 }).map((_, index) => {
-                            // Converte "dd/MM/yyyy" para Date corretamente
                             const [day, month, year] = (pacienteSelecionado.selectedDate || "").split("/");
                             const baseDate = new Date(`${year}-${month}-${day}T00:00:00`);
-
-                            // Adiciona 7 dias para cada semana
                             baseDate.setDate(baseDate.getDate() + index * 7);
-
-                            // Formata para dd/MM/yyyy
                             const dataFormatada = baseDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-
                             const novoAgendamento = {
                                 fkPaciente: {
                                     id: pacienteSelecionado.id,
@@ -212,7 +203,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                         preco: pacienteSelecionado.fkPlano?.preco || 0,
                                     }
                                 },
-                                data: formatDateToBackend(dataFormatada), // Usa a data correta de cada semana
+                                data: formatDateToBackend(dataFormatada),
                                 hora: formatHoraToBackend(pacienteSelecionado.horario || horario),
                                 tipo: pacienteSelecionado.tipo || "AVULSO",
                                 statusSessao: "PENDENTE",
@@ -226,7 +217,6 @@ const CadastrarAgendamento = ({ paciente }) => {
                         await Promise.all(promises);
                         responseMessage("Agendamentos cadastrados com sucesso!", "small");
                     } else {
-                        // Cria apenas um agendamento para a data selecionada
                         const novoAgendamento = {
                             fkPaciente: {
                                 id: pacienteSelecionado.id,
@@ -240,8 +230,8 @@ const CadastrarAgendamento = ({ paciente }) => {
                                     preco: pacienteSelecionado.fkPlano?.preco || 0,
                                 }
                             },
-                            data: formatDateToBackend(pacienteSelecionado.selectedDate), // yyyy-MM-dd
-                            hora: formatHoraToBackend(pacienteSelecionado.horario || horario), // <-- string!
+                            data: formatDateToBackend(pacienteSelecionado.selectedDate),
+                            hora: formatHoraToBackend(pacienteSelecionado.horario || horario),
                             tipo: pacienteSelecionado.tipo || "AVULSO",
                             statusSessao: "PENDENTE",
                             anotacao: "teste",
@@ -275,11 +265,11 @@ const CadastrarAgendamento = ({ paciente }) => {
                 setDiaSemana(selected);
                 const dias = getProximosDiasDoMes(selected);
                 setDiasDoMes(dias);
-                setDiaMesSelecionado(dias[0]); // seleciona o primeiro dia do mês disponível
+                setDiaMesSelecionado(dias[0]);
                 setPacienteSelecionado(prev => ({
                     ...prev,
                     diaSemana: selected,
-                    selectedDate: dias[0] // sempre seleciona o primeiro disponível
+                    selectedDate: dias[0]
                 }));
             };
 
@@ -298,14 +288,11 @@ const CadastrarAgendamento = ({ paciente }) => {
             }, [pacienteSelecionado]);
 
             useEffect(() => {
-                // Só executa se vierem parâmetros na URL
                 const timeSlotParam = searchParams.get('timeSlot');
                 const dayParam = searchParams.get('day');
 
                 if (dayParam) {
                     setDiaMesSelecionado(dayParam);
-
-                    // Corrige o cálculo do dia da semana
                     const [dia, mes, ano] = dayParam.split('/');
                     const data = new Date(Number(ano), Number(mes) - 1, Number(dia));
                     const jsDiaSemana = data.getDay();
