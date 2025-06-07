@@ -1,1 +1,40 @@
 @import 'tailwindcss';
+
+.form-psicologo{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    min-width: 40%;
+    width: fit-content;
+    height: 100%;
+    padding: 1em;
+    gap: 0.2em;
+    border: var(--BlackFy) 2px solid;
+    border-radius: 12px;
+    background-color: var(--WhiteFy);
+
+    figure {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+
+        div {
+            background-color: #D9D9D9;
+            width: 150px;
+            height: 150px;
+            border-radius: 2em;
+            border: #133857 2px solid;
+        }
+
+        span {
+            font-weight: 500;
+
+            span {
+                color: #643BA1;
+            }
+        }
+
+    }
+}
+
