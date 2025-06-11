@@ -16,17 +16,14 @@ const Agendamentos = () => {
     window.location.href = './agendamentos/cadastrar';
   };
 
-  // Função para retornar o range de datas (segunda a sexta) da semana baseada no offset
 const getWeekRange = (offset = 0) => {
   const today = new Date();
   const currentDay = today.getDay();
 
-  // Vai para segunda-feira da semana atual
   if (currentDay === 6) today.setDate(today.getDate() + 2);
   else if (currentDay === 0) today.setDate(today.getDate() + 1);
   else today.setDate(today.getDate() - (currentDay - 1));
 
-  // Aplica o offset de semanas
   today.setDate(today.getDate() + offset * 7);
 
   const start = new Date(today);

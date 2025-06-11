@@ -109,23 +109,25 @@ const CadastrarAgendamento = ({ paciente }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!pacienteSelecionado) {
-            errorMessage("Por favor, escolha um paciente para continuar.", "small");
+        if (
+            !pacienteSelecionado ||
+            !pacienteSelecionado.id ||
+            !pacienteSelecionado.selectedDate ||
+            !pacienteSelecionado.horario ||
+            !pacienteSelecionado.tipo ||
+            !diaSemana ||
+            !diaMesSelecionado
+        ) {
+            errorMessage("Por favor, preencha todos os campos obrigatórios para continuar.", "small");
             return;
         }
 
-        if (!pacienteSelecionado.selectedDate) {
-            errorMessage("Por favor, escolha uma data para continuar.", "small");
-            return;
-        }
+        const [dia, mes, ano] = (pacienteSelecionado.selectedDate || diaMesSelecionado).split('/');
+        const dataAgendamento = new Date(`${ano}-${mes}-${dia}T${(pacienteSelecionado.horario || horario || "08:00")}:00`);
+        const agora = new Date();
 
-        if (!pacienteSelecionado.horario) {
-            errorMessage("Por favor, escolha um horário para continuar.", "small");
-            return;
-        }
-
-        if (!pacienteSelecionado.tipo) {
-            errorMessage("Por favor, escolha o tipo de sessão.", "small");
+        if (dataAgendamento < agora) {
+            errorMessage("Não é possível agendar para um horário que já passou.", "small");
             return;
         }
 
@@ -158,7 +160,6 @@ const CadastrarAgendamento = ({ paciente }) => {
                         anotacao: "teste",
                     };
 
-                    console.log("Agendamento (Plano Mensal):", novoAgendamento);
                     return postAgendamento(novoAgendamento);
                 });
 
@@ -185,18 +186,19 @@ const CadastrarAgendamento = ({ paciente }) => {
                     anotacao: "teste",
                 };
 
-                console.log("Agendamento (Data Única):", novoAgendamento);
                 await postAgendamento(novoAgendamento);
                 responseMessage("Agendamento cadastrado com sucesso!", "small");
             }
-        } catch (error) {
-            console.error("Erro ao cadastrar agendamento:", error);
-            errorMessage("Erro ao cadastrar agendamento.", "small");
-        } finally {
-            responseMessage("Agendamentos cadastrados com sucesso!", "small");
             setTimeout(() => {
                 window.location = '/dashboard/agendamentos';
             }, 1200);
+        } catch (error) {
+            if (error.response && error.response.status === 409) {
+                errorMessage("Já existe um agendamento neste dia e horário.", "small");
+            } else {
+                errorMessage("Erro ao cadastrar agendamento.", "small");
+            }
+            console.error("Erro ao cadastrar agendamento:", error);
         }
     };
 
@@ -365,7 +367,7 @@ const CadastrarAgendamento = ({ paciente }) => {
                                             <option value="" disabled>Selecione um horário</option>
                                             {Array.from({ length: 9 }, (_, i) => {
                                                 const hour = (8 + i).toString().padStart(2, '0');
-                                                if (hour === "12") return null; // Não renderiza 12:00
+                                                if (hour === "12") return null;
                                                 return (
                                                     <option key={hour} value={`${hour}:00`}>
                                                         {`${hour}:00`}
