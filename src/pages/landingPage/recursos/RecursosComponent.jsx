@@ -56,7 +56,7 @@ const RecursosComponent = () => {
         {dadosRecursos.map((recurso) => (
           <SwiperSlide key={recurso.id} className="card-content-solucao">
             <div className="card-solucao">
-              <img src={recurso.img} alt="" className="slide-img" />
+              <img src={recurso.img} alt={recurso.titulo} className="slide-img" />
               <div>
                 <h1>{recurso.titulo}</h1>
                 <p>{recurso.descricao}</p>
