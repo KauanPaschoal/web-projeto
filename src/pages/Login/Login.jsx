@@ -27,7 +27,7 @@ const LoginPage = () => {
         }
       );
 
-      const { id, nome, token } = response.data;
+      const { id, nome, token, role } = response.data;
 
       const toCapitalize = (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -38,10 +38,16 @@ const LoginPage = () => {
         localStorage.setItem("authToken", token);
         localStorage.setItem("nomeUsuario", nomeFormatado);
         localStorage.setItem("idUsuario", id);
+        localStorage.setItem("roleUsuario", role.role);
 
         responseMessage(`Bem vindo, ${nomeFormatado}!`);
+
         setTimeout(() => {
-          window.location.href = "/dashboard";
+          if (role.id === 1) {
+            window.location.href = "/dashboard/psicologos";
+          } else if (role.id === 3) {
+            window.location.href = "/dashboard";
+          }
         }, 2300);
       } else {
         errorMessage("Usuário ou senha inválidos");
