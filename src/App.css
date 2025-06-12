@@ -26,23 +26,30 @@
 
 /* Estilização do Scrollbar */
 ::-webkit-scrollbar {
-  width: 0.60em; /* Largura do scrollbar */
+  width: 0.60em;
+  /* Largura do scrollbar */
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--LightGrayFy); /* Cor do fundo do track */
-  border-radius: 10px; /* Bordas arredondadas */
+  background: var(--LightGrayFy);
+  /* Cor do fundo do track */
+  border-radius: 10px;
+  /* Bordas arredondadas */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--LightBlueFy); /* Cor do thumb */
-  border-radius: 10px; /* Bordas arredondadas */
-  border: 2px solid var(--LightGrayFy); /* Espaço entre o thumb e o track */
+  background: var(--LightBlueFy);
+  /* Cor do thumb */
+  border-radius: 10px;
+  /* Bordas arredondadas */
+  border: 2px solid var(--LightGrayFy);
+  /* Espaço entre o thumb e o track */
   padding: 1px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--DarkBlueFy); /* Cor do thumb ao passar o mouse */
+  background: var(--DarkBlueFy);
+  /* Cor do thumb ao passar o mouse */
 }
 
 * {
@@ -65,7 +72,7 @@ button {
   font-size: small;
   align-items: center;
   gap: 1em;
-  border-radius: 1em;
+  border-radius: 20px;
 }
 
 .btn_secundario {
@@ -73,6 +80,7 @@ button {
   border: var(--LightBlueFy) 2px solid;
   color: var(--LightBlueFy);
   transition: ease-in-out 0.3s;
+  height: fit-content;
 }
 
 .btn_secundario:hover {
@@ -140,7 +148,7 @@ button {
   font-size: 1rem;
   color: var(--DarkBlueFy);
   background: var(--WhiteFy);
-  margin:auto;
+  margin: auto;
   margin-top: 16px;
   padding-left: 0;
   width: 100%;
