@@ -1,16 +1,13 @@
-import React from 'react'
-import './KPIsComponent.css'
+import React from "react";
+import "./KPIsComponent.css";
 
-const KPIsComponent = (valores) => {
+const KPIsComponent = ({ valor, texto, cor }) => {
+  return (
+    <div className="card-kpi">
+      <span style={{ borderLeft: `10px solid var(--${cor})` }}>{valor}</span>
+      <p>{texto}</p>
+    </div>
+  );
+};
 
-    
-
-    return (
-        <div className='card-kpi'>
-            <span>{valores.valor}</span>
-            <p>{valores.texto}</p>
-        </div>
-    )
-}
-
-export default KPIsComponent
+export default KPIsComponent;
