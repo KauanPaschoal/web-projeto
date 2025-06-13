@@ -12,10 +12,16 @@ import Psicologos from "./pages/dashboard/psicologos/psicologos";
 import AdicionarPsicologo from "./pages/dashboard/psicologos/adicionarPsicologo/adicionarPsicologo";
 import LoginPage from "./pages/Login/Login";
 import EditarPsicologo from "./pages/dashboard/psicologos/visualizarPsicologo/EditarPsicologo";
+import EsqueceuSenha from "./pages/Login/EsqueceuSenha/EsqueceuSenha";
+import ConfirmarCodigo from "./pages/Login/EsqueceuSenha/ConfirmarCodigo/ConfirmarCodigo";
+import AlterarSenha from "./pages/Login/EsqueceuSenha/AlterarSenha/AlterarSenha";
 
 export const routes = createBrowserRouter([
     { path: "/", element: <LandingPage /> },
     { path: "/login", element: <LoginPage /> },
+    { path: "/login/esqueceu-senha", element: <EsqueceuSenha /> },
+    { path: "/login/esqueceu-senha/confirmar-codigo", element: <ConfirmarCodigo /> },
+    { path: "/login/esqueceu-senha/alterar-senha", element: <AlterarSenha /> },
     { path: "/dashboard", element: <Dashboard /> },
     { path: "/dashboard/agendamentos", element: <Agendamentos /> },
     { path: "/dashboard/agendamentos/cadastrar/:id", element: <CadastrarAgendamento /> },
