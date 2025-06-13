@@ -178,10 +178,10 @@ const Dashboard = () => {
           </div>
         }
       >
-        <div className="flex flex-col gap-2">
+        <div className="pacientes-background">
           <div className="flex w-full justify-between gap-2">
             {/* KPI dinâmica - Pacientes Agendados na Semana */}
-            <div className="flex flex-col items-center">
+            <div className="flex-1 flex-col items-center">
               <KPIsComponent
                 valor={loadingKpi ? "0" : kpiPrincipalValor}
                 texto={kpiPrincipalTexto}
