@@ -18,6 +18,9 @@ const ConfirmarCodigo = () => {
     // Aqui você faria a chamada para a API de confirmação de código
     setConfirmado(true);
     responseMessage('Código confirmado com sucesso! Você pode redefinir sua senha.');
+    setTimeout(() => {
+      window.location.href = '/login/esqueceu-senha/alterar-senha'; // Redireciona para a página de alteração de senha
+    }, 2000);
   };
 
   return (

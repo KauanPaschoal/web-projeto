@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/LogoTipo Branco 1.svg";
 import { errorMessage, responseMessage } from "../../utils/alert.js";
-import "./style/login.css";
+import "./login.css";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import axios from "axios";
 
@@ -106,7 +106,7 @@ const LoginPage = () => {
               É necessário no mínimo 8 letras, 1 letra maiúscula e 1 número.
             </p>
             <Link
-              to="/esqueci-senha"
+              to="/login/esqueceu-senha"
               className="text-darkBlueFy font-semibold text-right block"
             >
               Esqueceu a senha?

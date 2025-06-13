@@ -18,6 +18,9 @@ const EsqueceuSenha = () => {
         // Aqui você faria a chamada para a API de recuperação de senha
         setEnviado(true);
         responseMessage('Se o e-mail estiver cadastrado, você receberá as instruções em instantes.');
+        setTimeout(() => {
+            window.location.href = '/login/esqueceu-senha/confirmar-codigo'; // Redireciona para a página de confirmação de código
+        }, 2000);
     };
 
     return (

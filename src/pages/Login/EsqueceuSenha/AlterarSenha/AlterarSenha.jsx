@@ -23,6 +23,9 @@ const AlterarSenha = () => {
     // Aqui você faria a chamada para a API de alteração de senha
     setAlterada(true);
     responseMessage('Senha alterada com sucesso! Você já pode fazer login.');
+    setTimeout(() => {
+      window.location.href = '/login'; // Redireciona para a página de login
+    }, 2000);
   };
 
   return (
