@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-.calendario-card{
+.calendario-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -11,21 +11,23 @@
     border-left: 0.5em solid var(--LightGrayFy);
     background-color: var(--WhiteFy);
 
-    span{
+    span {
         font-size: 0.8em;
         color: var(--BlackFy);
     }
-    p{
+
+    p {
         font-size: 0.8em;
         color: var(--BlackFy);
     }
-    b{
+
+    b {
         font-size: 0.8em;
         color: var(--BlackFy);
     }
 }
 
-.btn_calendario{
+.btn_calendario {
     background-color: var(--LightBlueFy);
     color: var(--WhiteFy);
     width: 100%;
@@ -35,20 +37,31 @@
     cursor: pointer;
     border-radius: 12em;
 
-    &:hover{
+    &:hover {
         background-color: var(--DarkBlueFy);
         transition: 0.3s;
     }
-    &:active{
+
+    &:active {
         background-color: var(--DarkBlueFy);
         transition: 0.3s;
     }
 }
-.card-header-calendario{
+
+.card-header-calendario {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
+}
+
+.btn_calendario--disabled {
+    background-color: var(--LightGrayFy) !important;
+    color: var(--GrayFy) !important;
+    border: 2px solid var(--LightGrayFy) !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+    pointer-events: none;
 }
 
 /* .agendamento-info{
