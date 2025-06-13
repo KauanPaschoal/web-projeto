@@ -48,10 +48,10 @@ function capitalizeFirstLetter(string) {
   return (
     <Chart
       width={"100%"}
+      height={"100%"}
       chartType="Bar"
       data={data}
       options={options}
-      height={"230px"}
       className="grafico-component"
     />
   );
