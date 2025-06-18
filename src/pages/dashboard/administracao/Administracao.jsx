@@ -157,39 +157,37 @@ const Administracao = () => {
                   />
                 </h2>
                 <div className="card-inputs">
-                  
-                    <InputField
-                      labelTitle="Nome"
-                      value={nome}
-                      width={"w-full"}
-                      disabled={!isEditingGeneral}
-                      onChange={(e) => setNome(e.target.value)}
-                    />
-                    <InputField
-                      labelTitle="E-mail"
-                      value={email}
-                      width={"w-full"}
-                      type="email"
-                      disabled={!isEditingGeneral}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <InputField
-                      labelTitle="Telefone"
-                      value={telefone}
-                      width={"w-full"}
-                      disabled={!isEditingGeneral}
-                      onChange={(e) =>
-                        setTelefone(formatTelefone(removeMask(e.target.value)))
-                      }
-                    />
-                    <InputField
-                      labelTitle="CRP"
-                      value={crp}
-                      disabled={true}
-                      width={"w-full"}
-                    />
-                 
-
+                  <InputField
+                    labelTitle="Nome"
+                    value={nome}
+                    width={"w-full"}
+                    disabled={!isEditingGeneral}
+                    onChange={(e) => setNome(e.target.value)}
+                  />
+                  <InputField
+                    labelTitle="E-mail"
+                    value={email}
+                    width={"w-full"}
+                    type="email"
+                    disabled={!isEditingGeneral}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <InputField
+                    labelTitle="Telefone"
+                    value={telefone}
+                    width={"w-full"}
+                    disabled={!isEditingGeneral}
+                    onChange={(e) =>
+                      setTelefone(formatTelefone(removeMask(e.target.value)))
+                    }
+                  />
+                  <InputField
+                    labelTitle="CRP"
+                    value={crp}
+                    disabled={true}
+                    width={"w-full"}
+                    maskType={"crp"}
+                  />
                 </div>
                 <div className="inputs-button">
                   <SaveButton
