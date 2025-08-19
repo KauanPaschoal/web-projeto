@@ -65,7 +65,7 @@ const Administracao = () => {
       const result = await confirmCancelEdit(
         "Cancelar edição?",
         "Tem certeza que deseja cancelar a edição?",
-        "small"
+        "medium"
       );
       if (!result.isConfirmed) return;
     }
@@ -157,41 +157,37 @@ const Administracao = () => {
                   />
                 </h2>
                 <div className="card-inputs">
-                  <div className="flex gap-2 w-full justify-center">
-                    <InputField
-                      labelTitle="Nome"
-                      value={nome}
-                      width={"w-full"}
-                      disabled={!isEditingGeneral}
-                      onChange={(e) => setNome(e.target.value)}
-                    />
-                    <InputField
-                      labelTitle="E-mail"
-                      value={email}
-                      width={"w-full"}
-                      type="email"
-                      disabled={!isEditingGeneral}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                  <div className="flex gap-2 w-full justify-center">
-                    <InputField
-                      labelTitle="Telefone"
-                      value={telefone}
-                      width={"w-full"}
-                      disabled={!isEditingGeneral}
-                      onChange={(e) =>
-                        setTelefone(formatTelefone(removeMask(e.target.value)))
-                      }
-                    />
-                    <InputField
-                      labelTitle="CRP"
-                      value={crp}
-                      disabled={true}
-                      width={"w-full"}
-                    />
-                  </div>
-
+                  <InputField
+                    labelTitle="Nome"
+                    value={nome}
+                    width={"w-full"}
+                    disabled={!isEditingGeneral}
+                    onChange={(e) => setNome(e.target.value)}
+                  />
+                  <InputField
+                    labelTitle="E-mail"
+                    value={email}
+                    width={"w-full"}
+                    type="email"
+                    disabled={!isEditingGeneral}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <InputField
+                    labelTitle="Telefone"
+                    value={telefone}
+                    width={"w-full"}
+                    disabled={!isEditingGeneral}
+                    onChange={(e) =>
+                      setTelefone(formatTelefone(removeMask(e.target.value)))
+                    }
+                  />
+                  <InputField
+                    labelTitle="CRP"
+                    value={crp}
+                    disabled={true}
+                    width={"w-full"}
+                    maskType={"crp"}
+                  />
                 </div>
                 <div className="inputs-button">
                   <SaveButton

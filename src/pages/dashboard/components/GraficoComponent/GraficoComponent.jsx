@@ -1,20 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import "./GraficoComponent.css";
+import { getDadosGrafico } from "../../../../provider/api/dashboard/fetchs-dashboard";
 
 const GraficoComponent = () => {
+
+  const [loading, setLoading] = React.useState(true);
+  const [dadosGrafico, setDadosGrafico] = React.useState([]);
+  const [error, setError] = React.useState(null);
+
   const data = [
-    ["Agendamentos", "Reagendados", "Concluídos"],
-    ["Março", 15, 15],
-    ["Abril", 11, 4],
-    ["Maio", 6, 11],
-    ["Junho", 10, 5],
-    ["Julho", 8, 3],
-    ["Agosto", 5, 1],
-    ["Setembro", 12, 2],
-    ["Outubro", 8, 4],
-    ["Novembro", 8, 7],
-  ];
+  ["Agendamentos", "Cancelados", "Concluídos"],
+  ...dadosGrafico.map(item => [
+    capitalizeFirstLetter(item.nomeMes),
+    item.qtdCancelada,
+    item.qtdConcluida
+  ])
+];
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+} 
+
+  useEffect(() => {
+    const fetchDadosGrafico = async () => {
+
+      try {
+        const dadosGraficoData = await getDadosGrafico();
+
+        setDadosGrafico(dadosGraficoData);
+
+        console.log('DADOS GRAFICO:', dadosGraficoData);
+
+      } catch (err) {
+        setError(err.message || 'Erro ao buscar dados das KPIs');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDadosGrafico();
+  }, []);
 
   const options = {
     stacked: true,
@@ -22,10 +48,10 @@ const GraficoComponent = () => {
   return (
     <Chart
       width={"100%"}
+      height={"100%"}
       chartType="Bar"
       data={data}
       options={options}
-      height={"230px"}
       className="grafico-component"
     />
   );

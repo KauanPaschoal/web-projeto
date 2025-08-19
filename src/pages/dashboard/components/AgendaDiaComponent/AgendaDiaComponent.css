@@ -9,6 +9,7 @@
     border-radius: 1em;
     text-align: start;
     padding: 1em;
+    width: 100%;
 
 
     button {
@@ -37,6 +38,10 @@
 
 .status-cancelado {
     background-color: var(--RedAlertFy);
+}
+
+.status-concluido {
+    background-color: var(--BlueAlertFy);
 }
 
 .status-default {

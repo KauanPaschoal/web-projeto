@@ -16,6 +16,7 @@ const InputField = ({
   value,
   icon,
   width,
+  containerWidth,
   disabled,
   maxLength,
   maskType, // 'cpf', 'telefone', 'cep', 'hora', etc
@@ -23,14 +24,23 @@ const InputField = ({
 }) => {
   // Configurações de máscara
   const maskOptions = {
-    cpf: { delimiters: ['.', '.', '-'], blocks: [3, 3, 3, 2], numericOnly: true },
-    telefone: { delimiters: ['(', ') ', '-'], blocks: [0, 2, 5, 4], numericOnly: true },
-    cep: { delimiters: ['-'], blocks: [5, 3], numericOnly: true },
-    hora: { delimiters: [':' ], blocks: [2, 2], numericOnly: true },
+    cpf: {
+      delimiters: [".", ".", "-"],
+      blocks: [3, 3, 3, 2],
+      numericOnly: true,
+    },
+    telefone: {
+      delimiters: ["(", ") ", "-"],
+      blocks: [0, 2, 5, 4],
+      numericOnly: true,
+    },
+    cep: { delimiters: ["-"], blocks: [5, 3], numericOnly: true },
+    hora: { delimiters: [":"], blocks: [2, 2], numericOnly: true },
+    crp: { delimiters: ["/", ""], blocks: [2, 6], numericOnly: true }, // Adicione esta linha
   };
 
   return (
-    <div className={`inputContainer ${width || "w-[45%]"}`}>
+    <div className={`inputContainer ${containerWidth || "w-[45%]"}`}>
       <label>{labelTitle}:</label>
       <div className="flex items-center gap-2">
         {icon && <span className="input-icon">{icon}</span>}

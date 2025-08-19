@@ -6,7 +6,7 @@ import InputField from '../../components/InputField/InputField';
 import SaveButton from '../../components/SaveButton/SaveButton';
 import MainComponent from '../../components/MainComponent/MainComponent';
 import { postPaciente } from '../../../../provider/api/pacientes/fetchs-pacientes';
-import { postPreferencia } from '../../../../provider/api/preferencias/fetchs-preferencias'; // Importa a função para cadastrar preferências
+import { postPreferencia } from '../../../../provider/api/preferencias/fetchs-preferencias'; 
 import { errorMessage, responseMessage } from '../../../../utils/alert';
 
 const AdicionarPaciente = () => {
@@ -19,14 +19,13 @@ const AdicionarPaciente = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validação simples
         if (!nome || !email || !diaConsultas || !horarioConsultas) {
             errorMessage('Por favor, preencha todos os campos obrigatórios.');
             return;
         }
 
-        const planoMensalEscolhido = planoMensal ? 2 : 1; // ID do plano mensal ou avulso
-        const senha = "123456"; // Senha padrão para fins de teste
+        const planoMensalEscolhido = planoMensal ? 2 : 1; 
+        const senha = "123456"; 
 
         const novoPaciente = {
             nome,
@@ -36,30 +35,27 @@ const AdicionarPaciente = () => {
             fkPlano: {
                 id: planoMensalEscolhido,
                 categoria: planoMensal ? "PLANO" : "AVULSO",
-                preco: planoMensal ? 1200 : 0, // Exemplo de preço
+                preco: planoMensal ? 1200 : 0, 
             },
         };
 
         try {
-            // Cadastra o paciente
             const pacienteCadastrado = await postPaciente(novoPaciente);
             console.log("Paciente cadastrado:", pacienteCadastrado);
 
-            // Cadastra a preferência associada ao paciente
             const novaPreferencia = {
-                diaSemana: diaConsultas.toUpperCase(), // Converte o dia para maiúsculas
+                diaSemana: diaConsultas.toUpperCase(),
                 horario: horarioConsultas,
                 fkPaciente: {
-                    id: pacienteCadastrado.id, // Certifique-se de que o ID está presente
+                    id: pacienteCadastrado.id,
                 },
             };
             console.log("Payload enviado:", novaPreferencia);
             await postPreferencia(novaPreferencia);
             console.log("Preferência cadastrada:", novaPreferencia);
 
-            responseMessage("Paciente e endereço atualizados com sucesso!");
+            responseMessage("Paciente e preferência criados com sucesso!");
 
-            // Limpa os campos após o sucesso
             setNome('');
             setEmail('');
             setDiaConsultas('');
@@ -140,7 +136,7 @@ const AdicionarPaciente = () => {
                                         <option value="" disabled>Selecione um horário</option>
                                         {Array.from({ length: 9 }, (_, i) => {
                                             const hour = (8 + i).toString().padStart(2, '0');
-                                            if (hour === "12") return null; // Não renderiza 12:00
+                                            if (hour === "12") return null;
                                             return (
                                                 <option key={hour} value={`${hour}:00`}>
                                                     {`${hour}:00`}

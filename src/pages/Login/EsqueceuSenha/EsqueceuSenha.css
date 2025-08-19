@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+
+.esqueceu-senha-container{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    padding: 2em;
+    background-color: var(--LightGrayFy);
+}
+
+.esqueceu-senha-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    padding: 2em;
+    border-radius: 1em;
+    background-color: var(--WhiteFy);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
