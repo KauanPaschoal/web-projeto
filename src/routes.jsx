@@ -1,4 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { environment } from "../environments/environment";
 import LandingPage from "./pages/landingPage/LandingPage";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Agendamentos from "./pages/dashboard/agendamentos/Agendamentos";
@@ -22,17 +24,18 @@ export const routes = createBrowserRouter([
     { path: "/login/esqueceu-senha", element: <EsqueceuSenha /> },
     { path: "/login/esqueceu-senha/confirmar-codigo", element: <ConfirmarCodigo /> },
     { path: "/login/esqueceu-senha/alterar-senha", element: <AlterarSenha /> },
-    { path: "/dashboard", element: <Dashboard /> },
-    { path: "/dashboard/agendamentos", element: <Agendamentos /> },
-    { path: "/dashboard/agendamentos/cadastrar/:id", element: <CadastrarAgendamento /> },
-    { path: "/dashboard/agendamentos/cadastrar", element: <CadastrarAgendamento /> },
-    { path: "/dashboard/agendamentos/editar/:id", element: <EditarAgendamento /> },
-    { path: "/dashboard/pacientes", element: <Pacientes /> },
-    { path: "/dashboard/pacientes/editar/:id", element: <EditarPaciente /> },
-    { path: "/dashboard/pacientes/adicionar", element: <AdicionarPaciente /> },
-    { path: "/dashboard/administracao", element: <Administracao /> },
-    { path: "/dashboard/psicologos", element: <Psicologos /> },
-    { path: "/dashboard/psicologos/adicionar", element: <AdicionarPsicologo /> },
-    { path: "/dashboard/psicologos/editar/:id", element: <EditarPsicologo /> },
+    // Rotas protegidas por ambiente
+    { path: "/dashboard", element: <ProtectedRoute><Dashboard /></ProtectedRoute> },
+    { path: "/dashboard/agendamentos", element: <ProtectedRoute><Agendamentos /></ProtectedRoute> },
+    { path: "/dashboard/agendamentos/cadastrar/:id", element: <ProtectedRoute><CadastrarAgendamento /></ProtectedRoute> },
+    { path: "/dashboard/agendamentos/cadastrar", element: <ProtectedRoute><CadastrarAgendamento /></ProtectedRoute> },
+    { path: "/dashboard/agendamentos/editar/:id", element: <ProtectedRoute><EditarAgendamento /></ProtectedRoute> },
+    { path: "/dashboard/pacientes", element: <ProtectedRoute><Pacientes /></ProtectedRoute> },
+    { path: "/dashboard/pacientes/editar/:id", element: <ProtectedRoute><EditarPaciente /></ProtectedRoute> },
+    { path: "/dashboard/pacientes/adicionar", element: <ProtectedRoute><AdicionarPaciente /></ProtectedRoute> },
+    { path: "/dashboard/administracao", element: <ProtectedRoute><Administracao /></ProtectedRoute> },
+    { path: "/dashboard/psicologos", element: <ProtectedRoute><Psicologos /></ProtectedRoute> },
+    { path: "/dashboard/psicologos/adicionar", element: <ProtectedRoute><AdicionarPsicologo /></ProtectedRoute> },
+    { path: "/dashboard/psicologos/editar/:id", element: <ProtectedRoute><EditarPsicologo /></ProtectedRoute> },
     { path: "*", element: <h1>Página não encontrada.</h1> }
 ]);
