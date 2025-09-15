@@ -21,3 +21,4 @@ updates:
       major:
         update-types:
           - "major"
+        target-branch: "develop"
