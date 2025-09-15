@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily" 
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "deps"
+
+    # Estratégia segura
+    versioning-strategy: auto
+    rebase-strategy: auto
+
+    # Agrupamentos
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+      major:
+        update-types:
+          - "major"
